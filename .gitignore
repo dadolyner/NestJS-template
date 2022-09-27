@@ -1,0 +1,4 @@
+# Ignored/Sensitive Files
+/dist
+/node_modules
+/env
