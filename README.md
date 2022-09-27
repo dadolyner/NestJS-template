@@ -14,14 +14,14 @@
 
 ---
 
-## Description
+### Description
 
 This is a template for NestJS applications. It includes the following features/packages:
 Fastify platform, TypeORM with PostgreSQL, JWT authentication with passport, swagger documentation and git.
 
 ---
 
-## Technologies
+### Technologies
 
 - Typescript
 - NestJS
@@ -34,7 +34,7 @@ Fastify platform, TypeORM with PostgreSQL, JWT authentication with passport, swa
 - Git
 ---
 
-## How To Use
+### How To Use
 
 #### Installation
 
@@ -100,6 +100,6 @@ $ npm run tests
 
 ---
 
-# Author Info
+### Author Info
 
 - Github - [@dadolyner](https://github.com/dadolyner)
