@@ -32,6 +32,7 @@ Fastify platform, TypeORM with PostgreSQL, JWT authentication with passport, swa
 - Nodemailer
 - Swagger
 - Git
+
 ---
 
 ### How To Use
@@ -58,6 +59,16 @@ $ npm i
 // .env.development
 // .env.production
 // .env.test
+
+// Required variables
+SERVER_IP=
+PORT=
+
+DATABASE_HOST=
+DATABASE_PORT=
+DATABASE_USER=
+DATABASE_PASSWORD=
+DATABASE_NAME=
 
 // Where you want to use environment variables add this to the top of the file
 import { config } from 'dotenv';
