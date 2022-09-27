@@ -98,6 +98,8 @@ $ npm run start:dev
 $ npm run tests
 ```
 
+---
+
 # Author Info
 
 - Github - [@dadolyner](https://github.com/dadolyner)
