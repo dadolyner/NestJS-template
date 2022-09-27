@@ -47,6 +47,15 @@ $ git clone https://github.com/dadolyner/NestJS-template
 ```
 
 ```bash
+# Install NestJS CLI
+$ npm install -g @nestjs/cli npm-check-updates
+
+# Update NestJS CLI
+$ nest update
+$ nest update --force
+```
+
+```bash
 # Install dependencies
 $ npm i
 ```
