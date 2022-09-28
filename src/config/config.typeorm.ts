@@ -1,7 +1,8 @@
-import { Module } from "@nestjs/common";
-import { ConfigModule, ConfigService } from "@nestjs/config";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import * as path from "path";
+// TypeORM Configuration File
+import { Module } from "@nestjs/common"
+import { ConfigModule, ConfigService } from "@nestjs/config"
+import { TypeOrmModule } from "@nestjs/typeorm"
+import * as path from "path"
 
 @Module({
     imports: [
@@ -15,7 +16,7 @@ import * as path from "path";
                 username: configService.get<string>('DATABASE_USER'),
                 password: configService.get<string>('DATABASE_PASSWORD'),
                 database: configService.get<string>('DATABASE_NAME'),
-                entities: [ path.resolve(__dirname, '../**/*.entity{.ts}') ],
+                entities: [ path.resolve(__dirname, '../entities/*.entity{.ts,.js}') ],
                 synchronize: true,
                 // logging: true,
                 // logger: 'advanced-console',
