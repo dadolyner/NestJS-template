@@ -10,6 +10,7 @@
     - [Setup modules](#setup-modules)
     - [Run the application](#run-the-application)
     - [Tests](#tests)
+- [Premade Modules](#premade-modules)
 - [Author Info](#author-info)
 
 ---
@@ -116,6 +117,18 @@ $ npm run start:dev
 ```bash
 # Run the application in test mode
 $ npm run tests
+```
+
+---
+
+### Premade Modules
+
+#### Authentication
+```ts
+// @Post('/auth/register') -> Register User
+// @Post('/auth/login') -> Login User and store JWT in cookies
+// @Post('/auth/refresh') -> Refresh users access token
+// @Post('/auth/logout') -> Logout user and clear cookies
 ```
 
 ---
