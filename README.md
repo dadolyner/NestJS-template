@@ -7,7 +7,6 @@
 - [How To Use](#how-to-use)
     - [Installation](#installation)
     - [Setup environment variables](#setup-environment-variables)
-    - [Setup modules](#setup-modules)
     - [Run the application](#run-the-application)
     - [Tests](#tests)
 - [Premade Modules](#premade-modules)
@@ -24,14 +23,15 @@ Fastify platform, TypeORM with PostgreSQL, JWT authentication with passport, swa
 
 ### Technologies
 
-- Typescript
 - NestJS
 - Fastify
-- PostgreSQL
 - TypeORM
+- Typescript
+- PostgreSQL
 - JWT
 - Nodemailer
 - Swagger
+- Env
 - Git
 
 ---
@@ -60,6 +60,7 @@ $ nest update --force
 # Install dependencies
 $ npm i
 ```
+
 #### Setup environment variables
 
 ```ts
@@ -80,26 +81,9 @@ DATABASE_USER=
 DATABASE_PASSWORD=
 DATABASE_NAME=
 
-// Where you want to use environment variables add this to the top of the file
-import { config } from 'dotenv';
-config({ path: path.resolve(__dirname, `../env/.env.${process.env.ENVIROMENT}`) })
-```
-
-#### Setup modules
-
-```ts
-// To connect entity to module add it to the imports array in the module
-TypeOrmModule.forFeature([Test])
-```
-
-```ts
-// To connect entity to service add it to the constructor of the service
-constructor( @InjectRepository(Test) private readonly testRepository: Repository<Test> ) { }
-```
-
-```ts
-// To connect service to constroller add it to the constructor of the constroller
-constructor(private readonly appService: AppService) { }
+JWT_ACCESSTOKEN_SECRET
+JWT_REFRESHTOKEN_SECRET
+COOKIE_SECRET
 ```
 
 #### Run the application
@@ -125,10 +109,12 @@ $ npm run tests
 
 #### Authentication
 ```ts
+// @UseGuards(AuthGuard) -> Protects the route with JWT authentication
+
 // @Post('/auth/register') -> Register User
 // @Post('/auth/login') -> Login User and store JWT in cookies
-// @Post('/auth/refresh') -> Refresh users access token
-// @Post('/auth/logout') -> Logout user and clear cookies
+// @Post('/auth/refresh') -> Refresh users access token (protected route)
+// @Post('/auth/logout') -> Logout user and clear cookies (protected route)
 ```
 
 ---

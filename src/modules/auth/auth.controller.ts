@@ -1,10 +1,11 @@
 // Auth Controller
 import { Controller, Post } from '@nestjs/common'
-import { Body, Res } from '@nestjs/common/decorators'
+import { Body, Res, UseGuards } from '@nestjs/common/decorators'
 import { AuthService } from './auth.service'
 import { AuthLoginDto, AuthRegisterDto } from './dto/auth.dto'
 import { FastifyReply } from 'fastify'
 import { Cookie } from './decorator/cookie.decorator'
+import { AuthGuard } from './jwt/auth.guard'
 
 @Controller('auth')
 export class AuthController {
@@ -23,12 +24,14 @@ export class AuthController {
     }
     
     // Refresh access token with a valid refresh token
+    @UseGuards(AuthGuard)
     @Post('refresh')
     async refreshToken(@Cookie('user') user: string, @Cookie('refresh_token') refreshToken: string, @Res() response: FastifyReply): Promise<void> {
         await this.authService.refreshToken(user, refreshToken, response)
     }
     
     // Logout user, remove refresh token and clear cookies
+    @UseGuards(AuthGuard)
     @Post('logout')
     async logout(@Cookie('user') user: string, @Res() response: FastifyReply): Promise<void> {
         await this.authService.logout(user, response)

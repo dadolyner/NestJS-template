@@ -1,5 +1,5 @@
 // Auth Service
-import { Injectable } from '@nestjs/common'
+import { Injectable, Req } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Users } from 'src/entities/users.entity'
 import { Repository } from 'typeorm'
@@ -47,8 +47,8 @@ export class AuthService {
         if (!validatePassword) throw HttpExc.badRequest(AuthService.name, 'User entered invalid credentials.')
 
         try {
-            const accessToken = this.jwtService.sign({ sub: userExists.id, email: userExists.email }, { secret: 'accessToken-secret', expiresIn: '15m' })
-            const refreshToken = this.jwtService.sign({ sub: userExists.id, email: userExists.email }, { secret: 'accessToken-secret', expiresIn: '7d' })
+            const accessToken = await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_ACCESSTOKEN_SECRET}`, expiresIn: '15m' })
+            const refreshToken = await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.REFRESHTOKEN_SECRET}`, expiresIn: '7d' })
 
             userExists.refreshToken = refreshToken
             userExists.updated_at = new Date()
@@ -60,17 +60,17 @@ export class AuthService {
             response.cookie('refresh_token', refreshToken, { httpOnly: true })
         } catch (error) { throw HttpExc.internalServerError(AuthService.name, `Login failed. Reason: ${error.message}.`) }
 
-        throw HttpExc.ok(AuthService.name, `New user ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully logged in.`)
+        throw HttpExc.ok(AuthService.name, `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully logged in.`)
     }
 
     // Refresh access token with a valid refresh token
     async refreshToken(user: string, refreshToken: string, response: FastifyReply): Promise<void> {
         const userExists = await this.usersRepository.findOne({ where: { id: user } })
         if (!userExists) throw HttpExc.badRequest(AuthService.name, 'Provided user does not exist.')
-        if (userExists.refreshToken !== refreshToken) throw HttpExc.badRequest(AuthService.name, 'Provided refresh token is invalid.')
+        if (userExists.refreshToken !== refreshToken) throw HttpExc.badRequest(AuthService.name, `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> provided invalid refresh token.`)
 
         try {
-            const accessToken = this.jwtService.sign({ sub: userExists.id, email: userExists.email }, { secret: 'accessToken-secret', expiresIn: '15m' })
+            const accessToken = await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_ACCESSTOKEN_SECRET}`, expiresIn: '15m' })
             response.cookie('access_token', accessToken, { httpOnly: true })
         } catch (error) { throw HttpExc.internalServerError(AuthService.name, `Signing a new access token failed. Reason: ${error.message}.`) }
 
@@ -81,16 +81,16 @@ export class AuthService {
     async logout(user: string, response: FastifyReply): Promise<void> {
         const userExists = await this.usersRepository.findOne({ where: { id: user } })
         if (!userExists) throw HttpExc.badRequest(AuthService.name, 'Provided user does not exist.')
-
+        
         try {
             userExists.refreshToken = null
             userExists.updated_at = new Date()
 
             await this.usersRepository.save(userExists)
 
-            response.clearCookie('user')
-            response.clearCookie('access_token')
-            response.clearCookie('refresh_token')
+            response.clearCookie('user', { httpOnly: true })
+            response.clearCookie('access_token', { httpOnly: true })
+            response.clearCookie('refresh_token', { httpOnly: true })
         } catch (error) { throw HttpExc.internalServerError(AuthService.name, `Logout failed. Reason: ${error.message}.`) }
 
         throw HttpExc.ok(AuthService.name, `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully logged out.`)

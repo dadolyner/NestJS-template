@@ -4,10 +4,7 @@ import { Module } from '@nestjs/common'
 import { TypeOrmConfig } from 'src/config/config.typeorm'
 
 @Module({
-    imports: [
-        TypeOrmConfig,
-        AuthModule
-    ],
+    imports: [ TypeOrmConfig, AuthModule ],
     controllers: [],
     providers: [],
     exports: []
