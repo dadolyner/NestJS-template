@@ -78,10 +78,11 @@ export class AuthService {
     }
 
     // Logout user, remove refresh token and clear cookies
-    async logout(user: string, response: FastifyReply): Promise<void> {
+    async logout(user: string, refreshToken: string, response: FastifyReply): Promise<void> {
         const userExists = await this.usersRepository.findOne({ where: { id: user } })
         if (!userExists) throw HttpExc.badRequest(AuthService.name, 'Provided user does not exist.')
-        
+        if (userExists.refreshToken !== refreshToken) throw HttpExc.badRequest(AuthService.name, `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> provided invalid refresh token.`)
+
         try {
             userExists.refreshToken = null
             userExists.updated_at = new Date()
@@ -90,7 +91,8 @@ export class AuthService {
 
             response.clearCookie('user', { httpOnly: true })
             response.clearCookie('access_token', { httpOnly: true })
-            response.clearCookie('refresh_token', { httpOnly: true })
+            response.clearCookie('refresh_token', { httpOnly: true }) 
+
         } catch (error) { throw HttpExc.internalServerError(AuthService.name, `Logout failed. Reason: ${error.message}.`) }
 
         throw HttpExc.ok(AuthService.name, `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully logged out.`)

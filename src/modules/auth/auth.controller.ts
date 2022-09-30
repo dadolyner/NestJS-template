@@ -43,7 +43,7 @@ export class AuthController {
     @ApiBearerAuth()
     @UseGuards(AuthGuard)
     @Post('logout')
-    async logout(@Cookie('user') user: string, @Res() response: FastifyReply): Promise<void> {
-        await this.authService.logout(user, response)
+    async logout(@Cookie('user') user: string, @Cookie('refresh_token') refreshToken: string, @Res() response: FastifyReply): Promise<void> {
+        await this.authService.logout(user, refreshToken, response)
     }
 }
