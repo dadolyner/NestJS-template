@@ -11,6 +11,7 @@
     - [Setup environment variables](#setup-environment-variables)
     - [Run the application](#run-the-application)
     - [Tests](#tests)
+    - [Access](#access)
 - [Premade Modules](#premade-modules)
 - [Author Info](#author-info)
 
