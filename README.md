@@ -1,5 +1,7 @@
 # NestJS Template
 
+---
+
 ### Table of Contents
 
 - [Description](#description)
@@ -18,6 +20,7 @@
 
 This is a template for NestJS applications. It includes the following features/packages:
 Fastify platform, TypeORM with PostgreSQL, JWT authentication with passport, swagger documentation and git.
+It also includes a premade auth module with register, login, logout and refresh token endpoints.
 
 ---
 
@@ -51,7 +54,7 @@ $ git clone https://github.com/dadolyner/NestJS-template
 # Install NestJS CLI
 $ npm install -g @nestjs/cli npm-check-updates
 
-# Update NestJS CLI
+# Update NestJS CLI to the latest version
 $ nest update
 $ nest update --force
 ```
@@ -101,6 +104,13 @@ $ npm run start:dev
 ```bash
 # Run the application in test mode
 $ npm run tests
+```
+
+#### Access
+
+```ts
+// To access the application go to http://localhost:3000
+// To access the swagger documentation go to http://localhost:3000/documentation
 ```
 
 ---
