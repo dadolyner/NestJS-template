@@ -1,3 +1,4 @@
+// AuthGuard class that protects routes with the @UseGuards decorator
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
 import { JwtService } from "@nestjs/jwt"
 import { HttpExc } from 'src/helpers/exceptions'

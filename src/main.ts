@@ -1,3 +1,4 @@
+// Main NestJS File
 import { AppModule } from './modules/app.module'
 import { Logger, ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
@@ -17,7 +18,7 @@ const Application = async () => {
         logger.log(`Starting the application in ${process.env.ENVIROMENT} mode ...`)
 
         const Application = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter(), { cors: true })
-        await Application.register(fastifyCookie, { secret: process.env.COOKIE_SECRET });
+        await Application.register(fastifyCookie, { secret: process.env.COOKIE_SECRET })
         Application.useGlobalPipes(new ValidationPipe())
         
         const swaggerConfig = new DocumentBuilder().setTitle('Application').setDescription('API Documentation for Application.').setVersion('1.0').build()
