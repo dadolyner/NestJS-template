@@ -5,7 +5,7 @@ import { AuthService } from './auth.service'
 import { AuthLoginDto, AuthRegisterDto, AuthRolesDto } from './dto/auth.dto'
 import { FastifyReply } from 'fastify'
 import { Cookie } from './decorator/cookie.decorator'
-import { AuthGuard } from './guard/auth.guard'
+import { AccessGuard, RefreshGuard } from './guard/auth.guard'
 import { ApiBasicAuth, ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { RoleGuard, Roles } from './guard/role.guard'
 
@@ -32,20 +32,19 @@ export class AuthController {
 
     // Refresh access token with a valid refresh token
     @ApiResponse({ status: 200, description: 'Refresh users access token' })
-    @ApiBearerAuth()
-    @UseGuards(AuthGuard)
+    @UseGuards(RefreshGuard)
     @Post('refresh')
-    async refreshToken(@Cookie('user') user: string, @Cookie('refresh_token') refreshToken: string, @Res({ passthrough: true }) response: FastifyReply): Promise<void> {
-        await this.authService.refreshToken(user, refreshToken, response)
+    async refreshToken(@Cookie('user') user: string, @Res({ passthrough: true }) response: FastifyReply): Promise<void> {
+        await this.authService.refreshToken(user, response)
     }
 
     // Logout user, remove refresh token and clear cookies
     @ApiResponse({ status: 200, description: 'Logout user and clear its cookies' })
     @ApiBearerAuth()
-    @UseGuards(AuthGuard)
+    @UseGuards(RefreshGuard)
     @Post('logout')
-    async logout(@Cookie('user') user: string, @Cookie('refresh_token') refreshToken: string, @Res({ passthrough: true }) response: FastifyReply): Promise<void> {
-        await this.authService.logout(user, refreshToken, response)
+    async logout(@Cookie('user') user: string, @Res({ passthrough: true }) response: FastifyReply): Promise<void> {
+        await this.authService.logout(user, response)
     }
 
     // Set users roles - Admin only

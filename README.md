@@ -120,16 +120,19 @@ $ npm run tests
 
 #### Authentication
 ```ts
-// @UseGuards(AuthGuard)   ->   Protects the route with JWT authentication
-// @Post('/auth/register') ->   Register User
-// @Post('/auth/login')    ->   Login User and store JWT in cookies
-// @Post('/auth/refresh')  ->   Refresh users access token (protected route)
-// @Post('/auth/logout')   ->   Logout user and clear cookies (protected route)
+// @UseGuards(AccessGuard)   ->     Protects the route with Access JWT authentication
+// @UseGuards(RefreshGuard)  ->     Protects the route with Refresh JWT authentication
 
-// @Roles(['roles'])       ->   Define roles that can acces the route
-// @UseGuards(RoleGuard)   ->   Protects the route with permission roles
-// @Patch('/auth/role')    ->   Change users roles (protected route by admin role)
-// @Delete('/auth/role')   ->   Delete users roles and set default roles (protected route by admin role)
+// @Roles(['roles'])         ->     Define roles that can acces the route
+// @UseGuards(RoleGuard)     ->     Protects the route with permission roles
+
+// @Post('/auth/register')   ->     Register User
+// @Post('/auth/login')      ->     Login User and store JWT in cookies ( access(exp: 15m) and refresh(exp: 7d) )
+// @Post('/auth/refresh')    ->     Refresh users access token (protected route with refresh token)
+// @Post('/auth/logout')     ->     Logout user and clear cookies (protected route with refresh token)
+
+// @Patch('/auth/role')      ->     Change users roles (protected route with admin role)
+// @Delete('/auth/role')     ->     Delete users roles and set default roles (protected route with admin role)
 ```
 
 ---
