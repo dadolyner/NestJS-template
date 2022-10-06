@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator'
+import { IsArray, IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator'
 
 // Auth Register DTO 
 export class AuthRegisterDto {
@@ -39,4 +39,12 @@ export class AuthLoginDto {
     @MinLength(8, { message: 'Password is too short' })
     @MaxLength(100, { message: 'Password is too long' })
     password: string
+}
+
+// Auth Roles Dto
+export class AuthRolesDto {
+    @ApiProperty({ type: Array, description: 'User roles', example: '["Admin"]' })
+    @IsArray({ message: 'Roles must be an array of strings' })
+    @IsNotEmpty({ message: 'Roles are required' })
+    roles: string[]
 }
