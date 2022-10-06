@@ -2,6 +2,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, Unique } from 'typeorm'
 import * as bcrypt from 'bcrypt'
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 97e06300ea3fb7b5fcaeb120caa3e0cc5f2cf548
 @Entity({ name: 'users' })
 @Unique(['email'])
 export class Users extends BaseEntity {
