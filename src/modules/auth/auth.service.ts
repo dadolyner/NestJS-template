@@ -122,11 +122,7 @@ export class AuthService {
         throw HttpExc.ok(AuthService.name, `Successfully changed roles for user ${userExists.first_name} ${userExists.last_name} <${userExists.email}>.`)
     }
 
-<<<<<<< HEAD
     // Reset users roles
-=======
-    // Remove users roles
->>>>>>> 97e06300ea3fb7b5fcaeb120caa3e0cc5f2cf548
     async resetRoles(user: string): Promise<void> {
         const userExists = await this.usersRepository.findOne({ where: { id: user } })
         if (!userExists) throw HttpExc.badRequest(AuthService.name, 'Provided user does not exist.')
