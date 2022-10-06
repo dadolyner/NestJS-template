@@ -126,7 +126,7 @@ $ npm run tests
 // @Post('/auth/refresh')  ->   Refresh users access token (protected route)
 // @Post('/auth/logout')   ->   Logout user and clear cookies (protected route)
 
-// @Roles(['roles'])       ->   Protects the route with permission roles
+// @Roles(['roles'])       ->   Define roles that can acces the route
 // @UseGuards(RoleGuard)   ->   Protects the route with permission roles
 // @Patch('/auth/role')    ->   Change users roles (protected route by admin role)
 // @Delete('/auth/role')   ->   Delete users roles and set default roles (protected route by admin role)
