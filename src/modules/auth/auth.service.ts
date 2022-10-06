@@ -3,7 +3,7 @@ import { Injectable, Req } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Users } from 'src/entities/users.entity'
 import { Repository } from 'typeorm'
-import { AuthLoginDto, AuthRegisterDto } from './dto/auth.dto'
+import { AuthLoginDto, AuthRegisterDto, AuthRolesDto } from './dto/auth.dto'
 import { JwtService } from '@nestjs/jwt'
 import { FastifyReply } from 'fastify'
 import { HttpExc } from 'src/helpers/exceptions'
@@ -28,6 +28,7 @@ export class AuthService {
         newUser.email = email
         newUser.salt = await newUser.generateSalt()
         newUser.password = await newUser.hashPassword(password, newUser.salt)
+        newUser.settings = { roles: ['User'] }
         newUser.created_at = new Date()
         newUser.updated_at = new Date()
 
@@ -55,9 +56,14 @@ export class AuthService {
 
             await this.usersRepository.save(userExists)
 
-            response.cookie('user', userExists.id, { httpOnly: true })
-            response.cookie('access_token', accessToken, { httpOnly: true })
-            response.cookie('refresh_token', refreshToken, { httpOnly: true })
+            const accessTokenExp = new Date()
+            accessTokenExp.setMinutes(accessTokenExp.getMinutes() + 15)
+            const cookiesExp = new Date()
+            cookiesExp.setDate(cookiesExp.getDate() + 7)
+
+            response.cookie('user', userExists.id, { httpOnly: true, expires: cookiesExp })
+            response.cookie('access_token', accessToken, { httpOnly: true, expires: accessTokenExp })
+            response.cookie('refresh_token', refreshToken, { httpOnly: true, expires: cookiesExp })
         } catch (error) { throw HttpExc.internalServerError(AuthService.name, `Login failed. Reason: ${error.message}.`) }
 
         throw HttpExc.ok(AuthService.name, `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully logged in.`)
@@ -70,8 +76,11 @@ export class AuthService {
         if (userExists.refreshToken !== refreshToken) throw HttpExc.badRequest(AuthService.name, `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> provided invalid refresh token.`)
 
         try {
+            const accessTokenExp = new Date()
+            accessTokenExp.setMinutes(accessTokenExp.getMinutes() + 15)
+
             const accessToken = await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_ACCESSTOKEN_SECRET}`, expiresIn: '15m' })
-            response.cookie('access_token', accessToken, { httpOnly: true })
+            response.cookie('access_token', accessToken, { httpOnly: true, expires: accessTokenExp })
         } catch (error) { throw HttpExc.internalServerError(AuthService.name, `Signing a new access token failed. Reason: ${error.message}.`) }
 
         throw HttpExc.ok(AuthService.name, `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully updated its access token.`)
@@ -89,12 +98,42 @@ export class AuthService {
 
             await this.usersRepository.save(userExists)
 
-            response.clearCookie('user', { httpOnly: true })
-            response.clearCookie('access_token', { httpOnly: true })
-            response.clearCookie('refresh_token', { httpOnly: true }) 
+            response.setCookie('user', '', { expires: new Date(0) }).clearCookie('user')
+            response.setCookie('access_token', '', { expires: new Date(0) }).clearCookie('access_token')
+            response.setCookie('refresh_token', '', { expires: new Date(0) }).clearCookie('refresh_token')
 
         } catch (error) { throw HttpExc.internalServerError(AuthService.name, `Logout failed. Reason: ${error.message}.`) }
 
         throw HttpExc.ok(AuthService.name, `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully logged out.`)
+    }
+
+    // Set users roles
+    async setRoles(user: string, roles: AuthRolesDto): Promise<void> {
+        const userExists = await this.usersRepository.findOne({ where: { id: user } })
+        if (!userExists) throw HttpExc.badRequest(AuthService.name, 'Provided user does not exist.')
+
+        try {
+            userExists.settings.roles = roles.roles
+            userExists.updated_at = new Date()
+
+            await this.usersRepository.save(userExists)
+        } catch (error) { throw HttpExc.internalServerError(AuthService.name, `Changing roles for user ${userExists.first_name} ${userExists.last_name} <${userExists.email}> failed. Reason: ${error.message}.`) }
+
+        throw HttpExc.ok(AuthService.name, `Successfully changed roles for user ${userExists.first_name} ${userExists.last_name} <${userExists.email}>.`)
+    }
+
+    // Reset users roles
+    async resetRoles(user: string): Promise<void> {
+        const userExists = await this.usersRepository.findOne({ where: { id: user } })
+        if (!userExists) throw HttpExc.badRequest(AuthService.name, 'Provided user does not exist.')
+
+        try {
+            userExists.settings.roles = ['User']
+            userExists.updated_at = new Date()
+
+            await this.usersRepository.save(userExists)
+        } catch (error) { throw HttpExc.internalServerError(AuthService.name, `Removing roles for user ${userExists.first_name} ${userExists.last_name} <${userExists.email}> failed. Reason: ${error.message}.`) }
+
+        throw HttpExc.ok(AuthService.name, `Successfully removed roles for user ${userExists.first_name} ${userExists.last_name} <${userExists.email}>.`)
     }
 }

@@ -2,7 +2,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, Unique } from 'typeorm'
 import * as bcrypt from 'bcrypt'
 
-@Entity('users')
+@Entity({ name: 'users' })
 @Unique(['email'])
 export class Users extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
@@ -26,6 +26,11 @@ export class Users extends BaseEntity {
     @Column({ nullable: true, default: null })
     refreshToken: string
 
+    @Column('jsonb', { nullable: true, default: {} })
+    settings: {
+        roles: string[]
+    }
+    
     @Column()
     created_at: Date
 
