@@ -1,0 +1,70 @@
+{
+    "info": {
+        "name": "Auth",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Register",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/auth/register",
+                    "protocol": "http",
+                    "host": [ "localhost:3000" ],
+                    "path": [ "auth", "register" ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": { "raw": { "language": "json" } },
+                    "raw": "{\n  \"first_name\": \"David\",\n  \"last_name\": \"Škulj\",\n  \"email\": \"skulj.david@gmail.com\",\n  \"password\": \"dadolyner123\"\n}"
+                }
+            }
+        },
+        {
+            "name": "Login",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/auth/login",
+                    "protocol": "http",
+                    "host": [ "localhost:3000" ],
+                    "path": [ "auth", "login" ],
+                    "port": "3000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": { "raw": { "language": "json" } },
+                    "raw": "{\n  \"email\": \"skulj.david@gmail.com\",\n  \"password\": \"dadolyner123\"\n}"
+                }
+            }
+        },
+        {
+            "name": "Refresh access token",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/auth/refresh",
+                    "protocol": "http",
+                    "host": [ "localhost:3000" ],
+                    "path": [ "auth", "refresh" ],
+                    "port": "3000"
+                }
+            }
+        },
+        {
+            "name": "Logout",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:3000/auth/logout",
+                    "protocol": "http",
+                    "host": [ "localhost:3000" ],
+                    "path": [ "auth", "logout" ],
+                    "port": "3000"
+                }
+            }
+        }
+    ]
+}
