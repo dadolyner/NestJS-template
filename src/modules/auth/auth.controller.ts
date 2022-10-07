@@ -34,7 +34,7 @@ export class AuthController {
     @ApiResponse({ status: 200, description: 'Refresh users access token' })
     @UseGuards(RefreshGuard)
     @Post('refresh')
-    async refreshToken(@Cookie('user') user: string, @Res({ passthrough: true }) response: FastifyReply): Promise<void> {
+    async refreshToken(@Cookie('user') user: string, @Res() response: FastifyReply): Promise<void> {
         await this.authService.refreshToken(user, response)
     }
 
@@ -43,7 +43,7 @@ export class AuthController {
     @ApiBearerAuth()
     @UseGuards(RefreshGuard)
     @Post('logout')
-    async logout(@Cookie('user') user: string, @Res({ passthrough: true }) response: FastifyReply): Promise<void> {
+    async logout(@Cookie('user') user: string, @Res() response: FastifyReply): Promise<void> {
         await this.authService.logout(user, response)
     }
 }
