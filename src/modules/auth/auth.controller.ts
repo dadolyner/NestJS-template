@@ -7,6 +7,7 @@ import { FastifyReply } from 'fastify'
 import { Cookie } from './decorator/cookie.decorator'
 import { RefreshGuard } from './guard/auth.guard'
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { HttpExcResponse } from 'src/helpers/exceptions'
 
 @ApiTags('Authentification')
 @Controller('auth')
@@ -17,24 +18,24 @@ export class AuthController {
     @ApiResponse({ status: 201, description: 'Create new user' })
     @ApiBody({ type: AuthRegisterDto })
     @Post('register')
-    async register(@Body() registerDto: AuthRegisterDto): Promise<void> {
-        await this.authService.register(registerDto)
+    async register(@Body() registerDto: AuthRegisterDto): Promise<HttpExcResponse> {
+        return await this.authService.register(registerDto)
     }
 
     // Login existing user, generate tokens and set cookies (user, access_token, refresh_token)
     @ApiResponse({ status: 200, description: 'Login existing user' })
     @ApiBody({ type: AuthLoginDto })
     @Post('login')
-    async login(@Body() loginDto: AuthLoginDto, @Res() response: FastifyReply): Promise<void> {
-        await this.authService.login(loginDto, response)
+    async login(@Body() loginDto: AuthLoginDto, @Res() response: FastifyReply): Promise<HttpExcResponse> {
+        return await this.authService.login(loginDto, response)
     }
 
     // Refresh access token with a valid refresh token
     @ApiResponse({ status: 200, description: 'Refresh users access token' })
     @UseGuards(RefreshGuard)
     @Post('refresh')
-    async refreshToken(@Cookie('user') user: string, @Res() response: FastifyReply): Promise<void> {
-        await this.authService.refreshToken(user, response)
+    async refreshToken(@Cookie('user') user: string, @Res() response: FastifyReply): Promise<HttpExcResponse> {
+        return await this.authService.refreshToken(user, response)
     }
 
     // Logout user, remove refresh token and clear cookies
@@ -42,7 +43,7 @@ export class AuthController {
     @ApiBearerAuth()
     @UseGuards(RefreshGuard)
     @Post('logout')
-    async logout(@Cookie('user') user: string, @Res() response: FastifyReply): Promise<void> {
-        await this.authService.logout(user, response)
+    async logout(@Cookie('user') user: string, @Res() response: FastifyReply): Promise<HttpExcResponse> {
+        return await this.authService.logout(user, response)
     }
 }

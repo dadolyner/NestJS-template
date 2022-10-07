@@ -6,7 +6,7 @@ import { Repository } from 'typeorm'
 import { AuthLoginDto, AuthRegisterDto } from './dto/auth.dto'
 import { JwtService } from '@nestjs/jwt'
 import { FastifyReply } from 'fastify'
-import { HttpExc } from 'src/helpers/exceptions'
+import { HttpExc, HttpExcResponse } from 'src/helpers/exceptions'
 
 @Injectable()
 export class AuthService {
@@ -16,7 +16,7 @@ export class AuthService {
     ) { }
 
     // Register new user
-    async register(registerDto: AuthRegisterDto): Promise<void> {
+    async register(registerDto: AuthRegisterDto): Promise<HttpExcResponse> {
         const { first_name, last_name, email, password } = registerDto
 
         const userExists = await this.usersRepository.findOne({ where: { email } })
@@ -39,7 +39,7 @@ export class AuthService {
     }
 
     // Login existing user, generate tokens and set cookies (user, access_token, refresh_token)
-    async login(loginDto: AuthLoginDto, response: FastifyReply): Promise<void> {
+    async login(loginDto: AuthLoginDto, response: FastifyReply): Promise<HttpExcResponse> {
         const { email, password } = loginDto
 
         const userExists = await this.usersRepository.findOne({ where: { email } })
@@ -70,7 +70,7 @@ export class AuthService {
     }
 
     // Refresh access token with a valid refresh token
-    async refreshToken(user: string, response: FastifyReply): Promise<void> {
+    async refreshToken(user: string, response: FastifyReply): Promise<HttpExcResponse> {
         const userExists = await this.usersRepository.findOne({ where: { id: user } })
         if (!userExists) throw HttpExc.badRequest(AuthService.name, 'Provided user does not exist.')
 
@@ -86,7 +86,7 @@ export class AuthService {
     }
 
     // Logout user, remove refresh token and clear cookies
-    async logout(user: string, response: FastifyReply): Promise<void> {
+    async logout(user: string, response: FastifyReply): Promise<HttpExcResponse> {
         const userExists = await this.usersRepository.findOne({ where: { id: user } })
         if (!userExists) throw HttpExc.badRequest(AuthService.name, 'Provided user does not exist.')
 

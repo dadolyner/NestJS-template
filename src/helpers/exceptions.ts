@@ -1,6 +1,8 @@
 // Custom Exceptions class
 import { HttpException, Logger } from "@nestjs/common"
 
+export type HttpExcResponse = { statusCode: number; message: string }
+
 export class HttpExc extends HttpException {
     constructor(message: string, status: number) {
         super(message, status)
