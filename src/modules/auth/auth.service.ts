@@ -1,5 +1,5 @@
 // Auth Service
-import { Injectable, Req } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Users } from 'src/entities/users.entity'
 import { Repository } from 'typeorm'
@@ -7,7 +7,6 @@ import { AuthLoginDto, AuthRegisterDto } from './dto/auth.dto'
 import { JwtService } from '@nestjs/jwt'
 import { FastifyReply } from 'fastify'
 import { HttpExc } from 'src/helpers/exceptions'
-import { FastifyRequest } from 'fastify'
 
 @Injectable()
 export class AuthService {

@@ -1,13 +1,12 @@
 // Auth Controller
 import { Controller, Post } from '@nestjs/common'
-import { Body, Delete, Param, Patch, Req, Res, SetMetadata, UseGuards } from '@nestjs/common/decorators'
+import { Body, Res, UseGuards } from '@nestjs/common/decorators'
 import { AuthService } from './auth.service'
-import { AuthLoginDto, AuthRegisterDto, AuthRolesDto } from './dto/auth.dto'
-import { FastifyReply, FastifyRequest } from 'fastify'
+import { AuthLoginDto, AuthRegisterDto } from './dto/auth.dto'
+import { FastifyReply } from 'fastify'
 import { Cookie } from './decorator/cookie.decorator'
-import { AccessGuard, RefreshGuard } from './guard/auth.guard'
-import { ApiBasicAuth, ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger'
-import { RoleGuard, Roles } from './guard/role.guard'
+import { RefreshGuard } from './guard/auth.guard'
+import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger'
 
 @ApiTags('Authentification')
 @Controller('auth')
