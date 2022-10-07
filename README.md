@@ -85,9 +85,9 @@ DATABASE_USER=
 DATABASE_PASSWORD=
 DATABASE_NAME=
 
-JWT_ACCESSTOKEN_SECRET
-JWT_REFRESHTOKEN_SECRET
-COOKIE_SECRET
+JWT_ACCESSTOKEN_SECRET=
+JWT_REFRESHTOKEN_SECRET=
+COOKIE_SECRET=
 ```
 
 #### Run the application
@@ -126,6 +126,7 @@ $ npm run tests
 // @Roles(['roles'])         ->     Define roles that can acces the route
 // @UseGuards(RoleGuard)     ->     Protects the route with permission roles
 
+// In folder asets you can find a postman collection with premade requests to test the following:
 // @Post('/auth/register')   ->     Register User
 // @Post('/auth/login')      ->     Login User and store JWT in cookies ( access(exp: 15m) and refresh(exp: 7d) )
 // @Post('/auth/refresh')    ->     Refresh users access token (protected route with refresh token)
