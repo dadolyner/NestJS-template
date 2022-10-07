@@ -3,10 +3,11 @@ import { Injectable, Req } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Users } from 'src/entities/users.entity'
 import { Repository } from 'typeorm'
-import { AuthLoginDto, AuthRegisterDto, AuthRolesDto } from './dto/auth.dto'
+import { AuthLoginDto, AuthRegisterDto } from './dto/auth.dto'
 import { JwtService } from '@nestjs/jwt'
 import { FastifyReply } from 'fastify'
 import { HttpExc } from 'src/helpers/exceptions'
+import { FastifyRequest } from 'fastify'
 
 @Injectable()
 export class AuthService {
@@ -49,7 +50,7 @@ export class AuthService {
 
         try {
             const accessToken = await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_ACCESSTOKEN_SECRET}`, expiresIn: '15m' })
-            const refreshToken = await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.REFRESHTOKEN_SECRET}`, expiresIn: '7d' })
+            const refreshToken = await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_REFRESHTOKEN_SECRET}`, expiresIn: '7d' })
 
             userExists.refreshToken = refreshToken
             userExists.updated_at = new Date()
@@ -103,35 +104,5 @@ export class AuthService {
         } catch (error) { throw HttpExc.internalServerError(AuthService.name, `Logout failed. Reason: ${error.message}.`) }
 
         throw HttpExc.ok(AuthService.name, `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully logged out.`)
-    }
-
-    // Set users roles
-    async setRoles(user: string, roles: AuthRolesDto): Promise<void> {
-        const userExists = await this.usersRepository.findOne({ where: { id: user } })
-        if (!userExists) throw HttpExc.badRequest(AuthService.name, 'Provided user does not exist.')
-
-        try {
-            userExists.settings.roles = roles.roles
-            userExists.updated_at = new Date()
-
-            await this.usersRepository.save(userExists)
-        } catch (error) { throw HttpExc.internalServerError(AuthService.name, `Changing roles for user ${userExists.first_name} ${userExists.last_name} <${userExists.email}> failed. Reason: ${error.message}.`) }
-
-        throw HttpExc.ok(AuthService.name, `Successfully changed roles for user ${userExists.first_name} ${userExists.last_name} <${userExists.email}>.`)
-    }
-
-    // Reset users roles
-    async resetRoles(user: string): Promise<void> {
-        const userExists = await this.usersRepository.findOne({ where: { id: user } })
-        if (!userExists) throw HttpExc.badRequest(AuthService.name, 'Provided user does not exist.')
-
-        try {
-            userExists.settings.roles = ['User']
-            userExists.updated_at = new Date()
-
-            await this.usersRepository.save(userExists)
-        } catch (error) { throw HttpExc.internalServerError(AuthService.name, `Removing roles for user ${userExists.first_name} ${userExists.last_name} <${userExists.email}> failed. Reason: ${error.message}.`) }
-
-        throw HttpExc.ok(AuthService.name, `Successfully removed roles for user ${userExists.first_name} ${userExists.last_name} <${userExists.email}>.`)
     }
 }

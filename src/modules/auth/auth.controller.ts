@@ -1,9 +1,9 @@
 // Auth Controller
 import { Controller, Post } from '@nestjs/common'
-import { Body, Delete, Param, Patch, Res, SetMetadata, UseGuards } from '@nestjs/common/decorators'
+import { Body, Delete, Param, Patch, Req, Res, SetMetadata, UseGuards } from '@nestjs/common/decorators'
 import { AuthService } from './auth.service'
 import { AuthLoginDto, AuthRegisterDto, AuthRolesDto } from './dto/auth.dto'
-import { FastifyReply } from 'fastify'
+import { FastifyReply, FastifyRequest } from 'fastify'
 import { Cookie } from './decorator/cookie.decorator'
 import { AccessGuard, RefreshGuard } from './guard/auth.guard'
 import { ApiBasicAuth, ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger'
@@ -45,25 +45,5 @@ export class AuthController {
     @Post('logout')
     async logout(@Cookie('user') user: string, @Res({ passthrough: true }) response: FastifyReply): Promise<void> {
         await this.authService.logout(user, response)
-    }
-
-    // Set users roles - Admin only
-    @ApiResponse({ status: 200, description: 'Add roles to user' })
-    @ApiBasicAuth()
-    @Roles(['Admin'])
-    @UseGuards(RoleGuard)
-    @Patch('roles/:id')
-    async setRoles(@Param('id') user: string, @Body() roles: AuthRolesDto): Promise<void> {
-        await this.authService.setRoles(user, roles)
-    }
-
-    // Set users roles - Admin only
-    @ApiResponse({ status: 200, description: 'Reset roles for user' })
-    @ApiBasicAuth()
-    @Roles(['Admin'])
-    @UseGuards(RoleGuard)
-    @Delete('roles/:id')
-    async resetRoles(@Param('id') user: string): Promise<void> {
-        await this.authService.resetRoles(user)
     }
 }

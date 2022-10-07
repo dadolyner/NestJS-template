@@ -24,7 +24,7 @@ export class RefreshGuard implements CanActivate {
     canActivate(context: ExecutionContext): any {
         const request = context.switchToHttp().getRequest()
         const cookies = request.cookies
-        const refreshToken = cookies.refreshToken
+        const refreshToken = cookies.refresh_token
         
         try { return this.jwtService.verify(refreshToken, { secret: `${process.env.JWT_REFRESHTOKEN_SECRET}` }) }
         catch (error) { throw HttpExc.unauthorized(RefreshGuard.name, `Refresh Token expired.`) }
