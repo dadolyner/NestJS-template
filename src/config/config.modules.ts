@@ -1,3 +1,5 @@
+// Array of all availible modules
+
 const ActiveModules = [
     'AuthModule'
 ]
