@@ -3,6 +3,11 @@ import { HttpException, Logger } from "@nestjs/common"
 
 export type HttpExcResponse = { statusCode: number; message: string }
 
+// https://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color
+// TODO: convert exeptions to custom server responses with custom logging
+// Every request needs @Res() response: FastifyReply at controller level
+// response.status(200).send({ status: 0, message: '', data: {} })
+
 export class HttpExc extends HttpException {
     constructor(message: string, status: number) {
         super(message, status)
