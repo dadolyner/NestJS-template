@@ -133,6 +133,20 @@ $ npm run tests
 // @Post('/auth/logout')     ->     Logout user and clear cookies (protected route with refresh token)
 ```
 
+#### Custom HTTP Exception response with server logging
+```ts
+// @Res() response: FastifyReply    ->     Controller parameter to get Fastify response for sending custom HTTP exceptions
+// Promise<DadoExResponse>          ->     Custom type for returning formatted response
+
+// return DadoEx.throw({ 
+//      status: <status code>,
+//      message: <custom message>,
+//      location: <class name>,
+//      data?: <data (object, array, ...)>
+//      response <FastifyReply>
+// })
+```
+
 ---
 
 ### Author Info

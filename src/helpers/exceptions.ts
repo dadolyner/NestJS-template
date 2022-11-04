@@ -1,105 +1,63 @@
-// Custom Exceptions class
-import { HttpException, Logger } from "@nestjs/common"
+// Custom Fastify Http Exceptions
+import { Logger } from "@nestjs/common"
+import { FastifyReply } from "fastify";
 
-export type HttpExcResponse = { statusCode: number; message: string }
+// Options
+export type DadoExOptions = { 
+    response: FastifyReply, 
+    location: string,
+    status: 200 | 201 | 202 | 204 | 304 | 400 | 401 | 402 | 403 | 404 | 408 | 409 | 500 | 501 | 502 | 503 | 504,
+    message: string, 
+    data?: any | null | undefined
+}
 
-// https://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color
-// TODO: convert exeptions to custom server responses with custom logging
-// Every request needs @Res() response: FastifyReply at controller level
-// response.status(200).send({ status: 0, message: '', data: {} })
+// Response type
+export type DadoExResponse = { 
+    status: { 
+        code: number, 
+        message: string 
+    }, 
+    message: string, 
+    data?: any | null | undefined  
+}
 
-export class HttpExc extends HttpException {
-    constructor(message: string, status: number) {
-        super(message, status)
-    }
+// Http
+const HttpErrorCodes = [
+    { code: 200, message: 'OK' },
+    { code: 201, message: 'Created' },
+    { code: 202, message: 'Accepted' },
+    { code: 204, message: 'No Content' },
+    { code: 304, message: 'Not Modified' },
+    { code: 400, message: 'Bad Request' },
+    { code: 401, message: 'Unauthorized' },
+    { code: 402, message: 'Payment Required' },
+    { code: 403, message: 'Forbidden' },
+    { code: 404, message: 'Not Found' },
+    { code: 408, message: 'Request Timeout' },
+    { code: 409, message: 'Conflict' },
+    { code: 500, message: 'Internal Server Error' },
+    { code: 501, message: 'Not Implemented' },
+    { code: 502, message: 'Bad Gateway' },
+    { code: 503, message: 'Service Unavailable' },
+    { code: 504, message: 'Gateway Timeout' },
+]
 
-    static ok(location: string, message: string) {
+class DadoEx {
+    static throw(options: DadoExOptions) {
+        const { response, location, status, message, data } = options
         const logger = new Logger(location)
-        logger.verbose(message)
-        return new HttpExc(message, 200)
-    }
-
-    static created(location: string, message: string) {
-        const logger = new Logger(location)
-        logger.verbose(message)
-        return new HttpExc(message, 201)
-    }
-
-    static accepted(location: string, message: string) {
-        const logger = new Logger(location)
-        logger.verbose(message)
-        return new HttpExc(message, 202)
-    }
-
-    static noContent(location: string, message: string) {
-        const logger = new Logger(location)
-        logger.verbose(message)
-        return new HttpExc(message, 204)
-    }
-
-    static notModified(location: string, message: string) {
-        const logger = new Logger(location)
-        logger.verbose(message)
-        return new HttpExc(message, 304)
-    }
-
-    static badRequest(location: string, message: string) {
-        const logger = new Logger(location)
-        logger.error(message)
-        return new HttpExc(message, 400)
-    }
-
-    static unauthorized(location: string, message: string) {
-        const logger = new Logger(location)
-        logger.error(message)
-        return new HttpExc(message, 401)
-    }
-
-    static payment(location: string, message: string) {
-        const logger = new Logger(location)
-        logger.error(message)
-        return new HttpExc(message, 402)
-    }
-
-    static forbiden(location: string, message: string) {
-        const logger = new Logger(location)
-        logger.error(message)
-        return new HttpExc(message, 403)
-    }
-
-    static notFound(location: string, message: string) {
-        const logger = new Logger(location)
-        logger.error(message)
-        return new HttpExc(message, 404)
-    }
-
-    static timeout(location: string, message: string) {
-        const logger = new Logger(location)
-        logger.error(message)
-        return new HttpExc(message, 408)
-    }
-
-    static conflict(location: string, message: string) {
-        const logger = new Logger(location)
-        logger.error(message)
-        return new HttpExc(message, 409)
-    }
-
-    static internalServerError(location: string, message: string) {
-        const logger = new Logger(location)
-        logger.error(message)
-        return new HttpExc(message, 500)
-    }
-
-    static badGateway(location: string, message: string) {
-        const logger = new Logger(location)
-        logger.error(message)
-        return new HttpExc(message, 502)
-    }
-
-    static gatewayTimeout(location: string, message: string) {
-        const logger = new Logger(location)
-        logger.error(message)
-        return new HttpExc(message, 504)
+        status >= 300 ? logger.error(message) : logger.verbose(message)
+        return response.status(status).send(
+            {
+                status: {
+                    code: status,
+                    message: HttpErrorCodes.find((error) => error.code === status).message
+                },
+                message: message,
+                data: data
+            }
+        )
     }
 }
+
+export default DadoEx
