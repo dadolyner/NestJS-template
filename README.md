@@ -57,6 +57,7 @@ $ npm install -g @nestjs/cli npm-check-updates
 
 # Update NestJS CLI to the latest version
 $ nest update
+# or
 $ nest update --force
 ```
 
@@ -68,14 +69,21 @@ $ npm i
 #### Setup environment variables
 
 ```ts
-// In the root directory create env folder
-// In the env folder create .env file for each enviroment and add your variables
+// In the root directory create "env" folder
+// In that "env" folder create .env file for each enviroment that you want and add your variables
 
-// .env.development
+// Start scripts for each enviroment
+// "start:prod": "cross-env ENVIROMENT=production node dist/main"
 // .env.production
-// .env.test
 
-// Required variables
+// "start:dev": "cross-env ENVIROMENT=development nest start --watch",
+// .env.development
+
+// "start:tests": "cross-env ENVIROMENT=test jest --config ./tests/jest-e2e.json",
+// .env.test
+```
+```ts
+// Required variables for this project
 SERVER_IP=
 PORT=
 
@@ -93,17 +101,17 @@ COOKIE_SECRET=
 #### Run the application
 
 ```bash
-# Run the application in production mode
+# Run the application in production mode with production environment variables
 $ npm run start
 ```
 
 ```bash
-# Run the application in development mode
+# Run the application in development mode with development environment variables
 $ npm run start:dev
 ```
 
 ```bash
-# Run the application in test mode
+# Run the application in test mode with test environment variables
 $ npm run tests
 ```
 
