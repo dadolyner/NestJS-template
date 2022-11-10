@@ -3,22 +3,21 @@ import { Logger } from "@nestjs/common"
 import { FastifyReply } from "fastify";
 
 // Options
-export type DadoExOptions = { 
-    response: FastifyReply, 
-    location: string,
+export type DadoExOptions = {
+    response: FastifyReply,
     status: 200 | 201 | 202 | 204 | 304 | 400 | 401 | 402 | 403 | 404 | 408 | 409 | 500 | 501 | 502 | 503 | 504,
-    message: string, 
+    message: string,
     data?: any | null | undefined
 }
 
 // Response type
-export type DadoExResponse = { 
-    status: { 
-        code: number, 
-        message: string 
-    }, 
-    message: string, 
-    data?: any | null | undefined  
+export type DadoExResponse = {
+    status: {
+        code: number,
+        message: string
+    },
+    message: string,
+    data?: any | null | undefined
 }
 
 // Http
@@ -43,9 +42,13 @@ const HttpErrorCodes = [
 ]
 
 class DadoEx {
-    static throw(options: DadoExOptions) {
-        const { response, location, status, message, data } = options
-        const logger = new Logger(location)
+    constructor(private location: string) {
+        this.location = location
+    }
+
+    throw(options: DadoExOptions) {
+        const { response, status, message, data } = options
+        const logger = new Logger(this.location)
         status >= 300 ? logger.error(message) : logger.verbose(message)
         return response.status(status).send(
             {

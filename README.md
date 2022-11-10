@@ -150,10 +150,10 @@ $ npm run tests
 // @Res() response: FastifyReply    ->     Controller parameter to get Fastify response for sending custom HTTP exceptions
 // Promise<DadoExResponse>          ->     Custom type for returning formatted response
 
+// private dadoEx = new DadoEx(<location string>)
 // return DadoEx.throw({ 
 //      status: <status code>,
 //      message: <custom message>,
-//      location: <class name>,
 //      data?: <data (object, array, ...)>
 //      response <FastifyReply>
 // })

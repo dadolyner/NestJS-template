@@ -15,12 +15,14 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ) { }
 
+    private dadoEx = new DadoEx(AuthService.name)
+
     // Register new user
     async register(registerDto: AuthRegisterDto, response: FastifyReply): Promise<DadoExResponse> {
         const { first_name, last_name, email, password } = registerDto
 
         const userExists = await this.usersRepository.findOne({ where: { email } })
-        if (userExists) return DadoEx.throw({ status: 409, message: 'User with this email already exists.', location: AuthService.name, response })
+        if (userExists) return this.dadoEx.throw({ status: 409, message: 'User with this email already exists.', response })
 
         const newUser = new Users()
         newUser.first_name = first_name
@@ -33,9 +35,9 @@ export class AuthService {
         newUser.updated_at = new Date()
 
         try { await this.usersRepository.save(newUser) }
-        catch (error) { return DadoEx.throw({ status: 500, message: `Adding a user failed. Reason: ${error.message}.`, location: AuthService.name, response }) }
+        catch (error) { return this.dadoEx.throw({ status: 500, message: `Adding a user failed. Reason: ${error.message}.`, response }) }
 
-        return DadoEx.throw({ status: 201, message: `New user ${first_name} ${last_name} <${email}> successfully registered.`, location: AuthService.name, response })
+        return this.dadoEx.throw({ status: 201, message: `New user ${first_name} ${last_name} <${email}> successfully registered.`, response })
     }
 
     // Login existing user, generate tokens and set cookies (user, access_token, refresh_token)
@@ -43,9 +45,9 @@ export class AuthService {
         const { email, password } = loginDto
 
         const userExists = await this.usersRepository.findOne({ where: { email } })
-        if (!userExists) return DadoEx.throw({ status: 400, message: 'User with this email does not exist.', location: AuthService.name, response })
+        if (!userExists) return this.dadoEx.throw({ status: 400, message: 'User with this email does not exist.', response })
         const validatePassword = await userExists.validatePassword(password)
-        if (!validatePassword) return DadoEx.throw({ status: 400, message: 'User entered invalid credentials.', location: AuthService.name, response })
+        if (!validatePassword) return this.dadoEx.throw({ status: 400, message: 'User entered invalid credentials.', response })
 
         try {
             const accessToken = await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_ACCESSTOKEN_SECRET}`, expiresIn: '15m' })
@@ -64,15 +66,15 @@ export class AuthService {
             response.cookie('user', userExists.id, { httpOnly: true, expires: cookiesExp })
             response.cookie('access_token', accessToken, { httpOnly: true, expires: accessTokenExp })
             response.cookie('refresh_token', refreshToken, { httpOnly: true, expires: cookiesExp })
-        } catch (error) { return DadoEx.throw({ status: 500, message: `Login failed. Reason: ${error.message}.`, location: AuthService.name, response }) }
+        } catch (error) { return this.dadoEx.throw({ status: 500, message: `Login failed. Reason: ${error.message}.`, response }) }
 
-        return DadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully logged in.`, location: AuthService.name, response })
+        return this.dadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully logged in.`, response })
     }
 
     // Refresh access token with a valid refresh token
     async refreshToken(user: string, response: FastifyReply): Promise<DadoExResponse> {
         const userExists = await this.usersRepository.findOne({ where: { id: user } })
-        if (!userExists) DadoEx.throw({ status: 400, message: 'Provided user does not exist.', location: AuthService.name, response })
+        if (!userExists) this.dadoEx.throw({ status: 400, message: 'Provided user does not exist.', response })
 
         try {
             const accessTokenExp = new Date()
@@ -80,15 +82,15 @@ export class AuthService {
 
             const accessToken = await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_ACCESSTOKEN_SECRET}`, expiresIn: '15m' })
             response.cookie('access_token', accessToken, { httpOnly: true, expires: accessTokenExp })
-        } catch (error) { return DadoEx.throw({ status: 500, message: `Signing a new access token failed. Reason: ${error.message}.`, location: AuthService.name, response }) }
+        } catch (error) { return this.dadoEx.throw({ status: 500, message: `Signing a new access token failed. Reason: ${error.message}.`, response }) }
 
-        return DadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully updated its access token.`, location: AuthService.name, response })
+        return this.dadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully updated its access token.`, response })
     }
 
     // Logout user, remove refresh token and clear cookies
     async logout(user: string, response: FastifyReply): Promise<DadoExResponse> {
         const userExists = await this.usersRepository.findOne({ where: { id: user } })
-        if (!userExists) DadoEx.throw({ status: 400, message: 'Provided user does not exist.', location: AuthService.name, response })
+        if (!userExists) this.dadoEx.throw({ status: 400, message: 'Provided user does not exist.', response })
 
         try {
             userExists.refreshToken = null
@@ -100,8 +102,8 @@ export class AuthService {
             response.setCookie('access_token', '', { expires: new Date(0) }).clearCookie('access_token')
             response.setCookie('refresh_token', '', { expires: new Date(0) }).clearCookie('refresh_token')
 
-        } catch (error) { return DadoEx.throw({ status: 500, message: `Logout failed. Reason: ${error.message}.`, location: AuthService.name, response }) }
+        } catch (error) { return this.dadoEx.throw({ status: 500, message: `Logout failed. Reason: ${error.message}.`, response }) }
 
-        return DadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully logged out.`, location: AuthService.name, response })
+        return this.dadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully logged out.`, response })
     }
 }

@@ -13,21 +13,23 @@ export class RoleGuard implements CanActivate {
     constructor(
         @InjectRepository(Users) private readonly usersRepository: Repository<Users>,
         private readonly reflector: Reflector
-    ) {}
+    ) { }
+
+    private dadoEx = new DadoEx(RoleGuard.name)
 
     async canActivate(context: ExecutionContext): Promise<any> {
         const request = context.switchToHttp().getRequest()
         const response = context.switchToHttp().getResponse()
         const cookies = request.cookies
         const user = cookies.user
-        
+
         const userExists = await this.usersRepository.findOne({ where: { id: user } })
-        if (!userExists) DadoEx.throw({ status: 401, message: `Access denied. Reason: User does not exist.`, location: RoleGuard.name, response })
-        
+        if (!userExists) this.dadoEx.throw({ status: 401, message: `Access denied. Reason: User does not exist.`, response })
+
         const userRoles = userExists.settings.roles
         const serverRoles = this.reflector.get<string[]>('roles', context.getHandler())
         const hasRole = () => userRoles.some(role => serverRoles.includes(role))
         if (user && hasRole() || userRoles.includes("Admin")) return true
-        else DadoEx.throw({ status: 401, message: `Access denied. Reason: User does not have the required permissions.`, location: RoleGuard.name, response }) 
+        else this.dadoEx.throw({ status: 401, message: `Access denied. Reason: User does not have the required permissions.`, response })
     }
 }
