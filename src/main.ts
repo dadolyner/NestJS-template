@@ -25,10 +25,10 @@ const Application = async () => {
         const swaggerDocument = SwaggerModule.createDocument(Application, swaggerConfig)
         SwaggerModule.setup('documentation', Application, swaggerDocument)
         
-        await Application.listen(process.env.PORT, '0.0.0.0')
+        await Application.listen(process.env.BACKEND_PORT, '0.0.0.0')
         
-        logger.log(`Application is running on ${process.env.SERVER_IP}:${process.env.PORT} in ${process.env.ENVIROMENT} mode.`)
-        logger.log(`Documentation is available on ${process.env.SERVER_IP}:${process.env.PORT}/documentation.`)
+        logger.log(`Application is running on ${process.env.BACKEND_IP}:${process.env.BACKEND_PORT} in ${process.env.ENVIROMENT} mode.`)
+        logger.log(`Documentation is available on ${process.env.BACKEND_IP}:${process.env.BACKEND_PORT}/documentation.`)
     } catch (error) { logger.error(error) }
 }
 Application()

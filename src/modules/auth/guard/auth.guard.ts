@@ -36,3 +36,20 @@ export class RefreshGuard implements CanActivate {
         catch (error) { this.dadoEx.throw({ status: 401, message: `Refresh Token expired.`, response }) }
     }
 }
+
+@Injectable()
+export class PasswordGuard implements CanActivate {
+    constructor(private jwtService: JwtService) { }
+
+    private dadoEx = new DadoEx(PasswordGuard.name)
+
+    canActivate(context: ExecutionContext): any {
+        const request = context.switchToHttp().getRequest()
+        const response = context.switchToHttp().getResponse()
+        const cookies = request.cookies
+        const passwordToken = cookies.password_token
+
+        try { return this.jwtService.verify(passwordToken, { secret: `${process.env.JWT_PASSWORDTOKEN_SECRET}` }) }
+        catch (error) { this.dadoEx.throw({ status: 401, message: `Password Token expired.`, response }) }
+    }
+}

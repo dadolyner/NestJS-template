@@ -9,16 +9,23 @@
             "request": {
                 "method": "POST",
                 "url": {
-                    "raw": "http://localhost:3000/auth/register",
-                    "protocol": "http",
-                    "host": [ "localhost:3000" ],
-                    "path": [ "auth", "register" ],
-                    "port": "3000"
+                    "raw": "{{SERVER_IP}}/auth/register",
+                    "host": [
+                        "{{server_ip}}"
+                    ],
+                    "path": [
+                        "auth",
+                        "register"
+                    ]
                 },
                 "body": {
                     "mode": "raw",
-                    "options": { "raw": { "language": "json" } },
-                    "raw": "{\n  \"first_name\": \"David\",\n  \"last_name\": \"Škulj\",\n  \"email\": \"skulj.david@gmail.com\",\n  \"password\": \"dadolyner123\"\n}"
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"first_name\": \"Janez\",\n  \"last_name\": \"Novak\",\n  \"email\": \"novak.janez@gmail.com\",\n  \"password\": \"janeznovak123\"\n}"
                 }
             }
         },
@@ -27,16 +34,23 @@
             "request": {
                 "method": "POST",
                 "url": {
-                    "raw": "http://localhost:3000/auth/login",
-                    "protocol": "http",
-                    "host": [ "localhost:3000" ],
-                    "path": [ "auth", "login" ],
-                    "port": "3000"
+                    "raw": "{{SERVER_IP}}/auth/login",
+                    "host": [
+                        "{{server_ip}}"
+                    ],
+                    "path": [
+                        "auth",
+                        "login"
+                    ]
                 },
                 "body": {
                     "mode": "raw",
-                    "options": { "raw": { "language": "json" } },
-                    "raw": "{\n  \"email\": \"skulj.david@gmail.com\",\n  \"password\": \"dadolyner123\"\n}"
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"email\": \"novak.janez@gmail.com\",\n  \"password\": \"janeznovak123\"\n}"
                 }
             }
         },
@@ -45,11 +59,14 @@
             "request": {
                 "method": "POST",
                 "url": {
-                    "raw": "http://localhost:3000/auth/refresh",
-                    "protocol": "http",
-                    "host": [ "localhost:3000" ],
-                    "path": [ "auth", "refresh" ],
-                    "port": "3000"
+                    "raw": "{{SERVER_IP}}/auth/refresh",
+                    "host": [
+                        "{{server_ip}}"
+                    ],
+                    "path": [
+                        "auth",
+                        "refresh"
+                    ]
                 }
             }
         },
@@ -58,11 +75,64 @@
             "request": {
                 "method": "POST",
                 "url": {
-                    "raw": "http://localhost:3000/auth/logout",
-                    "protocol": "http",
-                    "host": [ "localhost:3000" ],
-                    "path": [ "auth", "logout" ],
-                    "port": "3000"
+                    "raw": "{{SERVER_IP}}/auth/logout",
+                    "host": [
+                        "{{server_ip}}"
+                    ],
+                    "path": [
+                        "auth",
+                        "logout"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Request Password Reset",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "{{SERVER_IP}}/auth/request-password-reset",
+                    "host": [
+                        "{{server_ip}}"
+                    ],
+                    "path": [
+                        "auth",
+                        "request-password-reset"
+                    ]
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"email\": \"novak.janez@gmail.com\"\n}"
+                }
+            }
+        },
+        {
+            "name": "Reset Password",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "{{SERVER_IP}}/auth/reset-password",
+                    "host": [
+                        "{{server_ip}}"
+                    ],
+                    "path": [
+                        "auth",
+                        "reset-password"
+                    ]
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"password\": \"janeznovak123\"\n}"
                 }
             }
         }

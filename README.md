@@ -84,18 +84,30 @@ $ npm i
 ```
 ```ts
 // Required variables for this project
-SERVER_IP=
-PORT=
+// Backend details
+BACKEND_IP=
+BACKEND_PORT=
 
+// Frontend details
+FRONTEND_IP=
+FRONTEND_PORT=
+
+// Database details
 DATABASE_HOST=
 DATABASE_PORT=
 DATABASE_USER=
 DATABASE_PASSWORD=
 DATABASE_NAME=
 
+// Secrets for JWT
 JWT_ACCESSTOKEN_SECRET=
 JWT_REFRESHTOKEN_SECRET=
+JWT_PASSWORDTOKEN_SECRET=
 COOKIE_SECRET=
+
+// Mail STMP details
+STMP_USER=
+STMP_PASS=
 ```
 
 #### Run the application
@@ -139,11 +151,20 @@ $ npm run tests
 // @Post('/auth/login')      ->     Login User and store JWT in cookies ( access(exp: 15m) and refresh(exp: 7d) )
 // @Post('/auth/refresh')    ->     Refresh users access token (protected route with refresh token)
 // @Post('/auth/logout')     ->     Logout user and clear cookies (protected route with refresh token)
-
-// Users have JSONB settings which has role property that defines the users role and can be used for authorization
-// @Roles(['<roles>'])       ->     Protects the route with permission roles
-// @UseGuards(RoleGuard)     ->     Protects the route with permission roles
 ```
+
+```ts
+// Recently added features for secure password reset:
+// @Post('/auth/request-password-reset')     ->     Send email with reset password link
+// @Post('/auth/reset-password')             ->     Reset password with new password
+```
+<details>
+<summary>Preview of emails</summary>
+    <h4>Request password reset</h4>
+    <img src="src/assets/RequestPasswordReset.png"/>
+    <h4>Password changed</h4>
+    <img src="src/assets/PasswordChanged.png">
+</details>
 
 #### Custom HTTP Exception response with server logging
 ```ts

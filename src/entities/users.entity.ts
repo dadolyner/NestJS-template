@@ -23,9 +23,6 @@ export class Users extends BaseEntity {
     @Column()
     password: string
 
-    @Column({ nullable: true, default: null })
-    refreshToken: string
-
     @Column('jsonb', { nullable: true, default: {} })
     settings: {
         roles: string[]

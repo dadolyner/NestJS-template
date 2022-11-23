@@ -49,3 +49,19 @@ export class AuthRolesDto {
     @IsNotEmpty({ message: 'Roles are required' })
     roles: string[]
 }
+
+export class PasswordRequestDto {
+    @ApiProperty({ type: String, description: 'User email', example: 'janez.novak@gmail.com' })
+    @IsString({ message: 'Email must be a string' })
+    @IsEmail({ message: 'This is not an email' })
+    @IsNotEmpty({ message: 'Email is required' })
+    email: string
+}
+
+export class PasswordDto {
+    @ApiProperty({ type: String, description: 'User password', example: 'janeznovak123' })
+    @IsString({ message: 'Password must be a string' })
+    @MinLength(8, { message: 'Password is too short' })
+    @MaxLength(100, { message: 'Password is too long' })
+    password: string
+}
