@@ -7,7 +7,7 @@ export type DadoExOptions = {
     response: FastifyReply,
     status: 200 | 201 | 202 | 204 | 304 | 400 | 401 | 402 | 403 | 404 | 408 | 409 | 500 | 501 | 502 | 503 | 504,
     message: string,
-    data?: any | null | undefined
+    data?: Object | Array<Object> | null | undefined
 }
 
 // Response type
@@ -17,7 +17,7 @@ export type DadoExResponse = {
         message: string
     },
     message: string,
-    data?: any | null | undefined
+    data?: Object | Array<Object> | null | undefined
 }
 
 // Http

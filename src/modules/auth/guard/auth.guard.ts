@@ -3,6 +3,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
 import { JwtService } from "@nestjs/jwt"
 import DadoEx from 'src/helpers/exceptions'
 
+// Acces Token Guard
 @Injectable()
 export class AccessGuard implements CanActivate {
     constructor(private jwtService: JwtService) { }
@@ -20,6 +21,7 @@ export class AccessGuard implements CanActivate {
     }
 }
 
+// Refresh Token Guard
 @Injectable()
 export class RefreshGuard implements CanActivate {
     constructor(private jwtService: JwtService) { }
@@ -37,6 +39,7 @@ export class RefreshGuard implements CanActivate {
     }
 }
 
+// Password reset Token Guard
 @Injectable()
 export class PasswordGuard implements CanActivate {
     constructor(private jwtService: JwtService) { }
@@ -51,5 +54,23 @@ export class PasswordGuard implements CanActivate {
 
         try { return this.jwtService.verify(passwordToken, { secret: `${process.env.JWT_PASSWORDTOKEN_SECRET}` }) }
         catch (error) { this.dadoEx.throw({ status: 401, message: `Password Token expired.`, response }) }
+    }
+}
+
+// Email verification Token Guard
+@Injectable()
+export class EmailGuard implements CanActivate {
+    constructor(private jwtService: JwtService) { }
+
+    private dadoEx = new DadoEx(EmailGuard.name)
+
+    canActivate(context: ExecutionContext): any {
+        const request = context.switchToHttp().getRequest()
+        const response = context.switchToHttp().getResponse()
+        const cookies = request.cookies
+        const emailToken = cookies.email_token
+
+        try { return this.jwtService.verify(emailToken, { secret: `${process.env.JWT_EMAILTOKEN_SECRET}` }) }
+        catch (error) { this.dadoEx.throw({ status: 401, message: `Email Token expired.`, response }) }
     }
 }

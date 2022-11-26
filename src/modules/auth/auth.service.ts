@@ -10,6 +10,7 @@ import DadoEx, { DadoExResponse } from 'src/helpers/exceptions'
 import transporter from 'src/mail/email.config'
 import RequestPasswordReset, { ResetPasswordData } from 'src/mail/templates/RequestPasswordReset'
 import PasswordResetConf from 'src/mail/templates/ResetPasswordConfirmation'
+import VerifyEmail from 'src/mail/templates/VerifyEmail'
 
 @Injectable()
 export class AuthService {
@@ -34,13 +35,56 @@ export class AuthService {
         newUser.salt = await newUser.generateSalt()
         newUser.password = await newUser.hashPassword(password, newUser.salt)
         newUser.settings = { roles: ['User'] }
+        newUser.verified = false
         newUser.created_at = new Date()
         newUser.updated_at = new Date()
 
-        try { await this.usersRepository.save(newUser) }
+        try { 
+            await this.usersRepository.save(newUser) 
+
+            const emailToken = await this.jwtService.signAsync({ sub: newUser.id, email: newUser.email }, { secret: `${process.env.JWT_EMAILTOKEN_SECRET}`, expiresIn: '60m' })
+
+            const emailTokenExp = new Date()
+            emailTokenExp.setMinutes(emailTokenExp.getMinutes() + 60)
+
+            response.cookie('user', newUser.id, { httpOnly: true, expires: emailTokenExp })
+            response.cookie('email_token', emailToken, { httpOnly: true, expires: emailTokenExp })
+
+            const mailData: ResetPasswordData = {
+                first_name: newUser.first_name,
+                last_name: newUser.last_name,
+                link: `${process.env.FRONTEND_IP}:${process.env.FRONTEND_PORT}/verify-email`,
+            }
+
+            await transporter.sendMail({
+                from: '"Company Support" <support@company.com>',
+                to: newUser.email,
+                subject: 'Verify your email',
+                html: VerifyEmail(mailData),
+            })            
+        }
         catch (error) { return this.dadoEx.throw({ status: 500, message: `Adding a user failed. Reason: ${error.message}.`, response }) }
 
         return this.dadoEx.throw({ status: 201, message: `New user ${first_name} ${last_name} <${email}> successfully registered.`, response })
+    }
+
+    // Verify users email
+    async verifyEmail(user:string, response: FastifyReply): Promise<DadoExResponse> {
+        const userExists = await this.usersRepository.findOne({ where: { id: user } })
+        if (!userExists) return this.dadoEx.throw({ status: 404, message: 'User with this email does not exist.', response })
+
+        userExists.verified = true
+        userExists.updated_at = new Date()
+
+        try { 
+            await this.usersRepository.save(userExists)
+        
+            response.setCookie('user', '', { expires: new Date(0) }).clearCookie('user')
+            response.setCookie('email_token', '', { expires: new Date(0) }).clearCookie('email_token')
+        }
+        catch (error) { return this.dadoEx.throw({ status: 500, message: `Verifying user email failed. Reason: ${error.message}.`, response }) }
+
+        return this.dadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully verified.`, response })
     }
 
     // Login existing user, generate tokens and set cookies (user, access_token, refresh_token)
@@ -51,6 +95,8 @@ export class AuthService {
         if (!userExists) return this.dadoEx.throw({ status: 404, message: 'User with this email does not exist.', response })
         const validatePassword = await userExists.validatePassword(password)
         if (!validatePassword) return this.dadoEx.throw({ status: 400, message: 'User entered invalid credentials.', response })
+        const isUserVerified = userExists.verified
+        if (isUserVerified === false) return this.dadoEx.throw({ status: 401, message: 'User email is not verified.', response })
 
         try {
             const accessToken = await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_ACCESSTOKEN_SECRET}`, expiresIn: '15m' })
@@ -116,7 +162,7 @@ export class AuthService {
             const mailData: ResetPasswordData = {
                 first_name: userExists.first_name,
                 last_name: userExists.last_name,
-                reset_link: `${process.env.FRONTEND_IP}:${process.env.FRONTEND_PORT}/change-password`,
+                link: `${process.env.FRONTEND_IP}:${process.env.FRONTEND_PORT}/change-password`,
             }
 
             await transporter.sendMail({

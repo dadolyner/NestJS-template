@@ -27,6 +27,9 @@ export class Users extends BaseEntity {
     settings: {
         roles: string[]
     }
+
+    @Column()
+    verified: boolean
     
     @Column()
     created_at: Date
@@ -38,8 +41,8 @@ export class Users extends BaseEntity {
     async validatePassword(password: string): Promise<boolean> { return await bcrypt.hash(password, this.salt) === this.password }
 
     // Generate salt for hashing
-    async generateSalt() { return await bcrypt.genSalt() }
+    async generateSalt(): Promise<string> { return await bcrypt.genSalt() }
 
     // Hash user password
-    async hashPassword(password: string, salt: string) { return await bcrypt.hash(password, salt) }
+    async hashPassword(password: string, salt: string): Promise<string> { return await bcrypt.hash(password, salt) }
 }

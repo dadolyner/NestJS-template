@@ -103,6 +103,7 @@ DATABASE_NAME=
 JWT_ACCESSTOKEN_SECRET=
 JWT_REFRESHTOKEN_SECRET=
 JWT_PASSWORDTOKEN_SECRET=
+JWT_EMAILTOKEN_SECRET=
 COOKIE_SECRET=
 
 // Mail STMP details
@@ -140,30 +141,39 @@ $ npm run tests
 
 #### Authentication
 ```ts
-// @UseGuards(AccessGuard)   ->     Protects the route with Access JWT authentication
-// @UseGuards(RefreshGuard)  ->     Protects the route with Refresh JWT authentication
+// @UseGuards(AccessGuard)    ->     Protects the route with Access JWT authentication    -->  App access
+// @UseGuards(RefreshGuard)   ->     Protects the route with Refresh JWT authentication   -->  Refresh AccessToken
+// @UseGuards(PasswordGuard)  ->     Protects the route with Password JWT authentication  -->  Reset password
+// @UseGuards(EmailGuard)     ->     Protects the route with Email JWT authentication     -->  Verify email
 
-// @Roles(['roles'])         ->     Define roles that can acces the route
-// @UseGuards(RoleGuard)     ->     Protects the route with permission roles
+// @Roles(['roles'])          ->     Define roles that can acces the route
+// @UseGuards(RoleGuard)      ->     Protects the route with permission roles
 
 // In folder asets you can find a postman collection with premade requests to test the following:
-// @Post('/auth/register')   ->     Register User
-// @Post('/auth/login')      ->     Login User and store JWT in cookies ( access(exp: 15m) and refresh(exp: 7d) )
-// @Post('/auth/refresh')    ->     Refresh users access token (protected route with refresh token)
-// @Post('/auth/logout')     ->     Logout user and clear cookies (protected route with refresh token)
+// @Post('/auth/register')    ->     Register User
+// @Post('/auth/login')       ->     Login User and store JWT in cookies ( access(exp: 15m) and refresh(exp: 7d) )
+// @Post('/auth/refresh')     ->     Refresh users access token (protected route with refresh token)
+// @Post('/auth/logout')      ->     Logout user and clear cookies (protected route with refresh token)
 ```
 
 ```ts
-// Recently added features for secure password reset:
+// Recently added features for secure password reset and email verification:
+// @Post('/auth/verify-email')               ->     After registration send email with verify email link
 // @Post('/auth/request-password-reset')     ->     Send email with reset password link
 // @Post('/auth/reset-password')             ->     Reset password with new password
 ```
 <details>
-<summary>Preview of emails</summary>
-    <h4>Request password reset</h4>
-    <img src="src/assets/RequestPasswordReset.png"/>
-    <h4>Password changed</h4>
-    <img src="src/assets/PasswordChanged.png">
+<summary>Email previews</summary>
+    <hr/>
+        <h4>Email verification</h4>
+        <img src="src/assets/VerifyEmail.png">
+    <hr/>
+        <h4>Request password reset</h4>
+        <img src="src/assets/RequestPasswordReset.png"/>
+    <hr/>
+        <h4>Password changed</h4>
+        <img src="src/assets/PasswordChanged.png">
+    <hr/>
 </details>
 
 #### Custom HTTP Exception response with server logging
@@ -171,13 +181,13 @@ $ npm run tests
 // @Res() response: FastifyReply    ->     Controller parameter to get Fastify response for sending custom HTTP exceptions
 // Promise<DadoExResponse>          ->     Custom type for returning formatted response
 
-// private dadoEx = new DadoEx(<location string>)
-// return DadoEx.throw({ 
-//      status: <status code>,
-//      message: <custom message>,
-//      data?: <data (object, array, ...)>
-//      response <FastifyReply>
-// })
+private dadoEx = new DadoEx(<location string>)
+return DadoEx.throw({ 
+     status: <status code>, // number
+     message: <custom message>, // string
+     data?: <data (object, array, ...)> // Object or Array
+     response: <FastifyReply> // Fastify response
+})
 ```
 
 ---

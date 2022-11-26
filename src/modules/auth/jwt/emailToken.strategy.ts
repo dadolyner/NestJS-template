@@ -1,21 +1,21 @@
-// PasswordToken JWT Strategy
+// EmailToken JWT Strategy
 import { PassportStrategy } from "@nestjs/passport"
 import { ExtractJwt, Strategy } from "passport-jwt"
 import { Request } from 'express'
 import { Injectable } from "@nestjs/common"
 
 @Injectable()
-export class PasswordTokenStrategy extends PassportStrategy(Strategy, 'jwt-password') {
+export class EmailTokenStrategy extends PassportStrategy(Strategy, 'jwt-email') {
     constructor() {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-            secretOrKey: process.env.JWT_PASSWORDTOKEN_SECRET,
+            secretOrKey: process.env.JWT_EMAILTOKEN_SECRET,
             passReqToCallback: true
         })
     }
 
     validate(req: Request, payload: any) { 
-        const passwordToken = req.get('authorization').replace('Bearer ', '').trim()
-        return { ...payload, passwordToken } 
+        const emailToken = req.get('authorization').replace('Bearer ', '').trim()
+        return { ...payload, emailToken } 
     }
 }

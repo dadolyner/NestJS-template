@@ -1,9 +1,5 @@
-// Request password reset email
-export interface ResetPasswordData {
-    first_name: string;
-    last_name: string;
-    link?: string;
-}
+// Email verification email
+import { ResetPasswordData } from './RequestPasswordReset'
 
 const BodyStyle = `margin: 0; padding: 0; font-family: sans-serif; background-color: #fff;`
 const ContanerStyle = `width: fit-content; margin: 0 auto; border: 1px solid black; border-radius: 5px; padding: 10px; background-color: #fff;`
@@ -12,7 +8,7 @@ const HeaderStyle = `margin: 0; font-size: 24px; font-weight: 600; color: #4e5a6
 const ParagraphStyle = `margin: 0; font-size: 16px; font-weight: 400; color: #8594a7;`
 const ResetButtonStyle = `border-radius: 5px; text-decoration: none; color: #fff; background-color: #3b485a; padding: 10px 30px; font-size: 16px;`
 
-const RequestPasswordReset = (data: ResetPasswordData) => {
+const VerifyEmail = (data: ResetPasswordData) => {
     const { first_name, last_name, link } = data;
     return `
         <!DOCTYPE html>
@@ -29,11 +25,11 @@ const RequestPasswordReset = (data: ResetPasswordData) => {
                     <tr><td><h3 style="${HeaderStyle}">Dear ${first_name} ${last_name}<span>,</span></h3></td></tr>
                     <tr><td>&nbsp;</td></tr>
 
-                    <tr><td><p style="${ParagraphStyle}">You are recieving this email because we have recieved a password reset request for your account.</p></td></tr>
-                    <tr><td><p style="${ParagraphStyle}">This password reset link will expire in 60 minutes.</p></td></tr>
+                    <tr><td><p style="${ParagraphStyle}">You are recieving this email because you have registered on our website and you have to verify your email.</p></td></tr>
+                    <tr><td><p style="${ParagraphStyle}">This email verification link will expire in 60 minutes.</p></td></tr>
                     <tr><td>&nbsp;</td></tr>
 
-                    <tr><td style="text-align: center;"><a href="${link}" style="${ResetButtonStyle}">Reset Password</a></td></tr>
+                    <tr><td style="text-align: center;"><a href="${link}" style="${ResetButtonStyle}">Verify Email</a></td></tr>
                     <tr><td>&nbsp;</td></tr>
 
                     <tr><td><p style="${ParagraphStyle}">If this wasn't you, please let us know immediately by replying to this email.</p></td></tr>
@@ -48,4 +44,4 @@ const RequestPasswordReset = (data: ResetPasswordData) => {
     `
 }
 
-export default RequestPasswordReset
+export default VerifyEmail

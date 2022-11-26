@@ -5,7 +5,7 @@ import { AuthService } from './auth.service'
 import { AuthLoginDto, AuthRegisterDto, PasswordDto, PasswordRequestDto } from './dto/auth.dto'
 import { FastifyReply } from 'fastify'
 import { Cookie } from './decorator/cookie.decorator'
-import { PasswordGuard, RefreshGuard } from './guard/auth.guard'
+import { PasswordGuard, RefreshGuard, EmailGuard } from './guard/auth.guard'
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { DadoExResponse } from 'src/helpers/exceptions'
 
@@ -20,6 +20,15 @@ export class AuthController {
     @Post('register')
     async register(@Body() registerDto: AuthRegisterDto, @Res() response: FastifyReply): Promise<DadoExResponse> {
         return await this.authService.register(registerDto, response)
+    }
+
+    // Verify users email
+    @ApiResponse({ status: 200, description: 'Verify users email' })
+    @ApiBearerAuth()
+    @UseGuards(EmailGuard)
+    @Post('verify-email')
+    async verifyEmail(@Cookie('user') user: string, @Res() response: FastifyReply): Promise<DadoExResponse> {
+        return await this.authService.verifyEmail(user, response)
     }
 
     // Login existing user, generate tokens and set cookies (user, access_token, refresh_token)
