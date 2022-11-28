@@ -7,8 +7,8 @@ import { resolve } from 'path'
 config({ path: resolve(__dirname, `../../env/.env.${process.env.ENVIROMENT}`) })
 
 const transporter = nodemailer.createTransport({
-    host: 'smtp-relay.sendinblue.com',
-    port: 587,
+    host: process.env.STMP_HOST,
+    port: +process.env.STMP_PORT,
     secure: false,
     auth: {
         user: process.env.STMP_USER,
