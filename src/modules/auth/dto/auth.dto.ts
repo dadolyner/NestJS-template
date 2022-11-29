@@ -24,6 +24,7 @@ export class AuthRegisterDto {
     @IsString({ message: 'Password must be a string' })
     @MinLength(8, { message: 'Password is too short' })
     @MaxLength(100, { message: 'Password is too long' })
+    // @Matches(/(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, { message: 'password to weak' })
     password: string
 }
 
