@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Users } from 'src/entities/users.entity'
 import { Repository } from 'typeorm'
-import { AuthLoginDto, AuthRegisterDto, PasswordDto, PasswordRequestDto } from './dto/auth.dto'
+import { AuthLoginDto, AuthRegisterDto, AuthRolesDto, PasswordDto, PasswordRequestDto } from './dto/auth.dto'
 import { JwtService } from '@nestjs/jwt'
 import { FastifyReply } from 'fastify'
 import DadoEx, { DadoExResponse } from 'src/helpers/exceptions'
@@ -203,5 +203,21 @@ export class AuthService {
         } catch (error) { return this.dadoEx.throw({ status: 500, message: `Password reset failed. Reason: ${error.message}.`, response }) }
 
         return this.dadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully reset password.`, response })
+    }
+
+    // Set users roles
+    async setRoles(user: string, rolesDto: AuthRolesDto, response: FastifyReply): Promise<DadoExResponse> {
+        const { userId, roles } = rolesDto
+        const adminExists = await this.usersRepository.findOne({ where: { id: user } })
+        if (!adminExists) this.dadoEx.throw({ status: 404, message: 'Provided admin does not exist.', response })
+        const userExists = await this.usersRepository.findOne({ where: { id: userId } })
+        if (!userExists) this.dadoEx.throw({ status: 404, message: 'Provided user does not exist.', response })
+
+        try {
+            userExists.settings.roles = roles
+            await this.usersRepository.save(userExists)
+        } catch (error) { return this.dadoEx.throw({ status: 500, message: `Setting users roles failed. Reason: ${error.message}.`, response }) }
+
+        return this.dadoEx.throw({ status: 200, message: `Roles for user ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully set.`, response })
     }
 }

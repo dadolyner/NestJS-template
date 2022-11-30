@@ -2,12 +2,13 @@
 import { Controller, Post } from '@nestjs/common'
 import { Body, Res, UseGuards } from '@nestjs/common/decorators'
 import { AuthService } from './auth.service'
-import { AuthLoginDto, AuthRegisterDto, PasswordDto, PasswordRequestDto } from './dto/auth.dto'
+import { AuthLoginDto, AuthRegisterDto, AuthRolesDto, PasswordDto, PasswordRequestDto } from './dto/auth.dto'
 import { FastifyReply } from 'fastify'
 import { Cookie } from './decorator/cookie.decorator'
-import { PasswordGuard, RefreshGuard, EmailGuard } from './guard/auth.guard'
+import { PasswordGuard, RefreshGuard, EmailGuard, AccessGuard } from './guard/auth.guard'
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { DadoExResponse } from 'src/helpers/exceptions'
+import { RoleGuard, Roles } from './guard/role.guard'
 
 @ApiTags('Authentification')
 @Controller('auth')
@@ -72,5 +73,16 @@ export class AuthController {
     @Post('reset-password')
     async resetPassword(@Cookie('user') user: string, @Body() password: PasswordDto, @Res() response: FastifyReply): Promise<DadoExResponse> {
         return await this.authService.resetPassword(user, password, response)
+    }
+
+    // Set users roles
+    @ApiResponse({ status: 200, description: 'Set users roles' })
+    @ApiBody({ type: AuthRolesDto })
+    @ApiBearerAuth()
+    @UseGuards(AccessGuard, RoleGuard)
+    @Roles(['admin'])
+    @Post('roles')
+    async setRoles(@Cookie('user') user: string, @Body() rolesDto: AuthRolesDto, @Res() response: FastifyReply): Promise<DadoExResponse> {
+        return await this.authService.setRoles(user, rolesDto, response)
     }
 }

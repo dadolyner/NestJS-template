@@ -163,6 +163,7 @@ $ npm run tests
 // @Post('/auth/verify-email')               ->     After registration send email with verify email link
 // @Post('/auth/request-password-reset')     ->     Send email with reset password link
 // @Post('/auth/reset-password')             ->     Reset password with new password
+// @Post('/auth/roles')                      ->     Admin can set users roles
 ```
 <details>
 <summary>Email previews</summary>

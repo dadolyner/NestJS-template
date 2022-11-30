@@ -45,6 +45,11 @@ export class AuthLoginDto {
 
 // Roles
 export class AuthRolesDto {
+    @ApiProperty({ type: Array, description: 'User id', example: '991416fc-c1c9-451c-9c8e-8209e09fb4b7' })
+    @IsString({ message: 'Users id must be a strings' })
+    @IsNotEmpty({ message: 'User is required' })
+    userId: string
+
     @ApiProperty({ type: Array, description: 'User roles', example: '["Admin"]' })
     @IsArray({ message: 'Roles must be an array of strings' })
     @IsNotEmpty({ message: 'Roles are required' })
