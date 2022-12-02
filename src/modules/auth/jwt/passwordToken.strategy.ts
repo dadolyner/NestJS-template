@@ -14,8 +14,8 @@ export class PasswordTokenStrategy extends PassportStrategy(Strategy, 'jwt-passw
         })
     }
 
-    validate(req: Request, payload: any) { 
+    validate(req: Request, payload: any) {
         const passwordToken = req.get('authorization').replace('Bearer ', '').trim()
-        return { ...payload, passwordToken } 
+        return { ...payload, passwordToken }
     }
 }

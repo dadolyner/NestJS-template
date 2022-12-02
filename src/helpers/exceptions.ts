@@ -6,16 +6,14 @@ import { FastifyReply } from "fastify";
 export type DadoExOptions = {
     response: FastifyReply,
     status: 200 | 201 | 202 | 204 | 304 | 400 | 401 | 402 | 403 | 404 | 408 | 409 | 500 | 501 | 502 | 503 | 504,
+    time?: string,
     message: string,
     data?: Object | Array<Object> | null | undefined
 }
 
 // Response type
 export type DadoExResponse = {
-    status: {
-        code: number,
-        message: string
-    },
+    status: { code: number, message: string, time?: string },
     message: string,
     data?: Object | Array<Object> | null | undefined
 }
@@ -47,17 +45,18 @@ class DadoEx {
     }
 
     throw(options: DadoExOptions) {
-        const { response, status, message, data } = options
+        const { response, status, time, message, data } = options
         const logger = new Logger(this.location)
         status >= 300 ? logger.error(message) : logger.verbose(message)
         return response.status(status).send(
             {
                 status: {
                     code: status,
-                    message: HttpErrorCodes.find((error) => error.code === status).message
+                    message: HttpErrorCodes.find((error) => error.code === status).message,
+                    time: time,
                 },
                 message: message,
-                data: data
+                data: data,
             }
         )
     }

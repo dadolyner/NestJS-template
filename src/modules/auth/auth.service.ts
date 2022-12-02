@@ -39,8 +39,8 @@ export class AuthService {
         newUser.created_at = new Date()
         newUser.updated_at = new Date()
 
-        try { 
-            await this.usersRepository.save(newUser) 
+        try {
+            await this.usersRepository.save(newUser)
 
             const emailToken = await this.jwtService.signAsync({ sub: newUser.id, email: newUser.email }, { secret: `${process.env.JWT_EMAILTOKEN_SECRET}`, expiresIn: '60m' })
 
@@ -61,7 +61,7 @@ export class AuthService {
                 to: newUser.email,
                 subject: 'Verify your email',
                 html: VerifyEmail(mailData),
-            })            
+            })
         }
         catch (error) { return this.dadoEx.throw({ status: 500, message: `Adding a user failed. Reason: ${error.message}.`, response }) }
 
@@ -69,16 +69,16 @@ export class AuthService {
     }
 
     // Verify users email
-    async verifyEmail(user:string, response: FastifyReply): Promise<DadoExResponse> {
+    async verifyEmail(user: string, response: FastifyReply): Promise<DadoExResponse> {
         const userExists = await this.usersRepository.findOne({ where: { id: user } })
         if (!userExists) return this.dadoEx.throw({ status: 404, message: 'User with this email does not exist.', response })
 
         userExists.verified = true
         userExists.updated_at = new Date()
 
-        try { 
+        try {
             await this.usersRepository.save(userExists)
-        
+
             response.setCookie('user', '', { expires: new Date(0) }).clearCookie('user')
             response.setCookie('email_token', '', { expires: new Date(0) }).clearCookie('email_token')
         }

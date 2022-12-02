@@ -184,11 +184,24 @@ $ npm run tests
 // @Res() response: FastifyReply    ->     Controller parameter to get Fastify response for sending custom HTTP exceptions
 // Promise<DadoExResponse>          ->     Custom type for returning formatted response
 
+// Example:
 private dadoEx = new DadoEx(<location string>)
 return DadoEx.throw({ 
      status: <status code>, // number
      message: <custom message>, // string
-     data?: <data (object, array, ...)> // Object or Array
+     data?: <data (object, array, ...)>, // Object or Array
+     response: <FastifyReply> // Fastify response
+})
+
+// Added helper function to add time of executon to the response
+// Example:
+private dadoTimer = new DadoTimer()
+this.dadoTimer.start()
+return DadoEx.throw({ 
+     status: <status code>, // number
+     message: <custom message>, // string
+     time?: <this.dadoTimer.end()>, // string
+     data?: <data (object, array, ...)>, // Object or Array
      response: <FastifyReply> // Fastify response
 })
 ```

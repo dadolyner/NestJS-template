@@ -14,8 +14,8 @@ export class EmailTokenStrategy extends PassportStrategy(Strategy, 'jwt-email') 
         })
     }
 
-    validate(req: Request, payload: any) { 
+    validate(req: Request, payload: any) {
         const emailToken = req.get('authorization').replace('Bearer ', '').trim()
-        return { ...payload, emailToken } 
+        return { ...payload, emailToken }
     }
 }
