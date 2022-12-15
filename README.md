@@ -8,6 +8,7 @@
 - [Technologies](#technologies)
 - [How To Use](#how-to-use)
     - [Installation](#installation)
+    - [Database](#database)
     - [Setup environment variables](#setup-environment-variables)
     - [Run the application](#run-the-application)
     - [Tests](#tests)
@@ -64,6 +65,12 @@ $ nest update --force
 ```bash
 # Install dependencies
 $ npm i
+```
+
+#### Database
+
+```ts
+// Create a database in PostgreSQL and fill out credentials in .env file
 ```
 
 #### Setup environment variables
