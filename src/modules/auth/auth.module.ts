@@ -12,10 +12,11 @@ import { Users } from 'src/entities/users.entity'
 
 @Module({
     imports: [
+        JwtModule.register({}),
         TypeOrmModule.forFeature([Users]),
-        JwtModule.register({})
     ],
     controllers: [AuthController],
     providers: [AuthService, AccessTokenStrategy, RefreshTokenStrategy, PasswordTokenStrategy, EmailTokenStrategy],
+    exports: [JwtModule],
 })
 export class AuthModule { }
