@@ -28,8 +28,10 @@ export class RoleGuard implements CanActivate {
 
         const userRoles = userExists.settings.roles
         const serverRoles = this.reflector.get<string[]>('roles', context.getHandler())
-        const hasRole = () => userRoles.some(role => serverRoles.includes(role))
-        if (user && hasRole() || userRoles.includes("Admin")) return true
+        const hasRole = () => { return userRoles.some(role => serverRoles.includes(role)) }
+
+        if (userRoles.includes("Admin")) return true
+        else if (hasRole()) return true
         else this.dadoEx.throw({ status: 401, message: `Access denied. Reason: User does not have the required permissions.`, response })
     }
 }
