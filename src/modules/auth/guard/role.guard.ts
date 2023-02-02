@@ -24,7 +24,7 @@ export class RoleGuard implements CanActivate {
         const user = cookies.user
 
         const userExists = await this.usersRepository.findOne({ where: { id: user } })
-        if (!userExists) this.dadoEx.throw({ status: 401, message: `Access denied. Reason: User does not exist.`, response })
+        if (!userExists) return this.dadoEx.throw({ status: 401, message: `Access denied. Reason: User does not exist.`, response })
 
         const userRoles = userExists.settings.roles
         const serverRoles = this.reflector.get<string[]>('roles', context.getHandler())
@@ -32,6 +32,6 @@ export class RoleGuard implements CanActivate {
 
         if (userRoles.includes("Admin")) return true
         else if (hasRole()) return true
-        else this.dadoEx.throw({ status: 401, message: `Access denied. Reason: User does not have the required permissions.`, response })
+        else return this.dadoEx.throw({ status: 401, message: `Access denied. Reason: User does not have the required permissions.`, response })
     }
 }

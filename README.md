@@ -140,8 +140,8 @@ $ npm run tests
 #### Access
 
 ```ts
-// To access the application go to http://localhost:3000
-// To access the swagger documentation go to http://localhost:3000/documentation
+// To access the application go to http://<BACKEND_IP>:<BACKEND_PORT>
+// To access the swagger documentation go to http://<BACKEND_IP>:<BACKEND_PORT>/documentation
 ```
 
 ---

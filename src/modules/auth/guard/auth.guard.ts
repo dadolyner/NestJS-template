@@ -1,76 +1,64 @@
 // Guard classes that protects routes with Access or Refresh Token
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
-import { JwtService } from "@nestjs/jwt"
+import { ExecutionContext, Injectable } from '@nestjs/common'
+import { AuthGuard } from '@nestjs/passport'
 import DadoEx from 'src/helpers/exceptions'
 
 // Acces Token Guard
 @Injectable()
-export class AccessGuard implements CanActivate {
-    constructor(private jwtService: JwtService) { }
-
+export class AccessGuard extends AuthGuard('jwt') {
     private dadoEx = new DadoEx(AccessGuard.name)
 
     canActivate(context: ExecutionContext): any {
         const request = context.switchToHttp().getRequest()
         const response = context.switchToHttp().getResponse()
-        const cookies = request.cookies
-        const accessToken = cookies.access_token
+        request.response = response
 
-        try { return this.jwtService.verify(accessToken, { secret: `${process.env.JWT_ACCESSTOKEN_SECRET}` }) }
+        try { return super.canActivate(context) }
         catch (error) { this.dadoEx.throw({ status: 401, message: `Access Token expired.`, response }) }
     }
 }
 
 // Refresh Token Guard
 @Injectable()
-export class RefreshGuard implements CanActivate {
-    constructor(private jwtService: JwtService) { }
-
+export class RefreshGuard extends AuthGuard('jwt-refresh') {
     private dadoEx = new DadoEx(RefreshGuard.name)
 
     canActivate(context: ExecutionContext): any {
         const request = context.switchToHttp().getRequest()
         const response = context.switchToHttp().getResponse()
-        const cookies = request.cookies
-        const refreshToken = cookies.refresh_token
+        request.response = response
 
-        try { return this.jwtService.verify(refreshToken, { secret: `${process.env.JWT_REFRESHTOKEN_SECRET}` }) }
+        try { return super.canActivate(context) }
         catch (error) { this.dadoEx.throw({ status: 401, message: `Refresh Token expired.`, response }) }
     }
 }
 
 // Password reset Token Guard
 @Injectable()
-export class PasswordGuard implements CanActivate {
-    constructor(private jwtService: JwtService) { }
-
+export class PasswordGuard extends AuthGuard('jwt-password') {
     private dadoEx = new DadoEx(PasswordGuard.name)
 
     canActivate(context: ExecutionContext): any {
         const request = context.switchToHttp().getRequest()
         const response = context.switchToHttp().getResponse()
-        const cookies = request.cookies
-        const passwordToken = cookies.password_token
+        request.response = response
 
-        try { return this.jwtService.verify(passwordToken, { secret: `${process.env.JWT_PASSWORDTOKEN_SECRET}` }) }
+        try { return super.canActivate(context) }
         catch (error) { this.dadoEx.throw({ status: 401, message: `Password Token expired.`, response }) }
     }
 }
 
 // Email verification Token Guard
 @Injectable()
-export class EmailGuard implements CanActivate {
-    constructor(private jwtService: JwtService) { }
-
+export class EmailGuard extends AuthGuard('jwt-email') {
     private dadoEx = new DadoEx(EmailGuard.name)
 
     canActivate(context: ExecutionContext): any {
         const request = context.switchToHttp().getRequest()
         const response = context.switchToHttp().getResponse()
-        const cookies = request.cookies
-        const emailToken = cookies.email_token
+        request.response = response
 
-        try { return this.jwtService.verify(emailToken, { secret: `${process.env.JWT_EMAILTOKEN_SECRET}` }) }
+        try { return super.canActivate(context) }
         catch (error) { this.dadoEx.throw({ status: 401, message: `Email Token expired.`, response }) }
     }
 }

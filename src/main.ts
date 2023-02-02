@@ -11,13 +11,15 @@ import { config } from 'dotenv'
 import { resolve } from 'path'
 config({ path: resolve(__dirname, `../env/.env.${process.env.ENVIROMENT}`) })
 
+// Application
 const Application = async () => {
     const logger = new Logger('Application')
 
     try {
         logger.log(`Starting the application in ${process.env.ENVIROMENT} mode ...`)
 
-        const Application = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter(), { cors: true })
+        const Application = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter())
+        Application.enableCors({ origin: `${process.env.FRONTEND_IP}:${process.env.FRONTEND_PORT}`, credentials: true })
         await Application.register(fastifyCookie, { secret: process.env.COOKIE_SECRET })
         Application.useGlobalPipes(new ValidationPipe())
         

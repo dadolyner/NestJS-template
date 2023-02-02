@@ -1,9 +1,9 @@
 // Auth Controller
 import { Controller, Post } from '@nestjs/common'
-import { Body, Res, UseGuards } from '@nestjs/common/decorators'
+import { Body, Req, Res, UseGuards } from '@nestjs/common/decorators'
 import { AuthService } from './auth.service'
 import { AuthLoginDto, AuthRegisterDto, AuthRolesDto, PasswordDto, PasswordRequestDto } from './dto/auth.dto'
-import { FastifyReply } from 'fastify'
+import { FastifyReply, FastifyRequest } from 'fastify'
 import { Cookie } from './decorator/cookie.decorator'
 import { PasswordGuard, RefreshGuard, EmailGuard, AccessGuard } from './guard/auth.guard'
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger'
@@ -19,7 +19,7 @@ export class AuthController {
     @ApiResponse({ status: 201, description: 'Create new user' })
     @ApiBody({ type: AuthRegisterDto })
     @Post('register')
-    async register(@Body() registerDto: AuthRegisterDto, @Res() response: FastifyReply): Promise<DadoExResponse> {
+    async register(@Body() registerDto: AuthRegisterDto, @Res({ passthrough: true }) response: FastifyReply): Promise<DadoExResponse> {
         return await this.authService.register(registerDto, response)
     }
 
@@ -28,15 +28,15 @@ export class AuthController {
     @ApiBearerAuth()
     @UseGuards(EmailGuard)
     @Post('verify-email')
-    async verifyEmail(@Cookie('user') user: string, @Res() response: FastifyReply): Promise<DadoExResponse> {
-        return await this.authService.verifyEmail(user, response)
+    async verifyEmail(@Req() request: FastifyRequest, @Res({ passthrough: true }) response: FastifyReply): Promise<DadoExResponse> {
+        return await this.authService.verifyEmail(request, response)
     }
 
     // Login existing user, generate tokens and set cookies (user, access_token, refresh_token)
     @ApiResponse({ status: 200, description: 'Login existing user' })
     @ApiBody({ type: AuthLoginDto })
     @Post('login')
-    async login(@Body() loginDto: AuthLoginDto, @Res() response: FastifyReply): Promise<DadoExResponse> {
+    async login(@Body() loginDto: AuthLoginDto, @Res({ passthrough: true }) response: FastifyReply): Promise<DadoExResponse> {
         return await this.authService.login(loginDto, response)
     }
 
@@ -44,8 +44,8 @@ export class AuthController {
     @ApiResponse({ status: 200, description: 'Refresh users access token' })
     @UseGuards(RefreshGuard)
     @Post('refresh')
-    async refreshToken(@Cookie('user') user: string, @Res() response: FastifyReply): Promise<DadoExResponse> {
-        return await this.authService.refreshToken(user, response)
+    async refreshToken(@Req() request: FastifyRequest, @Res({ passthrough: true }) response: FastifyReply): Promise<DadoExResponse> {
+        return await this.authService.refreshToken(request, response)
     }
 
     // Logout user, remove refresh token and clear cookies
@@ -53,15 +53,15 @@ export class AuthController {
     @ApiBearerAuth()
     @UseGuards(RefreshGuard)
     @Post('logout')
-    async logout(@Cookie('user') user: string, @Res() response: FastifyReply): Promise<DadoExResponse> {
-        return await this.authService.logout(user, response)
+    async logout(@Req() request: FastifyRequest, @Res({ passthrough: true }) response: FastifyReply): Promise<DadoExResponse> {
+        return await this.authService.logout(request, response)
     }
 
     // Send a password reset email to the user
     @ApiResponse({ status: 200, description: 'Send password reset email to user' })
     @ApiBody({ type: PasswordRequestDto })
     @Post('request-password-reset')
-    async requestPasswordReset(@Body() email: PasswordRequestDto, @Res() response: FastifyReply): Promise<DadoExResponse> {
+    async requestPasswordReset(@Body() email: PasswordRequestDto, @Res({ passthrough: true }) response: FastifyReply): Promise<DadoExResponse> {
         return await this.authService.requestPasswordReset(email, response)
     }
 
@@ -71,8 +71,8 @@ export class AuthController {
     @ApiBearerAuth()
     @UseGuards(PasswordGuard)
     @Post('reset-password')
-    async resetPassword(@Cookie('user') user: string, @Body() password: PasswordDto, @Res() response: FastifyReply): Promise<DadoExResponse> {
-        return await this.authService.resetPassword(user, password, response)
+    async resetPassword(@Body() password: PasswordDto, @Req() request: FastifyRequest, @Res({ passthrough: true }) response: FastifyReply): Promise<DadoExResponse> {
+        return await this.authService.resetPassword(password, request, response)
     }
 
     // Set users roles
@@ -82,7 +82,7 @@ export class AuthController {
     @UseGuards(AccessGuard, RoleGuard)
     @Roles(['admin'])
     @Post('roles')
-    async setRoles(@Cookie('user') user: string, @Body() rolesDto: AuthRolesDto, @Res() response: FastifyReply): Promise<DadoExResponse> {
-        return await this.authService.setRoles(user, rolesDto, response)
+    async setRoles(@Body() rolesDto: AuthRolesDto, @Req() request: FastifyRequest, @Res({ passthrough: true }) response: FastifyReply): Promise<DadoExResponse> {
+        return await this.authService.setRoles(rolesDto, request, response)
     }
 }
