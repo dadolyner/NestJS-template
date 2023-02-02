@@ -32,22 +32,22 @@ export class QuoteController {
 
     // Update a quote
     @ApiResponse({ status: 200, description: 'Update quote' })
-    @ApiParam({ name: 'quoteId', required: true })
+    @ApiParam({ name: 'id', required: true })
     @ApiBody({ type: QuoteDto })
     @ApiBearerAuth()
     @UseGuards(AccessGuard)
     @Patch()
-    async updateQuote(@Query('quoteId') quoteId: string, @Body() quoteDto: QuoteDto, @Req() request: FastifyRequest, @Res() response: FastifyReply): Promise<DadoExResponse> {
+    async updateQuote(@Query('id') quoteId: string, @Body() quoteDto: QuoteDto, @Req() request: FastifyRequest, @Res() response: FastifyReply): Promise<DadoExResponse> {
         return this.quoteService.updateQuote(quoteId, quoteDto, request, response)
     }
 
     // Delete a quote
     @ApiResponse({ status: 200, description: 'Delete quote' })
-    @ApiParam({ name: 'quoteId', required: true })
+    @ApiParam({ name: 'id', required: true })
     @ApiBearerAuth()
     @UseGuards(AccessGuard)
     @Delete()
-    async deleteQuote(@Query('quoteId') quoteId: string, @Req() request: FastifyRequest, @Res() response: FastifyReply): Promise<DadoExResponse> {
+    async deleteQuote(@Query('id') quoteId: string, @Req() request: FastifyRequest, @Res() response: FastifyReply): Promise<DadoExResponse> {
         return this.quoteService.deleteQuote(quoteId, request, response)
     }
 }
