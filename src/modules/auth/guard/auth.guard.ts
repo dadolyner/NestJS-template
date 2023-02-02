@@ -14,7 +14,7 @@ export class AccessGuard extends AuthGuard('jwt') {
         request.response = response
 
         try { return super.canActivate(context) }
-        catch (error) { this.dadoEx.throw({ status: 401, message: `Access Token expired.`, response }) }
+        catch (error) { this.dadoEx.throw({ status: 401, message: `Invalid access token.`, response }) }
     }
 }
 
@@ -29,7 +29,7 @@ export class RefreshGuard extends AuthGuard('jwt-refresh') {
         request.response = response
 
         try { return super.canActivate(context) }
-        catch (error) { this.dadoEx.throw({ status: 401, message: `Refresh Token expired.`, response }) }
+        catch (error) { this.dadoEx.throw({ status: 401, message: `Invalid refresh token.`, response }) }
     }
 }
 
@@ -44,7 +44,7 @@ export class PasswordGuard extends AuthGuard('jwt-password') {
         request.response = response
 
         try { return super.canActivate(context) }
-        catch (error) { this.dadoEx.throw({ status: 401, message: `Password Token expired.`, response }) }
+        catch (error) { this.dadoEx.throw({ status: 401, message: `Invalid password token.`, response }) }
     }
 }
 
@@ -59,6 +59,6 @@ export class EmailGuard extends AuthGuard('jwt-email') {
         request.response = response
 
         try { return super.canActivate(context) }
-        catch (error) { this.dadoEx.throw({ status: 401, message: `Email Token expired.`, response }) }
+        catch (error) { this.dadoEx.throw({ status: 401, message: `Invalid email token.`, response }) }
     }
 }

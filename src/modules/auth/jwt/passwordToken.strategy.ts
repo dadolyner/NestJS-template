@@ -1,9 +1,10 @@
 // PasswordToken JWT Strategy
 import { PassportStrategy } from "@nestjs/passport"
 import { ExtractJwt, Strategy } from "passport-jwt"
-import { Injectable, Logger } from "@nestjs/common"
+import { Injectable } from "@nestjs/common"
 import { FastifyRequest } from "fastify"
 import { JwtPayload } from "./jwt.payload"
+import DadoEx from "src/helpers/exceptions"
 
 @Injectable()
 export class PasswordTokenStrategy extends PassportStrategy(Strategy, 'jwt-password') {
@@ -16,8 +17,8 @@ export class PasswordTokenStrategy extends PassportStrategy(Strategy, 'jwt-passw
 
     public static extractJwt(request: FastifyRequest): any {
         if(request.cookies && 'password_token' in request.cookies) return request.cookies.password_token
-        const logger = new Logger(PasswordTokenStrategy.name)
-        logger.error('User tried to access a protected route without a valid password token')
+        const dadoEx = new DadoEx(PasswordTokenStrategy.name)
+        dadoEx.throw({ status: 401, message: `Invalid password token.`, response: request['response'] })
         return null
     }
 

@@ -1,9 +1,10 @@
 // EmailToken JWT Strategy
 import { PassportStrategy } from "@nestjs/passport"
 import { ExtractJwt, Strategy } from "passport-jwt"
-import { Injectable, Logger } from "@nestjs/common"
+import { Injectable } from "@nestjs/common"
 import { FastifyRequest } from "fastify"
 import { JwtPayload } from "./jwt.payload"
+import DadoEx from "src/helpers/exceptions"
 
 @Injectable()
 export class EmailTokenStrategy extends PassportStrategy(Strategy, 'jwt-email') {
@@ -16,8 +17,8 @@ export class EmailTokenStrategy extends PassportStrategy(Strategy, 'jwt-email') 
 
     public static extractJwt(request: FastifyRequest): any {
         if(request.cookies && 'email_token' in request.cookies) return request.cookies.email_token
-        const logger = new Logger(EmailTokenStrategy.name)
-        logger.error('User tried to access a protected route without a valid email token')
+        const dadoEx = new DadoEx(EmailTokenStrategy.name)
+        dadoEx.throw({ status: 401, message: `Invalid email token.`, response: request['response'] })
         return null
     }
 
