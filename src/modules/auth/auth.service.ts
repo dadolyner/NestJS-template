@@ -98,7 +98,7 @@ export class AuthService {
         if (isUserVerified === false) return this.dadoEx.throw({ status: 401, message: 'User email is not verified.', response })
 
         try {
-            const accessToken = await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_ACCESSTOKEN_SECRET}`, expiresIn: '15m' })
+            const accessToken = await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_ACCESSTOKEN_SECRET}`, expiresIn: '5m' })
             const refreshToken = await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_REFRESHTOKEN_SECRET}`, expiresIn: '7d' })
 
             const accessTokenExp = new Date()
@@ -120,7 +120,7 @@ export class AuthService {
         const userExists = await this.usersRepository.findOne({ where: { id: user } })
         if (!userExists) return this.dadoEx.throw({ status: 404, message: 'Provided user does not exist.', response })
 
-        try { await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_ACCESSTOKEN_SECRET}`, expiresIn: '15m' }) } 
+        try { await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_ACCESSTOKEN_SECRET}`, expiresIn: '5m' }) } 
         catch (error) { return this.dadoEx.throw({ status: 500, message: `Signing a new access token failed. Reason: ${error.message}.`, response }) }
 
         return this.dadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully updated its access token.`, response })
