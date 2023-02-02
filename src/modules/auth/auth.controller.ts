@@ -79,7 +79,7 @@ export class AuthController {
     @ApiBody({ type: AuthRolesDto })
     @ApiBearerAuth()
     @UseGuards(AccessGuard, RoleGuard)
-    @Roles(['admin'])
+    @Roles(['Admin'])
     @Post('roles')
     async setRoles(@Body() rolesDto: AuthRolesDto, @Req() request: FastifyRequest, @Res() response: FastifyReply): Promise<DadoExResponse> {
         return await this.authService.setRoles(rolesDto, request, response)
