@@ -176,13 +176,13 @@ $ npm run tests
 <summary>Email previews</summary>
     <hr/>
         <h4>Email verification</h4>
-        <img src="src/assets/VerifyEmail.png">
+        <img src="src/assets/images/VerifyEmail.png">
     <hr/>
         <h4>Request password reset</h4>
-        <img src="src/assets/RequestPasswordReset.png"/>
+        <img src="src/assets/images/RequestPasswordReset.png"/>
     <hr/>
         <h4>Password changed</h4>
-        <img src="src/assets/PasswordChanged.png">
+        <img src="src/assets/images/PasswordChanged.png">
     <hr/>
 </details>
 
