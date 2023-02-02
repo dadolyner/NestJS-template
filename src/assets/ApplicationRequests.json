@@ -1,0 +1,326 @@
+{
+    "info": {
+        "name": "Application",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "description": ""
+    },
+    "item": [
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Register",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "{{SERVER_IP}}/auth/register",
+                            "host": [
+                                "{{SERVER_IP}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "register"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"first_name\": \"Janez\",\n  \"last_name\": \"Novak\",\n  \"email\": \"janez.novak@gmail.com\",\n  \"password\": \"janeznovak123\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Verify Email",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "{{SERVER_IP}}/auth/verify-email",
+                            "host": [
+                                "{{SERVER_IP}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "verify-email"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Login",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "{{SERVER_IP}}/auth/login",
+                            "host": [
+                                "{{SERVER_IP}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "login"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"email\": \"janez.novak@gmail.com\",\n  \"password\": \"janeznovak123\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Refresh access token",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "{{SERVER_IP}}/auth/refresh",
+                            "host": [
+                                "{{SERVER_IP}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "refresh"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "{{SERVER_IP}}/auth/logout",
+                            "host": [
+                                "{{SERVER_IP}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "logout"
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwOWYzOTNjMC03NjgzLTRmNzQtOWY5Yi1iOWE2ZDk1NGYzNzkiLCJlbWFpbCI6InNrdWxqLmRhdmlkQGdtYWlsLmNvbSIsImlhdCI6MTY3NTI0OTA2NCwiZXhwIjoxNjc1MjQ5OTY0fQ.siUgL360R1DY7BjYvMWTRfDF12L4WpdL6L3MwCQrWBI",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Request Password Reset",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "{{SERVER_IP}}/auth/request-password-reset",
+                            "host": [
+                                "{{SERVER_IP}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "request-password-reset"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"email\": \"janez.novak@gmail.com\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Reset Password",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "{{SERVER_IP}}/auth/reset-password",
+                            "host": [
+                                "{{SERVER_IP}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "reset-password"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"password\": \"janeznovak123\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Set roles",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "{{SERVER_IP}}/auth/roles",
+                            "host": [
+                                "{{SERVER_IP}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "roles"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"userId\": \"09f393c0-7683-4f74-9f9b-b9a6d954f379\",\n  \"roles\": [\"Moderator\"]\n}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Quote",
+            "item": [
+                {
+                    "name": "Get all quotes",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{SERVER_IP}}/quote",
+                            "host": [
+                                "{{SERVER_IP}}"
+                            ],
+                            "path": [
+                                "quote"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get quote by id",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{SERVER_IP}}/quote?id=28819497-bce5-4d52-8e76-b8b28cac713a",
+                            "query": [
+                                {
+                                    "key": "id",
+                                    "value": "28819497-bce5-4d52-8e76-b8b28cac713a"
+                                }
+                            ],
+                            "variable": [],
+                            "host": [
+                                "{{SERVER_IP}}"
+                            ],
+                            "path": [
+                                "quote"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create quote",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "{{SERVER_IP}}/quote",
+                            "host": [
+                                "{{SERVER_IP}}"
+                            ],
+                            "path": [
+                                "quote"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"quote\": \"You are what you eat!\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Update quote",
+                    "request": {
+                        "method": "PATCH",
+                        "url": {
+                            "raw": "{{SERVER_IP}}/quote?quoteId=1a1ad201-5eb2-43b6-a4a1-a04184b8c9bf",
+                            "query": [
+                                {
+                                    "key": "quoteId",
+                                    "value": "1a1ad201-5eb2-43b6-a4a1-a04184b8c9bf"
+                                }
+                            ],
+                            "variable": [],
+                            "host": [
+                                "{{SERVER_IP}}"
+                            ],
+                            "path": [
+                                "quote"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"quote\": \"Gigdi gigdi gigdi gi!\"\n}"
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwOWYzOTNjMC03NjgzLTRmNzQtOWY5Yi1iOWE2ZDk1NGYzNzkiLCJlbWFpbCI6InNrdWxqLmRhdmlkQGdtYWlsLmNvbSIsImlhdCI6MTY3NTI1MTc1OSwiZXhwIjoxNjc1MjUyNjU5fQ.sc-LjRr4Vipz8WzlB6gCHFKRVUmzVhAxl4TF8ijun9w",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete quote",
+                    "request": {
+                        "method": "DELETE",
+                        "url": {
+                            "raw": "{{SERVER_IP}}/quote?quoteId=12f01173-c0e5-487e-b23b-fc9e9dc0c3ec",
+                            "query": [
+                                {
+                                    "key": "quoteId",
+                                    "value": "12f01173-c0e5-487e-b23b-fc9e9dc0c3ec"
+                                }
+                            ],
+                            "variable": [],
+                            "host": [
+                                "{{SERVER_IP}}"
+                            ],
+                            "path": [
+                                "quote"
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
