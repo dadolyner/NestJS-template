@@ -1,6 +1,7 @@
 // Array of all availible modules
 
 const ActiveModules = [
-    'AuthModule'
+    'AuthModule',
+    'QuoteModule',
 ]
 export default ActiveModules

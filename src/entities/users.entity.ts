@@ -1,6 +1,7 @@
 // Users Entity
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, Unique } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, Unique, OneToMany } from 'typeorm'
 import * as bcrypt from 'bcrypt'
+import { Quotes } from './quotes.entity'
 
 @Entity({ name: 'users' })
 @Unique(['email'])
@@ -36,6 +37,9 @@ export class Users extends BaseEntity {
 
     @Column()
     updated_at: Date
+
+    @OneToMany(() => Quotes, (quote) => quote.user, { onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
+    quote: Quotes[];
 
     // Validate user password
     async validatePassword(password: string): Promise<boolean> { return await bcrypt.hash(password, this.salt) === this.password }
