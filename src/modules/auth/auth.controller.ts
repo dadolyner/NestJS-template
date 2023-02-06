@@ -9,7 +9,7 @@ import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { DadoExResponse } from 'src/helpers/exceptions'
 import { RoleGuard, Roles } from './guard/role.guard'
 
-@ApiTags('Authentification')
+@ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) { }
@@ -24,7 +24,7 @@ export class AuthController {
 
     // Verify users email
     @ApiResponse({ status: 200, description: 'Verify users email' })
-    @ApiBearerAuth()
+    @ApiBearerAuth('Email JWT Token')
     @UseGuards(EmailGuard)
     @Post('verify-email')
     async verifyEmail(@Req() request: FastifyRequest, @Res() response: FastifyReply): Promise<DadoExResponse> {
@@ -41,22 +41,23 @@ export class AuthController {
 
     // Refresh access token with a valid refresh token
     @ApiResponse({ status: 200, description: 'Refresh users access token' })
+    @ApiBearerAuth('Refresh JWT Token')
     @UseGuards(RefreshGuard)
     @Post('refresh')
     async refreshToken(@Req() request: FastifyRequest, @Res() response: FastifyReply): Promise<DadoExResponse> {
         return await this.authService.refreshToken(request, response)
     }
 
-    // Logout user, remove refresh token and clear cookies
+    // Logout user, destroy refresh token and clear cookies
     @ApiResponse({ status: 200, description: 'Logout user and clear its cookies' })
-    @ApiBearerAuth()
+    @ApiBearerAuth('Refresh JWT Token')
     @UseGuards(RefreshGuard)
     @Post('logout')
     async logout(@Req() request: FastifyRequest, @Res() response: FastifyReply): Promise<DadoExResponse> {
         return await this.authService.logout(request, response)
     }
 
-    // Send a password reset email to the user
+    // Reset password request
     @ApiResponse({ status: 200, description: 'Send password reset email to user' })
     @ApiBody({ type: PasswordRequestDto })
     @Post('request-password-reset')
@@ -67,7 +68,7 @@ export class AuthController {
     // Reset users password
     @ApiResponse({ status: 200, description: 'Reset users password' })
     @ApiBody({ type: PasswordDto })
-    @ApiBearerAuth()
+    @ApiBearerAuth('Password JWT Token')
     @UseGuards(PasswordGuard)
     @Post('reset-password')
     async resetPassword(@Body() password: PasswordDto, @Req() request: FastifyRequest, @Res() response: FastifyReply): Promise<DadoExResponse> {
@@ -77,7 +78,7 @@ export class AuthController {
     // Set users roles
     @ApiResponse({ status: 200, description: 'Set users roles' })
     @ApiBody({ type: AuthRolesDto })
-    @ApiBearerAuth()
+    @ApiBearerAuth('Access JWT Token and Admin Role')
     @UseGuards(AccessGuard, RoleGuard)
     @Roles(['Admin'])
     @Post('roles')

@@ -6,6 +6,7 @@ import { FastifyRequest } from "fastify"
 import DadoEx from "src/helpers/exceptions"
 import { JwtService } from "@nestjs/jwt"
 
+// Email Token Payload
 type JwtPayload = { sub: string, email: string, iat: number, exp: number }
 
 @Injectable()

@@ -6,7 +6,6 @@ import { Quotes } from 'src/entities/quotes.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from 'src/entities/users.entity';
 import { AuthModule } from '../auth/auth.module';
-import { JwtService } from '@nestjs/jwt';
 
 @Module({    
     imports: [

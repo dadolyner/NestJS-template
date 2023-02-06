@@ -23,7 +23,7 @@ export class QuoteController {
     // Create a new quote
     @ApiResponse({ status: 201, description: 'Create a new quote' })
     @ApiBody({ type: QuoteDto })
-    @ApiBearerAuth()
+    @ApiBearerAuth('Access JWT Token')
     @UseGuards(AccessGuard)
     @Post()
     async createQuote(@Body() quoteDto: QuoteDto, @Req() request: FastifyRequest, @Res() response: FastifyReply): Promise<DadoExResponse> {
@@ -34,7 +34,7 @@ export class QuoteController {
     @ApiResponse({ status: 200, description: 'Update quote' })
     @ApiParam({ name: 'id', required: true })
     @ApiBody({ type: QuoteDto })
-    @ApiBearerAuth()
+    @ApiBearerAuth('Access JWT Token')
     @UseGuards(AccessGuard)
     @Patch()
     async updateQuote(@Query('id') quoteId: string, @Body() quoteDto: QuoteDto, @Req() request: FastifyRequest, @Res() response: FastifyReply): Promise<DadoExResponse> {
@@ -44,7 +44,7 @@ export class QuoteController {
     // Delete a quote
     @ApiResponse({ status: 200, description: 'Delete quote' })
     @ApiParam({ name: 'id', required: true })
-    @ApiBearerAuth()
+    @ApiBearerAuth('Access JWT Token')
     @UseGuards(AccessGuard)
     @Delete()
     async deleteQuote(@Query('id') quoteId: string, @Req() request: FastifyRequest, @Res() response: FastifyReply): Promise<DadoExResponse> {

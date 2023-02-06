@@ -6,6 +6,7 @@ import { FastifyRequest } from "fastify"
 import DadoEx from "src/helpers/exceptions"
 import { JwtService } from "@nestjs/jwt"
 
+// Password Token Payload
 type JwtPayload = { sub: string, password: string, iat: number, exp: number }
 
 @Injectable()

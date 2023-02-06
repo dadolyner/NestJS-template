@@ -6,6 +6,7 @@ import { Users } from 'src/entities/users.entity'
 import DadoEx from 'src/helpers/exceptions'
 import { Repository } from 'typeorm'
 
+// Required roles decorator
 export const Roles = (roles: string[]) => SetMetadata('roles', roles)
 
 @Injectable()

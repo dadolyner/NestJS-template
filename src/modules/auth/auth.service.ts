@@ -126,7 +126,7 @@ export class AuthService {
         return this.dadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully updated its access token.`, response })
     }
 
-    // Logout user, remove refresh token and clear cookies
+    // Logout user, destroy refresh token and clear cookies
     async logout(request: FastifyRequest, response: FastifyReply): Promise<DadoExResponse> {
         const user = request.cookies.user
         const userExists = await this.usersRepository.findOne({ where: { id: user } })
@@ -173,7 +173,7 @@ export class AuthService {
         return this.dadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully sent password reset request.`, response })
     }
 
-    // Reset password
+    // Set users roles
     async resetPassword(passwordDto: PasswordDto, request: FastifyRequest, response: FastifyReply): Promise<DadoExResponse> {
         const { password } = passwordDto
         const user = request.cookies.user

@@ -1,4 +1,3 @@
-import { QuoteModule } from './quote/quote.module';
 // Main App Module
 import { Module } from '@nestjs/common'
 import { TypeOrmConfig } from 'src/config/config.typeorm'

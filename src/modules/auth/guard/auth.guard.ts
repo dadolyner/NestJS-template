@@ -1,4 +1,4 @@
-// Guard classes that protects routes with Access or Refresh Token
+// Guard classes that protects routes with JWT tokens
 import { ExecutionContext, Injectable } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
 
