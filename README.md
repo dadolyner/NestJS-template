@@ -150,6 +150,8 @@ $ npm run tests
 
 #### Authentication
 ```ts
+// Custom route guards can accept either cookies or headers JWT tokens
+
 // @UseGuards(AccessGuard)    ->     Protects the route with Access JWT authentication    -->  App access
 // @UseGuards(RefreshGuard)   ->     Protects the route with Refresh JWT authentication   -->  Refresh AccessToken
 // @UseGuards(PasswordGuard)  ->     Protects the route with Password JWT authentication  -->  Reset password
@@ -194,10 +196,10 @@ $ npm run tests
 // Example:
 private dadoEx = new DadoEx(<location string>)
 return DadoEx.throw({ 
-     status: <status code>, // number
-     message: <custom message>, // string
-     data?: <data (object, array, ...)>, // Object or Array
-     response: <FastifyReply> // Fastify response
+    status: <status code>, // number
+    message: <custom message>, // string
+    data?: <data (object, array, ...)>, // Object or Array
+    response: <FastifyReply> // Fastify response
 })
 
 // Added helper function to add time of executon to the response
@@ -205,11 +207,11 @@ return DadoEx.throw({
 private dadoTimer = new DadoTimer()
 this.dadoTimer.start()
 return DadoEx.throw({ 
-     status: <status code>, // number
-     message: <custom message>, // string
-     time?: <this.dadoTimer.end()>, // string
-     data?: <data (object, array, ...)>, // Object or Array
-     response: <FastifyReply> // Fastify response
+    status: <status code>, // number
+    message: <custom message>, // string
+    time?: <this.dadoTimer.end()>, // string
+    data?: <data (object, array, ...)>, // Object or Array
+    response: <FastifyReply> // Fastify response
 })
 ```
 
