@@ -150,6 +150,8 @@ $ npm run tests
 
 #### Authentication
 ```ts
+// Custom route guards can accept either cookies or headers JWT tokens
+
 // @UseGuards(AccessGuard)    ->     Protects the route with Access JWT authentication    -->  App access
 // @UseGuards(RefreshGuard)   ->     Protects the route with Refresh JWT authentication   -->  Refresh AccessToken
 // @UseGuards(PasswordGuard)  ->     Protects the route with Password JWT authentication  -->  Reset password
