@@ -1,7 +1,6 @@
 // Guard classes that protects routes with Access or Refresh Token
 import { ExecutionContext, Injectable } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
-import DadoEx from 'src/helpers/exceptions'
 
 // Acces Token Guard
 @Injectable()
