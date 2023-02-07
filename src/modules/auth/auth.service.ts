@@ -39,14 +39,14 @@ export class AuthService {
         newUser.created_at = new Date()
         newUser.updated_at = new Date()
 
+        let emailToken: string
+
         try {
             await this.usersRepository.save(newUser)
 
-            const emailToken = await this.jwtService.signAsync({ sub: newUser.id, email: newUser.email }, { secret: `${process.env.JWT_EMAILTOKEN_SECRET}`, expiresIn: '60m' })
+            emailToken = await this.jwtService.signAsync({ sub: newUser.id, email: newUser.email }, { secret: `${process.env.JWT_EMAILTOKEN_SECRET}`, expiresIn: '60m' })
             const emailTokenExp = new Date()
             emailTokenExp.setMinutes(emailTokenExp.getMinutes() + 60)
-
-            response.setCookie('user', newUser.id, { path: '/', httpOnly: false, expires: emailTokenExp })
             response.setCookie('email_token', emailToken, { path: '/', httpOnly: false, expires: emailTokenExp })
 
             const mailData: ResetPasswordData = {
@@ -64,12 +64,12 @@ export class AuthService {
         }
         catch (error) { return this.dadoEx.throw({ status: 500, message: `Adding a user failed. Reason: ${error.message}.`, response }) }
 
-        return this.dadoEx.throw({ status: 201, message: `New user ${first_name} ${last_name} <${email}> successfully registered.`, response })
+        return this.dadoEx.throw({ status: 201, message: `New user ${first_name} ${last_name} <${email}> successfully registered.`, response, data: { emailToken } })
     }
 
     // Verify users email
     async verifyEmail(request: FastifyRequest, response: FastifyReply): Promise<DadoExResponse> {
-        const user = request.cookies.user
+        const user = request["user"].sub
         const userExists = await this.usersRepository.findOne({ where: { id: user } })
         if (!userExists) return this.dadoEx.throw({ status: 404, message: 'User with this email does not exist.', response })
 
@@ -78,7 +78,6 @@ export class AuthService {
 
         try {
             await this.usersRepository.save(userExists)
-            response.setCookie('user', '', { expires: new Date(0) }).clearCookie('user')
             response.setCookie('email_token', '', { expires: new Date(0) }).clearCookie('email_token')
         }
         catch (error) { return this.dadoEx.throw({ status: 500, message: `Verifying user email failed. Reason: ${error.message}.`, response }) }
@@ -97,43 +96,45 @@ export class AuthService {
         const isUserVerified = userExists.verified
         if (isUserVerified === false) return this.dadoEx.throw({ status: 401, message: 'User email is not verified.', response })
 
+        let accessToken: string, refreshToken: string
+
         try {
-            const accessToken = await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_ACCESSTOKEN_SECRET}`, expiresIn: '5m' })
-            const refreshToken = await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_REFRESHTOKEN_SECRET}`, expiresIn: '7d' })
+            accessToken = await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_ACCESSTOKEN_SECRET}`, expiresIn: '5m' })
+            refreshToken = await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_REFRESHTOKEN_SECRET}`, expiresIn: '7d' })
 
             const accessTokenExp = new Date()
             accessTokenExp.setMinutes(accessTokenExp.getMinutes() + 15)
             const refreshTokenExp = new Date()
             refreshTokenExp.setDate(refreshTokenExp.getDate() + 7)
 
-            response.setCookie('user', userExists.id, { path: '/', httpOnly: false, expires: refreshTokenExp })
             response.setCookie('access_token', accessToken, { path: '/', httpOnly: false, expires: accessTokenExp })
             response.setCookie('refresh_token', refreshToken, { path: '/', httpOnly: false, expires: refreshTokenExp })
         } catch (error) { return this.dadoEx.throw({ status: 500, message: `Login failed. Reason: ${error.message}.`, response }) }
 
-        return this.dadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully logged in.`, response })
+        return this.dadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully logged in.`, response, data: { accessToken, refreshToken } })
     }
 
     // Refresh access token with a valid refresh token
     async refreshToken(request: FastifyRequest, response: FastifyReply): Promise<DadoExResponse> {
-        const user = request.cookies.user
+        const user = request["user"].sub
         const userExists = await this.usersRepository.findOne({ where: { id: user } })
         if (!userExists) return this.dadoEx.throw({ status: 404, message: 'Provided user does not exist.', response })
 
-        try { await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_ACCESSTOKEN_SECRET}`, expiresIn: '5m' }) } 
+        let accessToken: string
+
+        try { accessToken = await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_ACCESSTOKEN_SECRET}`, expiresIn: '5m' }) } 
         catch (error) { return this.dadoEx.throw({ status: 500, message: `Signing a new access token failed. Reason: ${error.message}.`, response }) }
 
-        return this.dadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully updated its access token.`, response })
+        return this.dadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully updated its access token.`, response, data: { accessToken } })
     }
 
     // Logout user, destroy refresh token and clear cookies
     async logout(request: FastifyRequest, response: FastifyReply): Promise<DadoExResponse> {
-        const user = request.cookies.user
+        const user = request["user"].sub
         const userExists = await this.usersRepository.findOne({ where: { id: user } })
         if (!userExists) return this.dadoEx.throw({ status: 404, message: 'Provided user does not exist.', response })
 
         try {
-            response.setCookie('user', '', { expires: new Date(0) }).clearCookie('user')
             response.setCookie('access_token', '', { expires: new Date(0) }).clearCookie('access_token')
             response.setCookie('refresh_token', '', { expires: new Date(0) }).clearCookie('refresh_token')
         } catch (error) { return this.dadoEx.throw({ status: 500, message: `Logout failed. Reason: ${error.message}.`, response }) }
@@ -147,13 +148,13 @@ export class AuthService {
         const userExists = await this.usersRepository.findOne({ where: { email: email } })
         if (!userExists) return this.dadoEx.throw({ status: 404, message: 'Provided user does not exist.', response })
 
+        let passwordToken: string
+
         try {
-            const passwordToken = await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_PASSWORDTOKEN_SECRET}`, expiresIn: '60m' })
+            passwordToken = await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_PASSWORDTOKEN_SECRET}`, expiresIn: '60m' })
 
             const passwordTokenExp = new Date()
             passwordTokenExp.setMinutes(passwordTokenExp.getMinutes() + 60)
-
-            response.setCookie('user', userExists.id, { path: '/', httpOnly: false, expires: passwordTokenExp })
             response.setCookie('password_token', passwordToken, { path: '/', httpOnly: false, expires: passwordTokenExp })
 
             const mailData: ResetPasswordData = {
@@ -170,21 +171,19 @@ export class AuthService {
             })
         } catch (error) { return this.dadoEx.throw({ status: 500, message: `Password reset request failed. Reason: ${error.message}.`, response }) }
 
-        return this.dadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully sent password reset request.`, response })
+        return this.dadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully sent password reset request.`, response, data: { passwordToken } })
     }
 
     // Set users roles
     async resetPassword(passwordDto: PasswordDto, request: FastifyRequest, response: FastifyReply): Promise<DadoExResponse> {
         const { password } = passwordDto
-        const user = request.cookies.user
+        const user = request["user"].sub
         const userExists = await this.usersRepository.findOne({ where: { id: user } })
         if (!userExists) return this.dadoEx.throw({ status: 404, message: 'Provided user does not exist.', response })
 
         try {
             userExists.password = password
             await this.usersRepository.save(userExists)
-
-            response.setCookie('user', '', { expires: new Date(0) }).clearCookie('user')
             response.setCookie('password_token', '', { expires: new Date(0) }).clearCookie('password_token')
 
             const mailData: ResetPasswordData = {
@@ -206,7 +205,7 @@ export class AuthService {
     // Set users roles
     async setRoles(rolesDto: AuthRolesDto, request: FastifyRequest, response: FastifyReply): Promise<DadoExResponse> {
         const { userId, roles } = rolesDto
-        const user = request.cookies.user
+        const user = request["user"].sub
         const adminExists = await this.usersRepository.findOne({ where: { id: user } })
         if (!adminExists) return this.dadoEx.throw({ status: 404, message: 'Provided admin does not exist.', response })
         const userExists = await this.usersRepository.findOne({ where: { id: userId } })

@@ -49,7 +49,7 @@ export class QuoteService {
     // Create a new quote
     async createQuote(quoteDto: QuoteDto, request: FastifyRequest, response: FastifyReply): Promise<DadoExResponse> {
         const { quote } = quoteDto
-        const user = request.cookies.user
+        const user = request["user"].sub
 
         const userExists = await this.userRepository.findOne({ where: { id: user } })
         if (!userExists) return this.dadoEx.throw({ status: 404, message: 'Provided user does not exists.', response })
@@ -69,7 +69,7 @@ export class QuoteService {
     // Update a quote
     async updateQuote(quoteId: string, quoteDto: QuoteDto, request: FastifyRequest, response: FastifyReply): Promise<DadoExResponse> {
         const { quote } = quoteDto
-        const user = request.cookies.user
+        const user = request["user"].sub
         
         const userExists = await this.userRepository.findOne({ where: { id: user } })
         if (!userExists) return this.dadoEx.throw({ status: 404, message: 'Provided user does not exists.', response })
@@ -89,7 +89,7 @@ export class QuoteService {
 
     // Delete a quote
     async deleteQuote(quoteId: string, request: FastifyRequest, response: FastifyReply): Promise<DadoExResponse> {
-        const user = request.cookies.user
+        const user = request["user"].sub
 
         const userExists = await this.userRepository.findOne({ where: { id: user } })
         if (!userExists) return this.dadoEx.throw({ status: 404, message: 'Provided user does not exists.', response })
