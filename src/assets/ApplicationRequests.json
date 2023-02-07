@@ -14,22 +14,20 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/auth/register",
-                            "host": [
-                                "{{SERVER_IP}}"
-                            ],
-                            "path": [
-                                "auth",
-                                "register"
-                            ]
+                            "host": [ "{{server_ip}}" ],
+                            "path": [ "auth", "register" ]
                         },
+                        "header": [
+                            {
+                                "key": "User-Agent",
+                                "value": "Thunder Client (https://www.thunderclient.com)",
+                                "disabled": true
+                            }
+                        ],
                         "body": {
                             "mode": "raw",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            },
-                            "raw": "{\n  \"first_name\": \"Janez\",\n  \"last_name\": \"Novak\",\n  \"email\": \"janez.novak@gmail.com\",\n  \"password\": \"janeznovak123\"\n}"
+                            "options": { "raw": { "language": "json" } },
+                            "raw": "{\n  \"first_name\": \"Janez\",\n  \"last_name\": \"Novak\",\n  \"email\": \"skulj.david@gmail.com\",\n  \"password\": \"janeznovak123\"\n}"
                         }
                     }
                 },
@@ -39,14 +37,16 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/auth/verify-email",
-                            "host": [
-                                "{{SERVER_IP}}"
-                            ],
-                            "path": [
-                                "auth",
-                                "verify-email"
-                            ]
-                        }
+                            "host": [ "{{server_ip}}" ],
+                            "path": [ "auth", "verify-email" ]
+                        },
+                        "header": [
+                            {
+                                "key": "User-Agent",
+                                "value": "Thunder Client (https://www.thunderclient.com)",
+                                "disabled": true
+                            }
+                        ]
                     }
                 },
                 {
@@ -55,22 +55,20 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/auth/login",
-                            "host": [
-                                "{{SERVER_IP}}"
-                            ],
-                            "path": [
-                                "auth",
-                                "login"
-                            ]
+                            "host": [ "{{server_ip}}" ],
+                            "path": [ "auth", "login" ]
                         },
+                        "header": [
+                            {
+                                "key": "User-Agent",
+                                "value": "Thunder Client (https://www.thunderclient.com)",
+                                "disabled": true
+                            }
+                        ],
                         "body": {
                             "mode": "raw",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            },
-                            "raw": "{\n  \"email\": \"janez.novak@gmail.com\",\n  \"password\": \"janeznovak123\"\n}"
+                            "options": { "raw": { "language": "json" } },
+                            "raw": "{\n  \"email\": \"skulj.david@gmail.com\",\n  \"password\": \"janeznovak123\"\n}"
                         }
                     }
                 },
@@ -80,14 +78,16 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/auth/refresh",
-                            "host": [
-                                "{{SERVER_IP}}"
-                            ],
-                            "path": [
-                                "auth",
-                                "refresh"
-                            ]
-                        }
+                            "host": [ "{{server_ip}}" ],
+                            "path": [ "auth", "refresh" ]
+                        },
+                        "header": [
+                            {
+                                "key": "User-Agent",
+                                "value": "Thunder Client (https://www.thunderclient.com)",
+                                "disabled": true
+                            }
+                        ]
                     }
                 },
                 {
@@ -96,24 +96,16 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/auth/logout",
-                            "host": [
-                                "{{SERVER_IP}}"
-                            ],
-                            "path": [
-                                "auth",
-                                "logout"
-                            ]
+                            "host": [ "{{server_ip}}" ],
+                            "path": [ "auth", "logout" ]
                         },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwOWYzOTNjMC03NjgzLTRmNzQtOWY5Yi1iOWE2ZDk1NGYzNzkiLCJlbWFpbCI6InNrdWxqLmRhdmlkQGdtYWlsLmNvbSIsImlhdCI6MTY3NTI0OTA2NCwiZXhwIjoxNjc1MjQ5OTY0fQ.siUgL360R1DY7BjYvMWTRfDF12L4WpdL6L3MwCQrWBI",
-                                    "type": "string"
-                                }
-                            ]
-                        }
+                        "header": [
+                            {
+                                "key": "User-Agent",
+                                "value": "Thunder Client (https://www.thunderclient.com)",
+                                "disabled": true
+                            }
+                        ]
                     }
                 },
                 {
@@ -122,21 +114,19 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/auth/request-password-reset",
-                            "host": [
-                                "{{SERVER_IP}}"
-                            ],
-                            "path": [
-                                "auth",
-                                "request-password-reset"
-                            ]
+                            "host": [ "{{server_ip}}" ],
+                            "path": [ "auth", "request-password-reset" ]
                         },
+                        "header": [
+                            {
+                                "key": "User-Agent",
+                                "value": "Thunder Client (https://www.thunderclient.com)",
+                                "disabled": true
+                            }
+                        ],
                         "body": {
                             "mode": "raw",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            },
+                            "options": { "raw": { "language": "json" } },
                             "raw": "{\n  \"email\": \"janez.novak@gmail.com\"\n}"
                         }
                     }
@@ -147,21 +137,19 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/auth/reset-password",
-                            "host": [
-                                "{{SERVER_IP}}"
-                            ],
-                            "path": [
-                                "auth",
-                                "reset-password"
-                            ]
+                            "host": [ "{{server_ip}}" ],
+                            "path": [ "auth", "reset-password" ]
                         },
+                        "header": [
+                            {
+                                "key": "User-Agent",
+                                "value": "Thunder Client (https://www.thunderclient.com)",
+                                "disabled": true
+                            }
+                        ],
                         "body": {
                             "mode": "raw",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            },
+                            "options": { "raw": { "language": "json" } },
                             "raw": "{\n  \"password\": \"janeznovak123\"\n}"
                         }
                     }
@@ -172,21 +160,19 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/auth/roles",
-                            "host": [
-                                "{{SERVER_IP}}"
-                            ],
-                            "path": [
-                                "auth",
-                                "roles"
-                            ]
+                            "host": [ "{{server_ip}}" ],
+                            "path": [ "auth", "roles" ]
                         },
+                        "header": [
+                            {
+                                "key": "User-Agent",
+                                "value": "Thunder Client (https://www.thunderclient.com)",
+                                "disabled": true
+                            }
+                        ],
                         "body": {
                             "mode": "raw",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            },
+                            "options": { "raw": { "language": "json" } },
                             "raw": "{\n  \"userId\": \"09f393c0-7683-4f74-9f9b-b9a6d954f379\",\n  \"roles\": [\"Moderator\"]\n}"
                         }
                     }
@@ -202,13 +188,16 @@
                         "method": "GET",
                         "url": {
                             "raw": "{{SERVER_IP}}/quote",
-                            "host": [
-                                "{{SERVER_IP}}"
-                            ],
-                            "path": [
-                                "quote"
-                            ]
-                        }
+                            "host": [ "{{server_ip}}" ],
+                            "path": [ "quote" ]
+                        },
+                        "header": [
+                            {
+                                "key": "User-Agent",
+                                "value": "Thunder Client (https://www.thunderclient.com)",
+                                "disabled": true
+                            }
+                        ]
                     }
                 },
                 {
@@ -216,21 +205,24 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "{{SERVER_IP}}/quote?id=28819497-bce5-4d52-8e76-b8b28cac713a",
+                            "raw": "{{SERVER_IP}}/quote?id=0c6fd4da-3727-4809-ab70-4912e02512e8",
                             "query": [
                                 {
                                     "key": "id",
-                                    "value": "28819497-bce5-4d52-8e76-b8b28cac713a"
+                                    "value": "0c6fd4da-3727-4809-ab70-4912e02512e8"
                                 }
                             ],
                             "variable": [],
-                            "host": [
-                                "{{SERVER_IP}}"
-                            ],
-                            "path": [
-                                "quote"
-                            ]
-                        }
+                            "host": [ "{{server_ip}}" ],
+                            "path": [ "quote" ]
+                        },
+                        "header": [
+                            {
+                                "key": "User-Agent",
+                                "value": "Thunder Client (https://www.thunderclient.com)",
+                                "disabled": true
+                            }
+                        ]
                     }
                 },
                 {
@@ -239,20 +231,19 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/quote",
-                            "host": [
-                                "{{SERVER_IP}}"
-                            ],
-                            "path": [
-                                "quote"
-                            ]
+                            "host": [ "{{server_ip}}" ],
+                            "path": [ "quote" ]
                         },
+                        "header": [
+                            {
+                                "key": "User-Agent",
+                                "value": "Thunder Client (https://www.thunderclient.com)",
+                                "disabled": true
+                            }
+                        ],
                         "body": {
                             "mode": "raw",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            },
+                            "options": { "raw": { "language": "json" } },
                             "raw": "{\n  \"quote\": \"You are what you eat!\"\n}"
                         }
                     }
@@ -262,39 +253,28 @@
                     "request": {
                         "method": "PATCH",
                         "url": {
-                            "raw": "{{SERVER_IP}}/quote?quoteId=1a1ad201-5eb2-43b6-a4a1-a04184b8c9bf",
+                            "raw": "{{SERVER_IP}}/quote?id=0c6fd4da-3727-4809-ab70-4912e02512e8",
                             "query": [
                                 {
-                                    "key": "quoteId",
-                                    "value": "1a1ad201-5eb2-43b6-a4a1-a04184b8c9bf"
+                                    "key": "id",
+                                    "value": "0c6fd4da-3727-4809-ab70-4912e02512e8"
                                 }
                             ],
                             "variable": [],
-                            "host": [
-                                "{{SERVER_IP}}"
-                            ],
-                            "path": [
-                                "quote"
-                            ]
+                            "host": [ "{{server_ip}}" ],
+                            "path": [ "quote" ]
                         },
+                        "header": [
+                            {
+                                "key": "User-Agent",
+                                "value": "Thunder Client (https://www.thunderclient.com)",
+                                "disabled": true
+                            }
+                        ],
                         "body": {
                             "mode": "raw",
-                            "options": {
-                                "raw": {
-                                    "language": "json"
-                                }
-                            },
+                            "options": { "raw": { "language": "json" } },
                             "raw": "{\n  \"quote\": \"Gigdi gigdi gigdi gi!\"\n}"
-                        },
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwOWYzOTNjMC03NjgzLTRmNzQtOWY5Yi1iOWE2ZDk1NGYzNzkiLCJlbWFpbCI6InNrdWxqLmRhdmlkQGdtYWlsLmNvbSIsImlhdCI6MTY3NTI1MTc1OSwiZXhwIjoxNjc1MjUyNjU5fQ.sc-LjRr4Vipz8WzlB6gCHFKRVUmzVhAxl4TF8ijun9w",
-                                    "type": "string"
-                                }
-                            ]
                         }
                     }
                 },
@@ -303,21 +283,24 @@
                     "request": {
                         "method": "DELETE",
                         "url": {
-                            "raw": "{{SERVER_IP}}/quote?quoteId=12f01173-c0e5-487e-b23b-fc9e9dc0c3ec",
+                            "raw": "{{SERVER_IP}}/quote?id=0c6fd4da-3727-4809-ab70-4912e02512e8",
                             "query": [
                                 {
-                                    "key": "quoteId",
-                                    "value": "12f01173-c0e5-487e-b23b-fc9e9dc0c3ec"
+                                    "key": "id",
+                                    "value": "0c6fd4da-3727-4809-ab70-4912e02512e8"
                                 }
                             ],
                             "variable": [],
-                            "host": [
-                                "{{SERVER_IP}}"
-                            ],
-                            "path": [
-                                "quote"
-                            ]
-                        }
+                            "host": [ "{{server_ip}}" ],
+                            "path": [ "quote" ]
+                        },
+                        "header": [
+                            {
+                                "key": "User-Agent",
+                                "value": "Thunder Client (https://www.thunderclient.com)",
+                                "disabled": true
+                            }
+                        ]
                     }
                 }
             ]
