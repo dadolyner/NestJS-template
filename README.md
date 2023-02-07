@@ -162,15 +162,15 @@ $ npm run tests
 // @Roles(['roles'])          ->     Define roles that can acces the route for RoleGuard
 // @UseGuards(RoleGuard)      ->     Protects the route with permission roles             -->  Checks users roles in DB
 
-// In folder asets you can find a postman collection with premade requests to test the following:
-// @Post('/auth/register')    ->     Register User
-// @Post('/auth/verify-email')               ->     After registration send email with verify email link
-// @Post('/auth/login')       ->     Login User and store JWT in cookies ( access(exp: 15m) and refresh(exp: 7d) )
-// @Post('/auth/refresh')     ->     Refresh users access token (protected route with refresh token)
-// @Post('/auth/logout')      ->     Logout user and clear cookies (protected route with refresh token)
-// @Post('/auth/request-password-reset')     ->     Send email with reset password link
-// @Post('/auth/reset-password')             ->     Reset password with new password
-// @Post('/auth/roles')                      ->     Admin can set users roles
+// In folder assets you can find a postman collection with premade requests to test the following requests:
+// @Post('/auth/register')                  ->    Register User
+// @Post('/auth/verify-email')              ->    After registration send email with verify email link
+// @Post('/auth/login')                     ->    Login User and store JWT in cookies ( access(exp: 15m) and refresh(exp: 7d) )
+// @Post('/auth/refresh')                   ->    Refresh users access token (protected route with refresh token)
+// @Post('/auth/logout')                    ->    Logout user and clear cookies (protected route with refresh token)
+// @Post('/auth/request-password-reset')    ->    Send email with reset password link
+// @Post('/auth/reset-password')            ->    Reset password with new password
+// @Post('/auth/roles')                     ->    Admin can set users roles
 ```
 
 #### Email templates
