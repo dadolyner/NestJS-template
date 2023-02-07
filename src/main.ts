@@ -19,7 +19,7 @@ const Application = async () => {
         logger.log(`Starting the application in ${process.env.ENVIROMENT} mode ...`)
 
         const Application = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter())
-        Application.enableCors({ origin: `${process.env.FRONTEND_IP}:${process.env.FRONTEND_PORT}`, credentials: true })
+        Application.enableCors({ origin: true, credentials: true })
         await Application.register(fastifyCookie, { secret: process.env.COOKIE_SECRET })
         Application.useGlobalPipes(new ValidationPipe())
         
