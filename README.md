@@ -22,7 +22,9 @@
 
 This is a template for NestJS applications. It includes the following features/packages:
 Fastify platform, TypeORM with PostgreSQL, JWT authentication with passport, swagger documentation and git.
-It also includes a premade auth module with register, login, logout and refresh token endpoints.
+It also includes two premade moduls 
+- Auth Module -> register, verify-email, login, refresh access token, logout and reset password.
+- Quote Module -> get, create, update and delete quotes with proper auth.
 
 ---
 
@@ -70,7 +72,7 @@ $ npm i
 #### Database
 
 ```ts
-// Create a database in PostgreSQL and fill out credentials in .env file
+// Create a PostgreSQL database and fill out credentials in .env file
 ```
 
 #### Setup environment variables
@@ -157,25 +159,23 @@ $ npm run tests
 // @UseGuards(PasswordGuard)  ->     Protects the route with Password JWT authentication  -->  Reset password
 // @UseGuards(EmailGuard)     ->     Protects the route with Email JWT authentication     -->  Verify email
 
-// @Roles(['roles'])          ->     Define roles that can acces the route
-// @UseGuards(RoleGuard)      ->     Protects the route with permission roles
+// @Roles(['roles'])          ->     Define roles that can acces the route for RoleGuard
+// @UseGuards(RoleGuard)      ->     Protects the route with permission roles             -->  Checks users roles in DB
 
 // In folder asets you can find a postman collection with premade requests to test the following:
 // @Post('/auth/register')    ->     Register User
+// @Post('/auth/verify-email')               ->     After registration send email with verify email link
 // @Post('/auth/login')       ->     Login User and store JWT in cookies ( access(exp: 15m) and refresh(exp: 7d) )
 // @Post('/auth/refresh')     ->     Refresh users access token (protected route with refresh token)
 // @Post('/auth/logout')      ->     Logout user and clear cookies (protected route with refresh token)
-```
-
-```ts
-// Recently added features for secure password reset and email verification:
-// @Post('/auth/verify-email')               ->     After registration send email with verify email link
 // @Post('/auth/request-password-reset')     ->     Send email with reset password link
 // @Post('/auth/reset-password')             ->     Reset password with new password
 // @Post('/auth/roles')                      ->     Admin can set users roles
 ```
+
+#### Email templates
 <details>
-<summary>Email previews</summary>
+<summary>Preview EMAIL templates</summary>
     <hr/>
         <h4>Email verification</h4>
         <img src="src/assets/images/VerifyEmail.png">
@@ -190,23 +190,30 @@ $ npm run tests
 
 #### Custom HTTP Exception response with server logging
 ```ts
-// @Res() response: FastifyReply    ->     Controller parameter to get Fastify response for sending custom HTTP exceptions
+// @Req() request: FastifyRequest   ->     Controller parameter to get Fastify request for retrieving request data
+// @Res() response: FastifyReply    ->     Controller parameter to get Fastify response for sending response to client
 // Promise<DadoExResponse>          ->     Custom type for returning formatted response
 
 // Example:
 private dadoEx = new DadoEx(<location string>)
-return DadoEx.throw({ 
+
+return dadoEx.throw({ 
     status: <status code>, // number
     message: <custom message>, // string
     data?: <data (object, array, ...)>, // Object or Array
     response: <FastifyReply> // Fastify response
 })
 
-// Added helper function to add time of executon to the response
+// Added helper function to add time of executon to the response (if needed)
 // Example:
+private dadoEx = new DadoEx(<location string>)
 private dadoTimer = new DadoTimer()
+
 this.dadoTimer.start()
-return DadoEx.throw({ 
+// ... code
+this.dadoTimer.end()
+
+return dadoEx.throw({ 
     status: <status code>, // number
     message: <custom message>, // string
     time?: <this.dadoTimer.end()>, // string
