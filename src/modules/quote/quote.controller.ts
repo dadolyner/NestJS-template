@@ -4,7 +4,7 @@ import { QuoteService } from './quote.service';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { QuoteDto } from './dto/quote.dto';
 import { DadoExResponse } from 'src/helpers/exceptions';
-import { ApiBearerAuth, ApiBody, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AccessGuard } from '../auth/guard/auth.guard';
 
 @ApiTags('Quotes')
@@ -14,7 +14,7 @@ export class QuoteController {
 
     // Get quotes
     @ApiResponse({ status: 200, description: 'Retrieve all quotes or one specific quote' })
-    @ApiParam({ name: 'id', description: 'Get a specific quote by its id', required: false, type: 'string' })
+    @ApiQuery({ name: 'id', description: 'Get a specific quote by its id', required: false, type: 'string' })
     @Get()
     async getQuotes(@Query('id') quoteId: string, @Res() response: FastifyReply): Promise<DadoExResponse> {
         return this.quoteService.getQuotes(quoteId, response)
@@ -32,7 +32,7 @@ export class QuoteController {
 
     // Update a quote
     @ApiResponse({ status: 200, description: 'Update quote' })
-    @ApiParam({ name: 'id', required: true })
+    @ApiQuery({ name: 'id', description: 'Update users defined quote', required: true, type: 'string' })
     @ApiBody({ type: QuoteDto })
     @ApiBearerAuth('Access JWT Token')
     @UseGuards(AccessGuard)
@@ -43,7 +43,7 @@ export class QuoteController {
 
     // Delete a quote
     @ApiResponse({ status: 200, description: 'Delete quote' })
-    @ApiParam({ name: 'id', required: true })
+    @ApiQuery({ name: 'id', description: 'Delete users defined quote', required: true, type: 'string' })
     @ApiBearerAuth('Access JWT Token')
     @UseGuards(AccessGuard)
     @Delete()
