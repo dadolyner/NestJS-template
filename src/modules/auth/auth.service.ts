@@ -174,7 +174,7 @@ export class AuthService {
         return this.dadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully sent password reset request.`, response, data: { passwordToken } })
     }
 
-    // Set users roles
+    // Reset users password
     async resetPassword(passwordDto: PasswordDto, request: FastifyRequest, response: FastifyReply): Promise<DadoExResponse> {
         const { password } = passwordDto
         const user = request["user"].sub
