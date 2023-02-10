@@ -16,7 +16,7 @@ export class AuthRegisterDto {
 
     @ApiProperty({ type: String, description: 'User email', example: 'janez.novak@gmail.com' })
     @IsString({ message: 'Email must be a string' })
-    @IsEmail({ message: 'This is not an email' })
+    @IsEmail()
     @IsNotEmpty({ message: 'Email is required' })
     email: string
 
@@ -32,7 +32,7 @@ export class AuthRegisterDto {
 export class AuthLoginDto {
     @ApiProperty({ type: String, description: 'User email', example: 'janez.novak@gmail.com' })
     @IsString({ message: 'Email must be a string' })
-    @IsEmail({ message: 'This is not an email' })
+    @IsEmail()
     @IsNotEmpty({ message: 'Email is required' })
     email: string
 
@@ -59,7 +59,7 @@ export class AuthRolesDto {
 export class PasswordRequestDto {
     @ApiProperty({ type: String, description: 'User email', example: 'janez.novak@gmail.com' })
     @IsString({ message: 'Email must be a string' })
-    @IsEmail({ message: 'This is not an email' })
+    @IsEmail()
     @IsNotEmpty({ message: 'Email is required' })
     email: string
 }
