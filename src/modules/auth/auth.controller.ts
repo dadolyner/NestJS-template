@@ -57,22 +57,22 @@ export class AuthController {
         return await this.authService.logout(request, response)
     }
 
-    // Reset password request
+    // Change password request
     @ApiResponse({ status: 200, description: 'Send password reset email to user' })
     @ApiBody({ type: PasswordRequestDto })
-    @Post('request-password-reset')
-    async requestPasswordReset(@Body() email: PasswordRequestDto, @Res() response: FastifyReply): Promise<DadoExResponse> {
-        return await this.authService.requestPasswordReset(email, response)
+    @Post('request-password-change')
+    async requestPasswordChange(@Body() email: PasswordRequestDto, @Res() response: FastifyReply): Promise<DadoExResponse> {
+        return await this.authService.requestPasswordChange(email, response)
     }
 
-    // Reset users password
+    // Change users password
     @ApiResponse({ status: 200, description: 'Reset users password' })
     @ApiBody({ type: PasswordDto })
     @ApiBearerAuth('Password JWT Token')
     @UseGuards(PasswordGuard)
-    @Post('reset-password')
+    @Post('change-password')
     async resetPassword(@Body() password: PasswordDto, @Req() request: FastifyRequest, @Res() response: FastifyReply): Promise<DadoExResponse> {
-        return await this.authService.resetPassword(password, request, response)
+        return await this.authService.changePassword(password, request, response)
     }
 
     // Set users roles

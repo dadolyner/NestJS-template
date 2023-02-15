@@ -1,14 +1,11 @@
 // Main App Module
 import { Module } from '@nestjs/common'
 import { TypeOrmConfig } from 'src/config/config.typeorm'
-import ActiveModules from '../config/config.modules'
-import * as modules from 'src/modules'
+import { AuthModule } from './auth/auth.module'
+import { QuoteModule } from './quote/quote.module'
 
 @Module({
-    imports: [
-        TypeOrmConfig, 
-        ...ActiveModules.map((module) => modules[module])
-    ],
+    imports: [TypeOrmConfig, AuthModule, QuoteModule],
     controllers: [],
     providers: [],
 })

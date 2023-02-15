@@ -64,7 +64,7 @@ export class AuthService {
         }
         catch (error) { return this.dadoEx.throw({ status: 500, message: `Adding a user failed. Reason: ${error.message}.`, response }) }
 
-        return this.dadoEx.throw({ status: 201, message: `New user ${first_name} ${last_name} <${email}> successfully registered.`, response, data: { emailToken } })
+        return this.dadoEx.throw({ status: 201, message: `Registration successfull.`, response, data: { emailToken } })
     }
 
     // Verify users email
@@ -82,7 +82,7 @@ export class AuthService {
         }
         catch (error) { return this.dadoEx.throw({ status: 500, message: `Verifying user email failed. Reason: ${error.message}.`, response }) }
 
-        return this.dadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully verified.`, response })
+        return this.dadoEx.throw({ status: 200, message: `Email verified successfully.`, response })
     }
 
     // Login existing user, generate tokens and set cookies (user, access_token, refresh_token)
@@ -111,7 +111,7 @@ export class AuthService {
             response.setCookie('refresh_token', refreshToken, { path: '/', httpOnly: false, expires: refreshTokenExp })
         } catch (error) { return this.dadoEx.throw({ status: 500, message: `Login failed. Reason: ${error.message}.`, response }) }
 
-        return this.dadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully logged in.`, response, data: { accessToken, refreshToken } })
+        return this.dadoEx.throw({ status: 200, message: `Login successfull.`, response, data: { accessToken, refreshToken } })
     }
 
     // Refresh access token with a valid refresh token
@@ -125,7 +125,7 @@ export class AuthService {
         try { accessToken = await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_ACCESSTOKEN_SECRET}`, expiresIn: '5m' }) } 
         catch (error) { return this.dadoEx.throw({ status: 500, message: `Signing a new access token failed. Reason: ${error.message}.`, response }) }
 
-        return this.dadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully updated its access token.`, response, data: { accessToken } })
+        return this.dadoEx.throw({ status: 200, message: `Access token refreshed successfully.`, response, data: { accessToken } })
     }
 
     // Logout user, destroy refresh token and clear cookies
@@ -139,11 +139,11 @@ export class AuthService {
             response.setCookie('refresh_token', '', { expires: new Date(0) }).clearCookie('refresh_token')
         } catch (error) { return this.dadoEx.throw({ status: 500, message: `Logout failed. Reason: ${error.message}.`, response }) }
 
-        return this.dadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully logged out.`, response })
+        return this.dadoEx.throw({ status: 200, message: `Logout successfull.`, response })
     }
 
-    // Reset password request
-    async requestPasswordReset(emailDto: PasswordRequestDto, response: FastifyReply): Promise<DadoExResponse> {
+    // Change password request
+    async requestPasswordChange(emailDto: PasswordRequestDto, response: FastifyReply): Promise<DadoExResponse> {
         const { email } = emailDto
         const userExists = await this.usersRepository.findOne({ where: { email: email } })
         if (!userExists) return this.dadoEx.throw({ status: 404, message: 'Provided user does not exist.', response })
@@ -169,13 +169,13 @@ export class AuthService {
                 subject: 'Reset password request',
                 html: RequestPasswordReset(mailData),
             })
-        } catch (error) { return this.dadoEx.throw({ status: 500, message: `Password reset request failed. Reason: ${error.message}.`, response }) }
+        } catch (error) { return this.dadoEx.throw({ status: 500, message: `Password change request failed. Reason: ${error.message}.`, response }) }
 
-        return this.dadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully sent password reset request.`, response, data: { passwordToken } })
+        return this.dadoEx.throw({ status: 200, message: `Password change request sent successfully.`, response, data: { passwordToken } })
     }
 
-    // Reset users password
-    async resetPassword(passwordDto: PasswordDto, request: FastifyRequest, response: FastifyReply): Promise<DadoExResponse> {
+    // Change users password
+    async changePassword(passwordDto: PasswordDto, request: FastifyRequest, response: FastifyReply): Promise<DadoExResponse> {
         const { password } = passwordDto
         const user = request["user"].sub
         const userExists = await this.usersRepository.findOne({ where: { id: user } })
@@ -197,9 +197,9 @@ export class AuthService {
                 subject: 'Password changed',
                 html: PasswordResetConf(mailData),
             })
-        } catch (error) { return this.dadoEx.throw({ status: 500, message: `Password reset failed. Reason: ${error.message}.`, response }) }
+        } catch (error) { return this.dadoEx.throw({ status: 500, message: `Password change failed. Reason: ${error.message}.`, response }) }
 
-        return this.dadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully reset password.`, response })
+        return this.dadoEx.throw({ status: 200, message: `Password changed successfully.`, response })
     }
 
     // Set users roles
@@ -216,6 +216,6 @@ export class AuthService {
             await this.usersRepository.save(userExists)
         } catch (error) { return this.dadoEx.throw({ status: 500, message: `Setting users roles failed. Reason: ${error.message}.`, response }) }
 
-        return this.dadoEx.throw({ status: 200, message: `Roles for user ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully set.`, response })
+        return this.dadoEx.throw({ status: 200, message: `Roles set successfully.`, response })
     }
 }

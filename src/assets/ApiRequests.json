@@ -14,8 +14,8 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/auth/register",
-                            "host": [ "{{server_ip}}" ],
-                            "path": [ "auth", "register" ]
+                            "path": [ "auth", "register" ],
+                            "host": [ "{{server_ip}}" ]
                         },
                         "header": [
                             {
@@ -27,7 +27,7 @@
                         "body": {
                             "mode": "raw",
                             "options": { "raw": { "language": "json" } },
-                            "raw": "{\n  \"first_name\": \"Janez\",\n  \"last_name\": \"Novak\",\n  \"email\": \"skulj.david@gmail.com\",\n  \"password\": \"janeznovak123\"\n}"
+                            "raw": "{\n  \"first_name\": \"Janez\",\n  \"last_name\": \"Novak\",\n  \"email\": \"janez.novak@gmail.com\",\n  \"password\": \"janeznovak123\"\n}"
                         }
                     }
                 },
@@ -37,8 +37,8 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/auth/verify-email",
-                            "host": [ "{{server_ip}}" ],
-                            "path": [ "auth", "verify-email" ]
+                            "path": [ "auth", "verify-email" ],
+                            "host": [ "{{server_ip}}" ]
                         },
                         "header": [
                             {
@@ -55,8 +55,8 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/auth/login",
-                            "host": [ "{{server_ip}}" ],
-                            "path": [ "auth", "login" ]
+                            "path": [ "auth", "login" ],
+                            "host": [ "{{server_ip}}" ]
                         },
                         "header": [
                             {
@@ -68,7 +68,7 @@
                         "body": {
                             "mode": "raw",
                             "options": { "raw": { "language": "json" } },
-                            "raw": "{\n  \"email\": \"skulj.david@gmail.com\",\n  \"password\": \"janeznovak123\"\n}"
+                            "raw": "{\n  \"email\": \"janez.novak@gmail.com\",\n  \"password\": \"janeznovak123\"\n}"
                         }
                     }
                 },
@@ -78,8 +78,8 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/auth/refresh",
-                            "host": [ "{{server_ip}}" ],
-                            "path": [ "auth", "refresh" ]
+                            "path": [ "auth", "refresh" ],
+                            "host": [ "{{server_ip}}" ]
                         },
                         "header": [
                             {
@@ -96,9 +96,8 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/auth/logout",
-                            "host": [ "{{server_ip}}" ],
-                            "path": [ "auth", "logout" ]
-                        },
+                            "path": [ "auth", "logout" ],
+                            "host": [ "{{server_ip}}" ] },
                         "header": [
                             {
                                 "key": "User-Agent",
@@ -109,13 +108,13 @@
                     }
                 },
                 {
-                    "name": "Request Password Reset",
+                    "name": "Request Password Change",
                     "request": {
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/auth/request-password-reset",
-                            "host": [ "{{server_ip}}" ],
-                            "path": [ "auth", "request-password-reset" ]
+                            "path": [ "auth", "request-password-reset" ],
+                            "host": [ "{{server_ip}}" ]
                         },
                         "header": [
                             {
@@ -132,13 +131,13 @@
                     }
                 },
                 {
-                    "name": "Reset Password",
+                    "name": "Change Password",
                     "request": {
                         "method": "POST",
                         "url": {
-                            "raw": "{{SERVER_IP}}/auth/reset-password",
-                            "host": [ "{{server_ip}}" ],
-                            "path": [ "auth", "reset-password" ]
+                            "raw": "{{SERVER_IP}}/auth/change-password",
+                            "path": [ "auth", "change-password" ],
+                            "host": [ "{{server_ip}}" ]
                         },
                         "header": [
                             {
@@ -160,8 +159,8 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/auth/roles",
-                            "host": [ "{{server_ip}}" ],
-                            "path": [ "auth", "roles" ]
+                            "path": [ "auth", "roles" ],
+                            "host": [ "{{server_ip}}" ]
                         },
                         "header": [
                             {
@@ -188,8 +187,8 @@
                         "method": "GET",
                         "url": {
                             "raw": "{{SERVER_IP}}/quote",
-                            "host": [ "{{server_ip}}" ],
-                            "path": [ "quote" ]
+                            "path": [ "quote" ],
+                            "host": [ "{{server_ip}}" ]
                         },
                         "header": [
                             {
@@ -213,8 +212,8 @@
                                 }
                             ],
                             "variable": [],
-                            "host": [ "{{server_ip}}" ],
-                            "path": [ "quote" ]
+                            "path": [ "quote" ],
+                            "host": [ "{{server_ip}}" ]
                         },
                         "header": [
                             {
@@ -231,8 +230,8 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/quote",
-                            "host": [ "{{server_ip}}" ],
-                            "path": [ "quote" ]
+                            "path": [ "quote" ],
+                            "host": [ "{{server_ip}}" ]
                         },
                         "header": [
                             {
@@ -261,8 +260,8 @@
                                 }
                             ],
                             "variable": [],
-                            "host": [ "{{server_ip}}" ],
-                            "path": [ "quote" ]
+                            "path": [ "quote" ],
+                            "host": [ "{{server_ip}}" ]
                         },
                         "header": [
                             {
@@ -291,8 +290,8 @@
                                 }
                             ],
                             "variable": [],
-                            "host": [ "{{server_ip}}" ],
-                            "path": [ "quote" ]
+                            "path": [ "quote" ],
+                            "host": [ "{{server_ip}}" ]
                         },
                         "header": [
                             {

@@ -43,6 +43,24 @@ export class AuthLoginDto {
     password: string
 }
 
+// Password request
+export class PasswordRequestDto {
+    @ApiProperty({ type: String, description: 'User email', example: 'janez.novak@gmail.com' })
+    @IsString({ message: 'Email must be a string' })
+    @IsEmail()
+    @IsNotEmpty({ message: 'Email is required' })
+    email: string
+}
+
+// Password change
+export class PasswordDto {
+    @ApiProperty({ type: String, description: 'User password', example: 'janeznovak123' })
+    @IsString({ message: 'Password must be a string' })
+    @MinLength(8, { message: 'Password is too short' })
+    @MaxLength(100, { message: 'Password is too long' })
+    password: string
+}
+
 // Roles
 export class AuthRolesDto {
     @ApiProperty({ type: Array, description: 'User id', example: '991416fc-c1c9-451c-9c8e-8209e09fb4b7' })
@@ -54,20 +72,4 @@ export class AuthRolesDto {
     @IsArray({ message: 'Roles must be an array of strings' })
     @IsNotEmpty({ message: 'Roles are required' })
     roles: string[]
-}
-
-export class PasswordRequestDto {
-    @ApiProperty({ type: String, description: 'User email', example: 'janez.novak@gmail.com' })
-    @IsString({ message: 'Email must be a string' })
-    @IsEmail()
-    @IsNotEmpty({ message: 'Email is required' })
-    email: string
-}
-
-export class PasswordDto {
-    @ApiProperty({ type: String, description: 'User password', example: 'janeznovak123' })
-    @IsString({ message: 'Password must be a string' })
-    @MinLength(8, { message: 'Password is too short' })
-    @MaxLength(100, { message: 'Password is too long' })
-    password: string
 }
