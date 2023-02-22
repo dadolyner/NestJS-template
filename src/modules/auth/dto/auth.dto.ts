@@ -26,6 +26,11 @@ export class AuthRegisterDto {
     @MaxLength(100, { message: 'Password is too long' })
     // @Matches(/(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, { message: 'password to weak' })
     password: string
+
+    @ApiProperty({ type: String, description: 'User avatar', example: 'image/base64' })
+    @IsString({ message: 'Avatar must be a string' })
+    @IsNotEmpty({ message: 'Avatar is required' })
+    avatar: string
 }
 
 // Login

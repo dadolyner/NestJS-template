@@ -27,7 +27,7 @@
                         "body": {
                             "mode": "raw",
                             "options": { "raw": { "language": "json" } },
-                            "raw": "{\n  \"first_name\": \"Janez\",\n  \"last_name\": \"Novak\",\n  \"email\": \"janez.novak@gmail.com\",\n  \"password\": \"janeznovak123\"\n}"
+                            "raw": "{\n  \"first_name\": \"Janez\",\n  \"last_name\": \"Novak\",\n  \"email\": \"janez.novak@gmail.com\",\n  \"password\": \"janeznovak123\",\n \"avatar\": \"iamge/base64\"\n}"
                         }
                     }
                 },

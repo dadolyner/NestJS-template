@@ -11,6 +11,7 @@ import transporter from 'src/mail/email.config'
 import RequestPasswordReset, { ResetPasswordData } from 'src/mail/templates/RequestPasswordReset'
 import PasswordResetConf from 'src/mail/templates/ResetPasswordConfirmation'
 import VerifyEmail from 'src/mail/templates/VerifyEmail'
+import uploadImageToS3 from 'src/helpers/awsUpload'
 
 @Injectable()
 export class AuthService {
@@ -23,10 +24,13 @@ export class AuthService {
 
     // Register new user
     async register(registerDto: AuthRegisterDto, response: FastifyReply): Promise<DadoExResponse> {
-        const { first_name, last_name, email, password } = registerDto
+        const { first_name, last_name, email, password, avatar } = registerDto
 
         const userExists = await this.usersRepository.findOne({ where: { email } })
         if (userExists) return this.dadoEx.throw({ status: 409, message: 'User with this email already exists.', response })
+        const awsResponse = await uploadImageToS3(avatar)
+        if(!awsResponse) return this.dadoEx.throw({ status: 500, message: `Uploading image to S3 failed.`, response })
+        const avatarUrl = awsResponse.Location
 
         const newUser = new Users()
         newUser.first_name = first_name
@@ -36,6 +40,7 @@ export class AuthService {
         newUser.password = await newUser.hashPassword(password, newUser.salt)
         newUser.settings = { roles: ['User'] }
         newUser.verified = false
+        newUser.avatar = avatarUrl
         newUser.created_at = new Date()
         newUser.updated_at = new Date()
 

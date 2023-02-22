@@ -31,6 +31,9 @@ export class Users extends BaseEntity {
 
     @Column()
     verified: boolean
+
+    @Column()
+    avatar: string
     
     @Column()
     created_at: Date
