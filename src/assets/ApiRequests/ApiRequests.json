@@ -14,8 +14,13 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/auth/register",
-                            "path": [ "auth", "register" ],
-                            "host": [ "{{server_ip}}" ]
+                            "path": [
+                                "auth",
+                                "register"
+                            ],
+                            "host": [
+                                "{{server_ip}}"
+                            ]
                         },
                         "header": [
                             {
@@ -26,8 +31,12 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "options": { "raw": { "language": "json" } },
-                            "raw": "{\n  \"first_name\": \"Janez\",\n  \"last_name\": \"Novak\",\n  \"email\": \"janez.novak@gmail.com\",\n  \"password\": \"janeznovak123\",\n \"avatar\": \"iamge/base64\"\n}"
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"first_name\": \"Janez\",\n  \"last_name\": \"Novak\",\n  \"email\": \"janez.novak@gmail.com\",\n  \"password\": \"janeznovak123\",\n  \"avatar\": \"image/base64\"\n}"
                         }
                     }
                 },
@@ -37,8 +46,13 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/auth/verify-email",
-                            "path": [ "auth", "verify-email" ],
-                            "host": [ "{{server_ip}}" ]
+                            "path": [
+                                "auth",
+                                "verify-email"
+                            ],
+                            "host": [
+                                "{{server_ip}}"
+                            ]
                         },
                         "header": [
                             {
@@ -55,8 +69,13 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/auth/login",
-                            "path": [ "auth", "login" ],
-                            "host": [ "{{server_ip}}" ]
+                            "path": [
+                                "auth",
+                                "login"
+                            ],
+                            "host": [
+                                "{{server_ip}}"
+                            ]
                         },
                         "header": [
                             {
@@ -67,7 +86,11 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "options": { "raw": { "language": "json" } },
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
                             "raw": "{\n  \"email\": \"janez.novak@gmail.com\",\n  \"password\": \"janeznovak123\"\n}"
                         }
                     }
@@ -78,8 +101,13 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/auth/refresh",
-                            "path": [ "auth", "refresh" ],
-                            "host": [ "{{server_ip}}" ]
+                            "path": [
+                                "auth",
+                                "refresh"
+                            ],
+                            "host": [
+                                "{{server_ip}}"
+                            ]
                         },
                         "header": [
                             {
@@ -96,8 +124,14 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/auth/logout",
-                            "path": [ "auth", "logout" ],
-                            "host": [ "{{server_ip}}" ] },
+                            "path": [
+                                "auth",
+                                "logout"
+                            ],
+                            "host": [
+                                "{{server_ip}}"
+                            ]
+                        },
                         "header": [
                             {
                                 "key": "User-Agent",
@@ -112,9 +146,14 @@
                     "request": {
                         "method": "POST",
                         "url": {
-                            "raw": "{{SERVER_IP}}/auth/request-password-reset",
-                            "path": [ "auth", "request-password-reset" ],
-                            "host": [ "{{server_ip}}" ]
+                            "raw": "{{SERVER_IP}}/auth/request-password-change",
+                            "path": [
+                                "auth",
+                                "request-password-change"
+                            ],
+                            "host": [
+                                "{{server_ip}}"
+                            ]
                         },
                         "header": [
                             {
@@ -125,7 +164,11 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "options": { "raw": { "language": "json" } },
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
                             "raw": "{\n  \"email\": \"janez.novak@gmail.com\"\n}"
                         }
                     }
@@ -136,8 +179,13 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/auth/change-password",
-                            "path": [ "auth", "change-password" ],
-                            "host": [ "{{server_ip}}" ]
+                            "path": [
+                                "auth",
+                                "change-password"
+                            ],
+                            "host": [
+                                "{{server_ip}}"
+                            ]
                         },
                         "header": [
                             {
@@ -148,7 +196,11 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "options": { "raw": { "language": "json" } },
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
                             "raw": "{\n  \"password\": \"janeznovak123\"\n}"
                         }
                     }
@@ -159,8 +211,13 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/auth/roles",
-                            "path": [ "auth", "roles" ],
-                            "host": [ "{{server_ip}}" ]
+                            "path": [
+                                "auth",
+                                "roles"
+                            ],
+                            "host": [
+                                "{{server_ip}}"
+                            ]
                         },
                         "header": [
                             {
@@ -171,8 +228,12 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "options": { "raw": { "language": "json" } },
-                            "raw": "{\n  \"userId\": \"09f393c0-7683-4f74-9f9b-b9a6d954f379\",\n  \"roles\": [\"Moderator\"]\n}"
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"userId\": \"userId\",\n  \"roles\": [\"Moderator\"]\n}"
                         }
                     }
                 }
@@ -187,8 +248,12 @@
                         "method": "GET",
                         "url": {
                             "raw": "{{SERVER_IP}}/quote",
-                            "path": [ "quote" ],
-                            "host": [ "{{server_ip}}" ]
+                            "path": [
+                                "quote"
+                            ],
+                            "host": [
+                                "{{server_ip}}"
+                            ]
                         },
                         "header": [
                             {
@@ -204,16 +269,20 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "{{SERVER_IP}}/quote?id=0c6fd4da-3727-4809-ab70-4912e02512e8",
+                            "raw": "{{SERVER_IP}}/quote?id=quoteId",
                             "query": [
                                 {
                                     "key": "id",
-                                    "value": "0c6fd4da-3727-4809-ab70-4912e02512e8"
+                                    "value": "quoteId"
                                 }
                             ],
                             "variable": [],
-                            "path": [ "quote" ],
-                            "host": [ "{{server_ip}}" ]
+                            "path": [
+                                "quote"
+                            ],
+                            "host": [
+                                "{{server_ip}}"
+                            ]
                         },
                         "header": [
                             {
@@ -230,8 +299,12 @@
                         "method": "POST",
                         "url": {
                             "raw": "{{SERVER_IP}}/quote",
-                            "path": [ "quote" ],
-                            "host": [ "{{server_ip}}" ]
+                            "path": [
+                                "quote"
+                            ],
+                            "host": [
+                                "{{server_ip}}"
+                            ]
                         },
                         "header": [
                             {
@@ -242,7 +315,11 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "options": { "raw": { "language": "json" } },
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
                             "raw": "{\n  \"quote\": \"You are what you eat!\"\n}"
                         }
                     }
@@ -260,8 +337,12 @@
                                 }
                             ],
                             "variable": [],
-                            "path": [ "quote" ],
-                            "host": [ "{{server_ip}}" ]
+                            "path": [
+                                "quote"
+                            ],
+                            "host": [
+                                "{{server_ip}}"
+                            ]
                         },
                         "header": [
                             {
@@ -272,8 +353,12 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "options": { "raw": { "language": "json" } },
-                            "raw": "{\n  \"quote\": \"Gigdi gigdi gigdi gi!\"\n}"
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"quote\": \"You eat what you are!\"\n}"
                         }
                     }
                 },
@@ -282,16 +367,20 @@
                     "request": {
                         "method": "DELETE",
                         "url": {
-                            "raw": "{{SERVER_IP}}/quote?id=0c6fd4da-3727-4809-ab70-4912e02512e8",
+                            "raw": "{{SERVER_IP}}/quote?id=quoteId",
                             "query": [
                                 {
                                     "key": "id",
-                                    "value": "0c6fd4da-3727-4809-ab70-4912e02512e8"
+                                    "value": "quoteId"
                                 }
                             ],
                             "variable": [],
-                            "path": [ "quote" ],
-                            "host": [ "{{server_ip}}" ]
+                            "path": [
+                                "quote"
+                            ],
+                            "host": [
+                                "{{server_ip}}"
+                            ]
                         },
                         "header": [
                             {

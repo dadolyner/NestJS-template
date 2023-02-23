@@ -1,0 +1,35 @@
+@SERVER_IP = http://localhost:3000
+
+
+### GET ALL QUOTES
+GET {{SERVER_IP}}/quote
+
+
+
+### GET QUOTE BY ID
+GET {{SERVER_IP}}/quote?id=0c6fd4da-3727-4809-ab70-4912e02512e8
+
+
+
+### CREATE QUOTE
+POST {{SERVER_IP}}/quote
+Content-Type: application/json
+
+{
+  "quote": "You are what you eat!"
+}
+
+
+
+### UPDATE QUOTE
+PATCH {{SERVER_IP}}/quote?id=0c6fd4da-3727-4809-ab70-4912e02512e8
+Content-Type: application/json
+
+{
+  "quote": "You are what you eat!"
+}
+
+
+
+### DELETE QUOTE
+DELETE {{SERVER_IP}}/quote?id=0c6fd4da-3727-4809-ab70-4912e02512e8
