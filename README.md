@@ -30,17 +30,15 @@ It also includes two premade moduls
 
 ### Technologies
 
-- NestJS
-- Fastify
-- TypeORM
-- Typescript
-- PostgreSQL
-- JWT
-- Nodemailer
-- Swagger
-- Env
-- AWS S3
-- Git
+- [NestJS](https://nestjs.com/)
+- [Fastify](https://www.fastify.io/)
+- [TypeORM](https://typeorm.io/)
+- [Typescript](https://www.typescriptlang.org/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [JWT](https://jwt.io/)
+- [Swagger](https://swagger.io/)
+- [AWS S3](https://aws.amazon.com/s3/)
+- [Git](https://git-scm.com/)
 
 ---
 
@@ -157,7 +155,7 @@ $ npm run tests
 
 ### Premade Modules
 
-#### Authentication
+##### Authentication
 ```ts
 // Custom route guards can accept either cookies or headers JWT tokens
 
@@ -177,7 +175,15 @@ $ npm run tests
 // @Post('/auth/logout')                    ->    Logout user and clear cookies (protected route with refresh token)
 // @Post('/auth/request-password-reset')    ->    Send email with reset password link
 // @Post('/auth/reset-password')            ->    Reset password with new password
-// @Post('/auth/roles')                     ->    Admin can set users roles
+// @Post('/auth/roles')                     ->    Admin can set users roles (protected route with access token)
+```
+##### Quotes
+```ts
+// In folder assets you can find a postman collection with premade requests to test the following requests:
+// @Get('/quote')       ->    Get all quotes (Query id for specific quote, Query limit for pagination)
+// @Post('/quote')      ->    Create new quote (protected route with access token)
+// @Patch('/quote')     ->    Update quote (Param quote id) (protected route with access token)
+// @Delete('/quote')    ->    Delete quote (Param quote id) (protected route with access token)
 ```
 
 #### Email templates
@@ -224,7 +230,7 @@ return dadoEx.throw({
     status: <status code>, // number
     message: <custom message>, // string
     time?: <this.dadoTimer.end()>, // string
-    data?: <data (object, array, ...)>, // Object or Array
+    data?: <data>, // Object or Array
     response: <FastifyReply> // Fastify response
 })
 ```

@@ -269,11 +269,11 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "{{SERVER_IP}}/quote?id=quoteId",
+                            "raw": "{{SERVER_IP}}/quote?id=a2dc2590-7dbb-484d-91d9-11940294aad9",
                             "query": [
                                 {
                                     "key": "id",
-                                    "value": "quoteId"
+                                    "value": "a2dc2590-7dbb-484d-91d9-11940294aad9"
                                 }
                             ],
                             "variable": [],
@@ -329,16 +329,17 @@
                     "request": {
                         "method": "PATCH",
                         "url": {
-                            "raw": "{{SERVER_IP}}/quote?id=0c6fd4da-3727-4809-ab70-4912e02512e8",
-                            "query": [
+                            "raw": "{{SERVER_IP}}/quote/:id",
+                            "query": [],
+                            "variable": [
                                 {
                                     "key": "id",
-                                    "value": "0c6fd4da-3727-4809-ab70-4912e02512e8"
+                                    "value": "a2dc2590-7dbb-484d-91d9-11940294aad9"
                                 }
                             ],
-                            "variable": [],
                             "path": [
-                                "quote"
+                                "quote",
+                                ":id"
                             ],
                             "host": [
                                 "{{server_ip}}"
@@ -367,16 +368,17 @@
                     "request": {
                         "method": "DELETE",
                         "url": {
-                            "raw": "{{SERVER_IP}}/quote?id=quoteId",
-                            "query": [
+                            "raw": "{{SERVER_IP}}/quote/:id",
+                            "query": [],
+                            "variable": [
                                 {
                                     "key": "id",
-                                    "value": "quoteId"
+                                    "value": "a2dc2590-7dbb-484d-91d9-11940294aad9"
                                 }
                             ],
-                            "variable": [],
                             "path": [
-                                "quote"
+                                "quote",
+                                ":id"
                             ],
                             "host": [
                                 "{{server_ip}}"

@@ -1,5 +1,5 @@
 // Reset password confirmation
-import { ResetPasswordData } from './RequestPasswordReset'
+import { EmailDto } from "../dto/email.dto"
 
 const BodyStyle = `margin: 0; padding: 0; font-family: sans-serif; background-color: #fff;`
 const ContanerStyle = `width: fit-content; margin: 0 auto; border: 1px solid black; border-radius: 5px; padding: 10px; background-color: #fff;`
@@ -7,7 +7,7 @@ const TableStyle = `margin: auto; background-color: #fff;`
 const HeaderStyle = `margin: 0; font-size: 24px; font-weight: 600; color: #4e5a65;`
 const ParagraphStyle = `margin: 0; font-size: 16px; font-weight: 400; color: #8594a7;`
 
-const PasswordResetConf = (data: ResetPasswordData) => {
+const PasswordResetConf = (data: EmailDto) => {
     const { first_name, last_name } = data;
     return `
         <!DOCTYPE html>

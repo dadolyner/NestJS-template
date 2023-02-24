@@ -1,10 +1,10 @@
 // RoleGuard class that protects routes with proper user permissions
-import { CanActivate, ExecutionContext, Injectable, SetMetadata } from '@nestjs/common'
-import { Reflector } from '@nestjs/core'
+import { SetMetadata, Injectable, CanActivate, ExecutionContext } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Users } from 'src/entities/users.entity'
-import DadoEx from 'src/helpers/exceptions'
 import { Repository } from 'typeorm'
+import { Users } from 'src/entities/users.entity'
+import { Reflector } from '@nestjs/core'
+import DadoEx from 'src/helpers/exceptions'
 
 // Required roles decorator
 export const Roles = (roles: string[]) => SetMetadata('roles', roles)

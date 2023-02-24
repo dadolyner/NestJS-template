@@ -1,10 +1,10 @@
 // AccessToken JWT Strategy
-import { PassportStrategy } from "@nestjs/passport"
-import { ExtractJwt, Strategy } from "passport-jwt"
 import { Injectable } from "@nestjs/common"
+import { PassportStrategy } from "@nestjs/passport"
+import { JwtService } from "@nestjs/jwt"
+import { ExtractJwt, Strategy } from "passport-jwt"
 import { FastifyRequest } from "fastify"
 import DadoEx from "src/helpers/exceptions"
-import { JwtService } from "@nestjs/jwt"
 
 // Access Token Payload
 type JwtPayload = { sub: string, email: string, iat: number, exp: number }

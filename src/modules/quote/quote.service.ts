@@ -1,12 +1,13 @@
 // Quote Service
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Quotes } from 'src/entities/quotes.entity';
 import { Repository } from 'typeorm';
-import { QuoteDto } from './dto/quote.dto';
-import DadoEx, { DadoExResponse } from 'src/helpers/exceptions';
-import { FastifyReply, FastifyRequest } from 'fastify';
+import { Quotes } from 'src/entities/quotes.entity';
 import { Users } from 'src/entities/users.entity';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import DadoEx, { DadoExResponse } from 'src/helpers/exceptions';
+import { QuoteDto } from './dto/quote.dto';
+import { QuoteExportDto } from './dto/exports.dto';
 
 @Injectable()
 export class QuoteService {
@@ -18,31 +19,22 @@ export class QuoteService {
     private dadoEx = new DadoEx(QuoteService.name)
 
     // Get quotes
-    async getQuotes(quoteId: string, response: FastifyReply): Promise<DadoExResponse> {
-        let remappedQuotes: any = []
+    async getQuotes(quoteId: string, limit: number, response: FastifyReply): Promise<DadoExResponse> {
+        let remappedQuotes: QuoteExportDto[] = []
         try {
-            const query = await this.quoteRepository.createQueryBuilder('quotes')
-            .select([ 'quotes.id', 'quotes.quote', 'users.id', 'users.first_name', 'users.last_name', 'users.email' ])
-            .leftJoin('quotes.user', 'users')
-            if(quoteId) query.where('quotes.id = :id', { id: quoteId }).getMany()
-            const allQuotes = await query.getMany()
-            
-            if (!allQuotes || allQuotes.length === 0) return this.dadoEx.throw({ status: 204, message: `No quotes found.`, response })
-            remappedQuotes = allQuotes.map(quote => {
-                return {
-                    id: quote.id,
-                    quote: quote.quote,
-                    user: {
-                        id: quote.user.id,
-                        first_name: quote.user.first_name,
-                        last_name: quote.user.last_name,
-                        email: quote.user.email
-                    }
-                }
-            })
-        } catch(error) { return this.dadoEx.throw({ status: 500, message: `Retrieving all quotes failed. Reason: ${error.message}.`, response }) }
+            const query = this.quoteRepository.createQueryBuilder('quotes')
+                .select(['quotes.id', 'quotes.quote', 'quotes.created_at', 'quotes.updated_at', 'users.id', 'users.first_name', 'users.last_name', 'users.email'])
+                .leftJoin('quotes.user', 'users')
+            if (quoteId) query.where('quotes.id = :id', { id: quoteId }).getMany()
+            if (limit) query.orderBy('quotes.created_at', 'DESC').limit(limit)
+            const allQuotes = await query.orderBy('quotes.created_at', 'DESC').getMany()
 
-        if(quoteId) return this.dadoEx.throw({ status: 200, message: `Specific quote retrieved successfully.`, response, data: remappedQuotes })
+            if (!allQuotes || allQuotes.length === 0) return this.dadoEx.throw({ status: 204, message: `No quotes found.`, response })
+            remappedQuotes = allQuotes.map(quote => { return new QuoteExportDto(quote) })
+        } catch (error) { return this.dadoEx.throw({ status: 500, message: `Retrieving all quotes failed. Reason: ${error.message}.`, response }) }
+
+        if (quoteId) return this.dadoEx.throw({ status: 200, message: `Specific quote retrieved successfully.`, response, data: remappedQuotes })
+        else if (limit) return this.dadoEx.throw({ status: 200, message: `${limit} quotes retrieved successfully.`, response, data: remappedQuotes })
         else return this.dadoEx.throw({ status: 200, message: `All quotes retrieved successfully.`, response, data: remappedQuotes })
     }
 
@@ -61,16 +53,16 @@ export class QuoteService {
         newQuote.updated_at = new Date()
 
         try { await this.quoteRepository.save(newQuote) }
-        catch (error) { return this.dadoEx.throw({ status: 500, message: `Adding a quote failed. Reason: ${error.message}.`, response }) }
+        catch (error) { return this.dadoEx.throw({ status: 500, message: `Creating a quote failed. Reason: ${error.message}.`, response }) }
 
-        return this.dadoEx.throw({ status: 201, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully added a new quote.`, response })
+        return this.dadoEx.throw({ status: 201, message: `New quote created successfully.`, response })
     }
 
     // Update a quote
     async updateQuote(quoteId: string, quoteDto: QuoteDto, request: FastifyRequest, response: FastifyReply): Promise<DadoExResponse> {
         const { quote } = quoteDto
         const user = request["user"].sub
-        
+
         const userExists = await this.userRepository.findOne({ where: { id: user } })
         if (!userExists) return this.dadoEx.throw({ status: 404, message: 'Provided user does not exists.', response })
         const quoteExists = await this.quoteRepository.findOne({ where: { id: quoteId } })
@@ -80,11 +72,11 @@ export class QuoteService {
 
         quoteExists.quote = quote
         quoteExists.updated_at = new Date()
-        
+
         try { await this.quoteRepository.save(quoteExists) }
         catch (error) { return this.dadoEx.throw({ status: 500, message: `Updating a quote failed. Reason: ${error.message}.`, response }) }
 
-        return this.dadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully updated a quote.`, response })
+        return this.dadoEx.throw({ status: 200, message: `Quote updated successfully.`, response })
     }
 
     // Delete a quote
@@ -101,6 +93,6 @@ export class QuoteService {
         try { await this.quoteRepository.delete(quoteExists.id) }
         catch (error) { return this.dadoEx.throw({ status: 500, message: `Deleting a quote failed. Reason: ${error.message}.`, response }) }
 
-        return this.dadoEx.throw({ status: 200, message: `User ${userExists.first_name} ${userExists.last_name} <${userExists.email}> successfully deleted a quote.`, response })
+        return this.dadoEx.throw({ status: 200, message: `Quote deleted successfully.`, response })
     }
 }

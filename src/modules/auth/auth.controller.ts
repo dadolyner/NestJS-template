@@ -1,6 +1,5 @@
 // Auth Controller
-import { Controller, Post } from '@nestjs/common'
-import { Body, Req, Res, UseGuards } from '@nestjs/common/decorators'
+import { Controller, Post, Body, Req, Res, UseGuards } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { AuthLoginDto, AuthRegisterDto, AuthRolesDto, PasswordDto, PasswordRequestDto } from './dto/auth.dto'
 import { FastifyReply, FastifyRequest } from 'fastify'

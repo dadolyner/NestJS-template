@@ -1,9 +1,5 @@
 // Request password reset email
-export interface ResetPasswordData {
-    first_name: string;
-    last_name: string;
-    link?: string;
-}
+import { EmailDto } from "../dto/email.dto"
 
 const BodyStyle = `margin: 0; padding: 0; font-family: sans-serif; background-color: #fff;`
 const ContanerStyle = `width: fit-content; margin: 0 auto; border: 1px solid black; border-radius: 5px; padding: 10px; background-color: #fff;`
@@ -12,7 +8,7 @@ const HeaderStyle = `margin: 0; font-size: 24px; font-weight: 600; color: #4e5a6
 const ParagraphStyle = `margin: 0; font-size: 16px; font-weight: 400; color: #8594a7;`
 const ResetButtonStyle = `border-radius: 5px; text-decoration: none; color: #fff; background-color: #3b485a; padding: 10px 30px; font-size: 16px;`
 
-const RequestPasswordReset = (data: ResetPasswordData) => {
+const RequestPasswordReset = (data: EmailDto) => {
     const { first_name, last_name, link } = data;
     return `
         <!DOCTYPE html>

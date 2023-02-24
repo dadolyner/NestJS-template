@@ -1,14 +1,15 @@
 // Auth Service
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Users } from 'src/entities/users.entity'
 import { Repository } from 'typeorm'
-import { AuthLoginDto, AuthRegisterDto, AuthRolesDto, PasswordDto, PasswordRequestDto } from './dto/auth.dto'
+import { Users } from 'src/entities/users.entity'
 import { JwtService } from '@nestjs/jwt'
+import { AuthLoginDto, AuthRegisterDto, AuthRolesDto, PasswordDto, PasswordRequestDto } from './dto/auth.dto'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import DadoEx, { DadoExResponse } from 'src/helpers/exceptions'
 import transporter from 'src/mail/email.config'
-import RequestPasswordReset, { ResetPasswordData } from 'src/mail/templates/RequestPasswordReset'
+import { EmailDto } from 'src/mail/dto/email.dto'
+import RequestPasswordReset from 'src/mail/templates/RequestPasswordReset'
 import PasswordResetConf from 'src/mail/templates/ResetPasswordConfirmation'
 import VerifyEmail from 'src/mail/templates/VerifyEmail'
 import uploadImageToS3 from 'src/helpers/awsUpload'
@@ -29,7 +30,7 @@ export class AuthService {
         const userExists = await this.usersRepository.findOne({ where: { email } })
         if (userExists) return this.dadoEx.throw({ status: 409, message: 'User with this email already exists.', response })
         const awsResponse = await uploadImageToS3(avatar)
-        if(!awsResponse) return this.dadoEx.throw({ status: 500, message: `Uploading image to S3 failed.`, response })
+        if (!awsResponse) return this.dadoEx.throw({ status: 500, message: `Uploading image to S3 failed.`, response })
         const avatarUrl = awsResponse.Location
 
         const newUser = new Users()
@@ -54,7 +55,7 @@ export class AuthService {
             emailTokenExp.setMinutes(emailTokenExp.getMinutes() + 60)
             response.setCookie('email_token', emailToken, { path: '/', httpOnly: false, expires: emailTokenExp })
 
-            const mailData: ResetPasswordData = {
+            const mailData: EmailDto = {
                 first_name: newUser.first_name,
                 last_name: newUser.last_name,
                 link: `${process.env.FRONTEND_IP}:${process.env.FRONTEND_PORT}/verify-email`,
@@ -127,7 +128,12 @@ export class AuthService {
 
         let accessToken: string
 
-        try { accessToken = await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_ACCESSTOKEN_SECRET}`, expiresIn: '5m' }) } 
+        try {
+            accessToken = await this.jwtService.signAsync({ sub: userExists.id, email: userExists.email }, { secret: `${process.env.JWT_ACCESSTOKEN_SECRET}`, expiresIn: '5m' })
+            const accessTokenExp = new Date()
+            accessTokenExp.setMinutes(accessTokenExp.getMinutes() + 15)
+            response.setCookie('access_token', accessToken, { path: '/', httpOnly: false, expires: accessTokenExp })
+        }
         catch (error) { return this.dadoEx.throw({ status: 500, message: `Signing a new access token failed. Reason: ${error.message}.`, response }) }
 
         return this.dadoEx.throw({ status: 200, message: `Access token refreshed successfully.`, response, data: { accessToken } })
@@ -162,7 +168,7 @@ export class AuthService {
             passwordTokenExp.setMinutes(passwordTokenExp.getMinutes() + 60)
             response.setCookie('password_token', passwordToken, { path: '/', httpOnly: false, expires: passwordTokenExp })
 
-            const mailData: ResetPasswordData = {
+            const mailData: EmailDto = {
                 first_name: userExists.first_name,
                 last_name: userExists.last_name,
                 link: `${process.env.FRONTEND_IP}:${process.env.FRONTEND_PORT}/change-password`,
@@ -191,7 +197,7 @@ export class AuthService {
             await this.usersRepository.save(userExists)
             response.setCookie('password_token', '', { expires: new Date(0) }).clearCookie('password_token')
 
-            const mailData: ResetPasswordData = {
+            const mailData: EmailDto = {
                 first_name: userExists.first_name,
                 last_name: userExists.last_name,
             }

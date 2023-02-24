@@ -1,11 +1,11 @@
 // Quote Controller
-import { Body, Controller, Delete, Get, Patch, Post, Query, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, Res, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { QuoteService } from './quote.service';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { QuoteDto } from './dto/quote.dto';
-import { DadoExResponse } from 'src/helpers/exceptions';
-import { ApiBearerAuth, ApiBody, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AccessGuard } from '../auth/guard/auth.guard';
+import { DadoExResponse } from 'src/helpers/exceptions';
 
 @ApiTags('Quotes')
 @Controller('quote')
@@ -15,9 +15,10 @@ export class QuoteController {
     // Get quotes
     @ApiResponse({ status: 200, description: 'Retrieve all quotes or one specific quote' })
     @ApiQuery({ name: 'id', description: 'Get a specific quote by its id', required: false, type: 'string' })
+    @ApiQuery({ name: 'limit', description: 'Get a specified ammount of quotes', required: false, type: 'number' })
     @Get()
-    async getQuotes(@Query('id') quoteId: string, @Res() response: FastifyReply): Promise<DadoExResponse> {
-        return this.quoteService.getQuotes(quoteId, response)
+    async getQuotes(@Query('id') quoteId: string, @Query('limit') limit: number, @Res() response: FastifyReply): Promise<DadoExResponse> {
+        return this.quoteService.getQuotes(quoteId, limit, response)
     }
 
     // Create a new quote
@@ -32,22 +33,22 @@ export class QuoteController {
 
     // Update a quote
     @ApiResponse({ status: 200, description: 'Update quote' })
-    @ApiQuery({ name: 'id', description: 'Update users defined quote', required: true, type: 'string' })
+    @ApiParam({ name: 'id', description: 'Update users defined quote', required: true, type: 'string' })
     @ApiBody({ type: QuoteDto })
     @ApiBearerAuth('Access JWT Token')
     @UseGuards(AccessGuard)
-    @Patch()
-    async updateQuote(@Query('id') quoteId: string, @Body() quoteDto: QuoteDto, @Req() request: FastifyRequest, @Res() response: FastifyReply): Promise<DadoExResponse> {
+    @Patch(':id')
+    async updateQuote(@Param('id') quoteId: string, @Body() quoteDto: QuoteDto, @Req() request: FastifyRequest, @Res() response: FastifyReply): Promise<DadoExResponse> {
         return this.quoteService.updateQuote(quoteId, quoteDto, request, response)
     }
 
     // Delete a quote
     @ApiResponse({ status: 200, description: 'Delete quote' })
-    @ApiQuery({ name: 'id', description: 'Delete users defined quote', required: true, type: 'string' })
+    @ApiParam({ name: 'id', description: 'Delete users defined quote', required: true, type: 'string' })
     @ApiBearerAuth('Access JWT Token')
     @UseGuards(AccessGuard)
-    @Delete()
-    async deleteQuote(@Query('id') quoteId: string, @Req() request: FastifyRequest, @Res() response: FastifyReply): Promise<DadoExResponse> {
+    @Delete(':id')
+    async deleteQuote(@Param('id') quoteId: string, @Req() request: FastifyRequest, @Res() response: FastifyReply): Promise<DadoExResponse> {
         return this.quoteService.deleteQuote(quoteId, request, response)
     }
 }
