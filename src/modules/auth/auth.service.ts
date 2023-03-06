@@ -29,26 +29,25 @@ export class AuthService {
 
         const userExists = await this.usersRepository.findOne({ where: { email } })
         if (userExists) return this.dadoEx.throw({ status: 409, message: 'User with this email already exists.', response })
-        const awsResponse = await uploadImageToS3(avatar)
-        if (!awsResponse) return this.dadoEx.throw({ status: 500, message: `Uploading image to S3 failed.`, response })
-        const avatarUrl = awsResponse.Location
+        
+        let avatarUrl: string = null
+        if(avatar) {
+            const awsResponse = await uploadImageToS3(avatar)
+            if (!awsResponse) return this.dadoEx.throw({ status: 500, message: `Uploading image to S3 failed.`, response })
+            avatarUrl = awsResponse.Location
+        }
 
         const newUser = new Users()
         newUser.first_name = first_name
         newUser.last_name = last_name
         newUser.email = email
-        newUser.salt = await newUser.generateSalt()
-        newUser.password = await newUser.hashPassword(password, newUser.salt)
-        newUser.settings = { roles: ['User'] }
-        newUser.verified = false
+        newUser.password = password
         newUser.avatar = avatarUrl
-        newUser.created_at = new Date()
-        newUser.updated_at = new Date()
 
         let emailToken: string
 
         try {
-            await this.usersRepository.save(newUser)
+            await this.usersRepository.insert(newUser)
 
             emailToken = await this.jwtService.signAsync({ sub: newUser.id, email: newUser.email }, { secret: `${process.env.JWT_EMAILTOKEN_SECRET}`, expiresIn: '60m' })
             const emailTokenExp = new Date()
@@ -213,20 +212,41 @@ export class AuthService {
         return this.dadoEx.throw({ status: 200, message: `Password changed successfully.`, response })
     }
 
-    // Set users roles
-    async setRoles(rolesDto: AuthRolesDto, request: FastifyRequest, response: FastifyReply): Promise<DadoExResponse> {
-        const { userId, roles } = rolesDto
+    // Add users roles
+    async addRoles(userId: string, rolesDto: AuthRolesDto, request: FastifyRequest, response: FastifyReply): Promise<DadoExResponse> {
+        const { roles } = rolesDto
         const user = request["user"].sub
+
         const adminExists = await this.usersRepository.findOne({ where: { id: user } })
         if (!adminExists) return this.dadoEx.throw({ status: 404, message: 'Provided admin does not exist.', response })
         const userExists = await this.usersRepository.findOne({ where: { id: userId } })
         if (!userExists) return this.dadoEx.throw({ status: 404, message: 'Provided user does not exist.', response })
 
         try {
-            userExists.settings.roles = roles
+            userExists.roles = [...new Set([...userExists.roles, ...roles])]
             await this.usersRepository.save(userExists)
         } catch (error) { return this.dadoEx.throw({ status: 500, message: `Setting users roles failed. Reason: ${error.message}.`, response }) }
 
         return this.dadoEx.throw({ status: 200, message: `Roles set successfully.`, response })
+    }
+
+    // Remove users roles
+    async removeRoles(userId: string, rolesDto: AuthRolesDto, request: FastifyRequest, response: FastifyReply): Promise<DadoExResponse> {
+        const { roles } = rolesDto
+        const user = request["user"].sub
+
+        const adminExists = await this.usersRepository.findOne({ where: { id: user } })
+        if (!adminExists) return this.dadoEx.throw({ status: 404, message: 'Provided admin does not exist.', response })
+        const userExists = await this.usersRepository.findOne({ where: { id: userId } })
+        if (!userExists) return this.dadoEx.throw({ status: 404, message: 'Provided user does not exist.', response })
+        const userRoles = userExists.roles
+        if(!userRoles.some(role => roles.includes(role))) return this.dadoEx.throw({ status: 404, message: 'Provided user does not have any of the provided roles.', response })
+
+        try {
+            userExists.roles = userExists.roles.filter(role => !roles.includes(role))
+            await this.usersRepository.save(userExists)
+        } catch (error) { return this.dadoEx.throw({ status: 500, message: `Removing users roles failed. Reason: ${error.message}.`, response }) }
+
+        return this.dadoEx.throw({ status: 200, message: `Roles removed successfully.`, response })
     }
 }

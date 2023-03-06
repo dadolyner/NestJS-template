@@ -10,8 +10,7 @@ Content-Type: application/json
   "first_name": "Janez",
   "last_name": "Novak",
   "email": "janez.novak@gmail.com",
-  "password": "janeznovak123",
-  "avatar": "image/base64"
+  "password": "janeznovak123"
 }
 
 
@@ -63,10 +62,9 @@ Content-Type: application/json
 
 
 ### AUTH SET ROLES
-POST {{SERVER_IP}}/auth/roles HTTP/1.1
+POST {{SERVER_IP}}/auth/roles/{userId} HTTP/1.1
 Content-Type: application/json
 
 {
-  "userId": "09f393c0-7683-4f74-9f9b-b9a6d954f379",
   "roles": ["Moderator"]
 }

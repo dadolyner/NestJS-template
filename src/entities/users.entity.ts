@@ -1,6 +1,7 @@
 // Users Entity
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, Unique, OneToMany } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, Unique, OneToMany, CreateDateColumn, UpdateDateColumn, BeforeInsert, BeforeUpdate } from 'typeorm'
 import * as bcrypt from 'bcrypt'
+export type AllowedRoles = 'Admin' | 'Moderator' | 'User' | 'Tester'
 import { Quotes } from './quotes.entity'
 
 @Entity({ name: 'users' })
@@ -9,47 +10,50 @@ export class Users extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string
 
-    @Column()
+    @Column({ type: 'varchar', length: 100 })
     first_name: string
 
-    @Column()
+    @Column({ type: 'varchar', length: 100 })
     last_name: string
 
-    @Column()
+    @Column({ type: 'varchar', length: 255, unique: true })
     email: string
 
-    @Column()
-    salt: string
-
-    @Column()
+    @Column({ type: 'varchar', length: 255 })
     password: string
 
-    @Column('jsonb', { nullable: true, default: {} })
-    settings: {
-        roles: string[]
-    }
+    @Column({ type: 'varchar', length: 255 })
+    salt: string
 
-    @Column()
+    @Column({ type: 'varchar', length: 255, nullable: true })
+    avatar: string
+
+    @Column('text', { array: true, nullable: true, default: ["User"] })
+    roles: AllowedRoles[]
+
+    @Column({ type: 'boolean', default: false })
     verified: boolean
 
-    @Column()
-    avatar: string
-    
-    @Column()
+    @CreateDateColumn()
     created_at: Date
 
-    @Column()
+    @UpdateDateColumn()
     updated_at: Date
 
     @OneToMany(() => Quotes, (quote) => quote.user, { onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
     quote: Quotes[];
 
+    // Before insert/update generate salt and hash password
+    @BeforeInsert()
+    async hashPassword(): Promise<void> {
+        if (this.password) {
+            this.salt = await bcrypt.genSalt()
+            this.password = await bcrypt.hash(this.password, this.salt)
+        }
+    }
+
     // Validate user password
-    async validatePassword(password: string): Promise<boolean> { return await bcrypt.hash(password, this.salt) === this.password }
-
-    // Generate salt for hashing
-    async generateSalt(): Promise<string> { return await bcrypt.genSalt() }
-
-    // Hash user password
-    async hashPassword(password: string, salt: string): Promise<string> { return await bcrypt.hash(password, salt) }
+    async validatePassword(password: string): Promise<boolean> { 
+        return await bcrypt.hash(password, this.salt) === this.password 
+    }
 }

@@ -36,7 +36,7 @@
                                     "language": "json"
                                 }
                             },
-                            "raw": "{\n  \"first_name\": \"Janez\",\n  \"last_name\": \"Novak\",\n  \"email\": \"janez.novak@gmail.com\",\n  \"password\": \"janeznovak123\",\n  \"avatar\": \"image/base64\"\n}"
+                            "raw": "{\n  \"first_name\": \"Janez\",\n  \"last_name\": \"Novak\",\n  \"email\": \"janez.novak@gmail.com\",\n  \"password\": \"janeznovak123\"\n}"
                         }
                     }
                 },
@@ -206,14 +206,22 @@
                     }
                 },
                 {
-                    "name": "Set roles",
+                    "name": "Add roles",
                     "request": {
-                        "method": "POST",
+                        "method": "PATCH",
                         "url": {
-                            "raw": "{{SERVER_IP}}/auth/roles",
+                            "raw": "{{SERVER_IP}}/auth/roles/:id",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "userId"
+                                }
+                            ],
                             "path": [
                                 "auth",
-                                "roles"
+                                "roles",
+                                ":id"
                             ],
                             "host": [
                                 "{{server_ip}}"
@@ -233,7 +241,47 @@
                                     "language": "json"
                                 }
                             },
-                            "raw": "{\n  \"userId\": \"userId\",\n  \"roles\": [\"Moderator\"]\n}"
+                            "raw": "{\n  \"roles\": [\"Moderator\", \"Tester\"]\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Remove roles",
+                    "request": {
+                        "method": "DELETE",
+                        "url": {
+                            "raw": "{{SERVER_IP}}/auth/roles/:id",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "userId"
+                                }
+                            ],
+                            "path": [
+                                "auth",
+                                "roles",
+                                ":id"
+                            ],
+                            "host": [
+                                "{{server_ip}}"
+                            ]
+                        },
+                        "header": [
+                            {
+                                "key": "User-Agent",
+                                "value": "Thunder Client (https://www.thunderclient.com)",
+                                "disabled": true
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"roles\": [\"Moderator\"]\n}"
                         }
                     }
                 }

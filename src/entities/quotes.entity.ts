@@ -1,5 +1,5 @@
 // Quotes Entity
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 import { Users } from './users.entity'
 
 @Entity({ name: 'quotes' })
@@ -7,13 +7,13 @@ export class Quotes extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string
 
-    @Column()
+    @Column({ type: 'varchar', length: 255 })
     quote: string
     
-    @Column()
+    @CreateDateColumn()
     created_at: Date
 
-    @Column()
+    @UpdateDateColumn()
     updated_at: Date
 
     @Column()

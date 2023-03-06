@@ -1,5 +1,5 @@
 // Auth Controller
-import { Controller, Post, Body, Req, Res, UseGuards } from '@nestjs/common'
+import { Controller, Post, Body, Req, Res, UseGuards, Delete, Param, Patch } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { AuthLoginDto, AuthRegisterDto, AuthRolesDto, PasswordDto, PasswordRequestDto } from './dto/auth.dto'
 import { FastifyReply, FastifyRequest } from 'fastify'
@@ -74,14 +74,25 @@ export class AuthController {
         return await this.authService.changePassword(password, request, response)
     }
 
-    // Set users roles
+    // Add users roles
     @ApiResponse({ status: 200, description: 'Set users roles' })
     @ApiBody({ type: AuthRolesDto })
     @ApiBearerAuth('Access JWT Token and Admin Role')
     @UseGuards(AccessGuard, RoleGuard)
     @Roles(['Admin'])
-    @Post('roles')
-    async setRoles(@Body() rolesDto: AuthRolesDto, @Req() request: FastifyRequest, @Res() response: FastifyReply): Promise<DadoExResponse> {
-        return await this.authService.setRoles(rolesDto, request, response)
+    @Patch('roles/:id')
+    async addRoles(@Param('id') userId: string, @Body() rolesDto: AuthRolesDto, @Req() request: FastifyRequest, @Res() response: FastifyReply): Promise<DadoExResponse> {
+        return await this.authService.addRoles(userId, rolesDto, request, response)
+    }
+
+    // Remove users roles
+    @ApiResponse({ status: 200, description: 'Remove users roles' })
+    @ApiBody({ type: AuthRolesDto })
+    @ApiBearerAuth('Access JWT Token and Admin Role')
+    @UseGuards(AccessGuard, RoleGuard)
+    @Roles(['Admin'])
+    @Delete('roles/:id')
+    async removeRoles(@Param('id') userId: string, @Body() rolesDto: AuthRolesDto, @Req() request: FastifyRequest, @Res() response: FastifyReply): Promise<DadoExResponse> {
+        return await this.authService.removeRoles(userId, rolesDto, request, response)
     }
 }

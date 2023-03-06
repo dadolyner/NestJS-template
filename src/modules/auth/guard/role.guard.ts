@@ -27,7 +27,7 @@ export class RoleGuard implements CanActivate {
         const userExists = await this.usersRepository.findOne({ where: { id: user } })
         if (!userExists) return this.dadoEx.throw({ status: 401, message: `Access denied. Reason: User does not exist.`, response })
 
-        const userRoles = userExists.settings.roles
+        const userRoles = userExists.roles
         const serverRoles = this.reflector.get<string[]>('roles', context.getHandler())
         const hasRole = () => { return userRoles.some(role => serverRoles.includes(role)) }
 

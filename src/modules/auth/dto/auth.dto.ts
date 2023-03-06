@@ -1,6 +1,7 @@
 // Auth DTOs
 import { ApiProperty } from '@nestjs/swagger'
-import { IsArray, IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator'
+import { IsArray, IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-validator'
+import { AllowedRoles } from 'src/entities/users.entity'
 
 // Register
 export class AuthRegisterDto {
@@ -28,6 +29,7 @@ export class AuthRegisterDto {
     password: string
 
     @ApiProperty({ type: String, description: 'User avatar', example: 'image/base64' })
+    @IsOptional()
     @IsString({ message: 'Avatar must be a string' })
     @IsNotEmpty({ message: 'Avatar is required' })
     avatar: string
@@ -68,13 +70,8 @@ export class PasswordDto {
 
 // Roles
 export class AuthRolesDto {
-    @ApiProperty({ type: Array, description: 'User id', example: '991416fc-c1c9-451c-9c8e-8209e09fb4b7' })
-    @IsString({ message: 'Users id must be a strings' })
-    @IsNotEmpty({ message: 'User is required' })
-    userId: string
-
     @ApiProperty({ type: Array, description: 'User roles', example: '["Admin"]' })
     @IsArray({ message: 'Roles must be an array of strings' })
     @IsNotEmpty({ message: 'Roles are required' })
-    roles: string[]
+    roles: AllowedRoles[]
 }
