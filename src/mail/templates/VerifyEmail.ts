@@ -9,7 +9,7 @@ const ParagraphStyle = `margin: 0; font-size: 16px; font-weight: 400; color: #85
 const ResetButtonStyle = `border-radius: 5px; text-decoration: none; color: #fff; background-color: #3b485a; padding: 10px 30px; font-size: 16px;`
 
 const VerifyEmail = (data: EmailDto) => {
-    const { first_name, last_name, link } = data;
+    const { first_name, last_name, link } = data
     return `
         <!DOCTYPE html>
         <html lang="en">

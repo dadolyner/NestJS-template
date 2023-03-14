@@ -75,23 +75,16 @@ $ npm i
 ```
 
 #### Setup environment variables
-
+In the root directory create "env" folder
+In that "env" folder create .env file for each enviroment that you want and add your variables
 ```ts
-// In the root directory create "env" folder
-// In that "env" folder create .env file for each enviroment that you want and add your variables
-
 // Start scripts for each enviroment
-// "start:prod": "cross-env ENVIROMENT=production node dist/main"
-// .env.production
-
-// "start:dev": "cross-env ENVIROMENT=development nest start --watch",
-// .env.development
-
-// "start:tests": "cross-env ENVIROMENT=test jest --config ./tests/jest-e2e.json",
-// .env.test
+"start:prod": "cross-env ENVIROMENT=production node dist/main" // .env.production
+"start:dev": "cross-env ENVIROMENT=development nest start --watch", // .env.development
+"start:tests": "cross-env ENVIROMENT=test jest --config ./tests/jest-e2e.json", // .env.test
 ```
+Required variables for this project
 ```ts
-// Required variables for this project
 // Backend details
 BACKEND_IP=
 BACKEND_PORT=
@@ -145,45 +138,43 @@ $ npm run tests
 ```
 
 #### Access
-
-```ts
-// To access the application go to http://<BACKEND_IP>:<BACKEND_PORT>
-// To access the swagger documentation go to http://<BACKEND_IP>:<BACKEND_PORT>/documentation
-```
+To access the application go to `http://<BACKEND_IP>:<BACKEND_PORT>`
+To access the swagger documentation go to `http://<BACKEND_IP>:<BACKEND_PORT>/documentation`
 
 ---
 
 ### Premade Modules
 
 ##### Authentication
+Custom route guards can accept either cookies or headers JWT tokens
 ```ts
-// Custom route guards can accept either cookies or headers JWT tokens
+@UseGuards(AccessGuard)     // Protects the route with Access JWT authentication    -->  App access
+@UseGuards(RefreshGuard)    // Protects the route with Refresh JWT authentication   -->  Refresh AccessToken
+@UseGuards(PasswordGuard)   // Protects the route with Password JWT authentication  -->  Reset password
+@UseGuards(EmailGuard)      // Protects the route with Email JWT authentication     -->  Verify email
 
-// @UseGuards(AccessGuard)    ->     Protects the route with Access JWT authentication    -->  App access
-// @UseGuards(RefreshGuard)   ->     Protects the route with Refresh JWT authentication   -->  Refresh AccessToken
-// @UseGuards(PasswordGuard)  ->     Protects the route with Password JWT authentication  -->  Reset password
-// @UseGuards(EmailGuard)     ->     Protects the route with Email JWT authentication     -->  Verify email
+@Roles(['roles'])     // Define roles that can acces the route for RoleGuard
+@UseGuards(RoleGuard) // Protects the route with permission roles  ->  Checks users roles in DB
+```
 
-// @Roles(['roles'])          ->     Define roles that can acces the route for RoleGuard
-// @UseGuards(RoleGuard)      ->     Protects the route with permission roles             -->  Checks users roles in DB
-
-// In folder assets you can find a postman collection with premade requests to test the following requests:
-// @Post('/auth/register')                  ->    Register User
-// @Post('/auth/verify-email')              ->    After registration send email with verify email link
-// @Post('/auth/login')                     ->    Login User and store JWT in cookies ( access(exp: 15m) and refresh(exp: 7d) )
-// @Post('/auth/refresh')                   ->    Refresh users access token (protected route with refresh token)
-// @Post('/auth/logout')                    ->    Logout user and clear cookies (protected route with refresh token)
-// @Post('/auth/request-password-reset')    ->    Send email with reset password link
-// @Post('/auth/reset-password')            ->    Reset password with new password
-// @Post('/auth/roles')                     ->    Admin can set users roles (protected route with access token)
+Auth routes
+```ts
+@Post('/auth/register')                 // Register User
+@Post('/auth/verify-email')             // After registration send email with verify email link
+@Post('/auth/login')                    // Login User and store JWT in cookies ( access(exp: 15m) and refresh(exp: 7d) )
+@Post('/auth/refresh')                  // Refresh users access token (protected route with refresh token)
+@Post('/auth/logout')                   // Logout user and clear cookies (protected route with refresh token)
+@Post('/auth/request-password-reset')   // Send email with reset password link
+@Post('/auth/reset-password')           // Reset password with new password
+@Post('/auth/roles')                    // Admin can set users roles (protected route with access token)
 ```
 ##### Quotes
+Quotes routes
 ```ts
-// In folder assets you can find a postman collection with premade requests to test the following requests:
-// @Get('/quote')       ->    Get all quotes (Query id for specific quote, Query limit for pagination)
-// @Post('/quote')      ->    Create new quote (protected route with access token)
-// @Patch('/quote')     ->    Update quote (Param quote id) (protected route with access token)
-// @Delete('/quote')    ->    Delete quote (Param quote id) (protected route with access token)
+@Get('/quote')      // Get all quotes (Query id for specific quote, Query limit for pagination)
+@Post('/quote')     // Create new quote (protected route with access token)
+@Patch('/quote')    // Update quote (Param quote id) (protected route with access token)
+@Delete('/quote')   // Delete quote (Param quote id) (protected route with access token)
 ```
 
 #### Email templates
@@ -203,9 +194,9 @@ $ npm run tests
 
 #### Custom HTTP Exception response with server logging
 ```ts
-// @Req() request: FastifyRequest   ->     Controller parameter to get Fastify request for retrieving request data
-// @Res() response: FastifyReply    ->     Controller parameter to get Fastify response for sending response to client
-// Promise<DadoExResponse>          ->     Custom type for returning formatted response
+@Req() request: FastifyRequest  // Controller parameter to get Fastify request for retrieving request data
+@Res() response: FastifyReply   // Controller parameter to get Fastify response for sending response to client
+Promise<DadoExResponse>         // Custom type for returning formatted response
 
 // Example:
 private dadoEx = new DadoEx(<location string>)

@@ -1,13 +1,13 @@
 // Quote Service
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Quotes } from 'src/entities/quotes.entity';
-import { Users } from 'src/entities/users.entity';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import DadoEx, { DadoExResponse } from 'src/helpers/exceptions';
-import { QuoteDto } from './dto/quote.dto';
-import { QuoteExportDto } from './dto/exports.dto';
+import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
+import { Quotes } from 'src/entities/quotes.entity'
+import { Users } from 'src/entities/users.entity'
+import { FastifyReply, FastifyRequest } from 'fastify'
+import DadoEx, { DadoExResponse } from 'src/helpers/exceptions'
+import { QuoteDto } from './dto/quote.dto'
+import { QuoteExportDto } from './dto/exports.dto'
 
 @Injectable()
 export class QuoteService {

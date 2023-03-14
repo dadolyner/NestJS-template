@@ -1,11 +1,11 @@
 // Quote Controller
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, Res, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { QuoteService } from './quote.service';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { QuoteDto } from './dto/quote.dto';
-import { AccessGuard } from '../auth/guard/auth.guard';
-import { DadoExResponse } from 'src/helpers/exceptions';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, Res, UseGuards } from '@nestjs/common'
+import { ApiBearerAuth, ApiBody, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { QuoteService } from './quote.service'
+import { FastifyReply, FastifyRequest } from 'fastify'
+import { QuoteDto } from './dto/quote.dto'
+import { AccessGuard } from '../auth/guard/auth.guard'
+import { DadoExResponse } from 'src/helpers/exceptions'
 
 @ApiTags('Quotes')
 @Controller('quote')

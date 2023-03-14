@@ -54,17 +54,15 @@ export class AuthService {
             emailTokenExp.setMinutes(emailTokenExp.getMinutes() + 60)
             response.setCookie('email_token', emailToken, { path: '/', httpOnly: false, expires: emailTokenExp })
 
-            const mailData: EmailDto = {
-                first_name: newUser.first_name,
-                last_name: newUser.last_name,
-                link: `${process.env.FRONTEND_IP}:${process.env.FRONTEND_PORT}/verify-email`,
-            }
-
             await transporter.sendMail({
                 from: '"Company Support" <support@company.com>',
                 to: newUser.email,
                 subject: 'Verify your email',
-                html: VerifyEmail(mailData),
+                html: VerifyEmail({
+                    first_name: newUser.first_name,
+                    last_name: newUser.last_name,
+                    link: `${process.env.FRONTEND_IP}:${process.env.FRONTEND_PORT}/verify-email`,
+                } as EmailDto),
             })
         }
         catch (error) { return this.dadoEx.throw({ status: 500, message: `Adding a user failed. Reason: ${error.message}.`, response }) }
@@ -167,17 +165,15 @@ export class AuthService {
             passwordTokenExp.setMinutes(passwordTokenExp.getMinutes() + 60)
             response.setCookie('password_token', passwordToken, { path: '/', httpOnly: false, expires: passwordTokenExp })
 
-            const mailData: EmailDto = {
-                first_name: userExists.first_name,
-                last_name: userExists.last_name,
-                link: `${process.env.FRONTEND_IP}:${process.env.FRONTEND_PORT}/change-password`,
-            }
-
             await transporter.sendMail({
                 from: '"Company Support" <support@company.com>',
                 to: userExists.email,
                 subject: 'Reset password request',
-                html: RequestPasswordReset(mailData),
+                html: RequestPasswordReset({
+                    first_name: userExists.first_name,
+                    last_name: userExists.last_name,
+                    link: `${process.env.FRONTEND_IP}:${process.env.FRONTEND_PORT}/change-password`,
+                } as EmailDto),
             })
         } catch (error) { return this.dadoEx.throw({ status: 500, message: `Password change request failed. Reason: ${error.message}.`, response }) }
 
@@ -194,18 +190,17 @@ export class AuthService {
         try {
             userExists.password = password
             await this.usersRepository.save(userExists)
+            
             response.setCookie('password_token', '', { expires: new Date(0) }).clearCookie('password_token')
-
-            const mailData: EmailDto = {
-                first_name: userExists.first_name,
-                last_name: userExists.last_name,
-            }
 
             await transporter.sendMail({
                 from: '"Company Support" <support@company.com>',
                 to: userExists.email,
                 subject: 'Password changed',
-                html: PasswordResetConf(mailData),
+                html: PasswordResetConf({
+                    first_name: userExists.first_name,
+                    last_name: userExists.last_name,
+                } as EmailDto),
             })
         } catch (error) { return this.dadoEx.throw({ status: 500, message: `Password change failed. Reason: ${error.message}.`, response }) }
 

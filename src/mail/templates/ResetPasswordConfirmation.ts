@@ -8,7 +8,7 @@ const HeaderStyle = `margin: 0; font-size: 24px; font-weight: 600; color: #4e5a6
 const ParagraphStyle = `margin: 0; font-size: 16px; font-weight: 400; color: #8594a7;`
 
 const PasswordResetConf = (data: EmailDto) => {
-    const { first_name, last_name } = data;
+    const { first_name, last_name } = data
     return `
         <!DOCTYPE html>
         <html lang="en">

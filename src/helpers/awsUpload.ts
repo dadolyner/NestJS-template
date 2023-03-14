@@ -1,6 +1,6 @@
 // AWS S3 Service
-import { S3 } from "aws-sdk";
-import { v4 as uuid } from 'uuid';
+import { S3 } from "aws-sdk"
+import { v4 as uuid } from 'uuid'
 
 const uploadImageToS3 = async(dataURL: string): Promise<S3.ManagedUpload.SendData> => {
     const dataBuffer = Buffer.from(dataURL.replace(/^data:image\/\w+;base64,/, ""), 'base64')

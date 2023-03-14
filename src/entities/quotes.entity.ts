@@ -20,5 +20,5 @@ export class Quotes extends BaseEntity {
     userId: string
 
     @ManyToOne(() => Users, (user) => user.quote, { onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
-	user: Users;
+	user: Users
 }

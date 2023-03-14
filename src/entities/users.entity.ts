@@ -1,8 +1,8 @@
 // Users Entity
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, Unique, OneToMany, CreateDateColumn, UpdateDateColumn, BeforeInsert, BeforeUpdate } from 'typeorm'
 import * as bcrypt from 'bcrypt'
-export type AllowedRoles = 'Admin' | 'Moderator' | 'User' | 'Tester'
 import { Quotes } from './quotes.entity'
+export type AllowedRoles = 'Admin' | 'Moderator' | 'User' | 'Tester'
 
 @Entity({ name: 'users' })
 @Unique(['email'])
@@ -41,9 +41,9 @@ export class Users extends BaseEntity {
     updated_at: Date
 
     @OneToMany(() => Quotes, (quote) => quote.user, { onDelete: 'RESTRICT', onUpdate: 'CASCADE' })
-    quote: Quotes[];
+    quote: Quotes[]
 
-    // Before insert/update generate salt and hash password
+    // Before insert generate salt and hash password
     @BeforeInsert()
     async hashPassword(): Promise<void> {
         if (this.password) {
@@ -52,8 +52,18 @@ export class Users extends BaseEntity {
         }
     }
 
-    // Validate user password
-    async validatePassword(password: string): Promise<boolean> { 
-        return await bcrypt.hash(password, this.salt) === this.password 
+    // Before update check if password is changed
+    @BeforeUpdate()
+    async checkPassword(): Promise<void> {
+        if (this.password) {
+            const user = await Users.findOne({ where: { id: this.id }})
+            if (user.password !== this.password) {
+                this.salt = await bcrypt.genSalt()
+                this.password = await bcrypt.hash(this.password, this.salt)
+            }
+        }
     }
+
+    // Validate user password
+    async validatePassword(password: string): Promise<boolean> { return await bcrypt.hash(password, this.salt) === this.password }
 }

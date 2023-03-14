@@ -1,6 +1,6 @@
 // Custom Fastify Http Exceptions
 import { Logger } from "@nestjs/common"
-import { FastifyReply } from "fastify";
+import { FastifyReply } from "fastify"
 
 // Options
 export type DadoExOptions = {
